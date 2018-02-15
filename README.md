@@ -37,9 +37,10 @@ In the main .h file add :
 * A global variable of type Ftylog * (class)
 In the cpp file, use the constructor : 
 <code>Ftylog::Ftylog(std::string component, std::string configFile)</code>
+
 This constructor  has two parameters : 
->component : name of the agent ex : fty-alert-list
->configFile : path to the log config file. Can be empty
+* component : name of the agent ex : fty-alert-list
+* configFile : path to the log config file. Can be empty
 
 Call delete for destroy the Ftylog object.
 
@@ -49,20 +50,21 @@ In the main .h file add :
 * A global variable of type Ftylog * (struct)
 In the c file, for initialize the log object call this functions :
 <code>Ftylog * new_ftylog(const char * component, const char * logConfigFile)</code>
+
 Same parameters as the c++ Ftylog constructor
 
 Call the procedure void delete_ftylog(Ftylog * log)  to destroy the Ftylog struct
 
 #### How to log
-Use defined macro to log any event in the software. 
-This macro are : 
-<code>* log_trace(\<log object\>,...)   : log a TRACE event.
-* log_debug(\<log object\>,...)   : log a DEBUG event. 
-* log_info(\<log object\>,...)    : log a INFO event.
-* log_warning(\<log object\>,...) : log a WARN event.
-* log_error(\<log object\>,...)   : log a ERROR event.
-* log_fatal(\<log object\>,...)   : log a FATAL event.</code>
-
+Use defined macro to log any event in the software :  
+  
+<code>* log_trace(\<log object\>,...) : log a TRACE event.  
+* log_debug(\<log object\>,...) : log a DEBUG event.   
+* log_info(\<log object\>,...) : log a INFO event.  
+* log_warning(\<log object\>,...) : log a WARN event.  
+* log_error(\<log object\>,...) : log a ERROR event.  
+* log_fatal(\<log object\>,...) : log a FATAL event.</code>
+  
 The "..." section is a string follow by any parameters as the printf functions.
 
 #### How to format log
@@ -72,8 +74,8 @@ If there is no configuration file, the default format is :
 <code>"%d{%b %-2d %H:%M:%S.%q} %h %t [%i] -%-5p- %M (%l) %m%n"</code>
 
 For example, with this code :
-<code>Ftylog * test = new Ftylog("test-agent","");
-log_info(test, "This is a %s log test number %d", "info", 1);</code>
+
+<code>log_info(test, "This is a %s log test number %d", "info", 1);</code>
 
 The log generated will be : 
 >Feb 15 10:28:29.036 jessie64 140004551534400 [2528] -INFO - log_fty_log_test (src/log/fty_log.cc:481) This is a info log test number 1 
@@ -86,22 +88,22 @@ The agent can define a path to a log configuration file. The file use the format
 So for a fty-test agent, to redirect INFO message to the console and the ERROR message in a file, 
 the log configuration file will be : 
 
-<code>#Logger definition
-log4cplus.logger.fty-test=INFO, console, file
-
- #Console Definition
-log4cplus.appender.console=log4cplus::ConsoleAppender
-log4cplus.appender.console.layout=log4cplus::PatternLayout
-log4cplus.appender.console.layout.ConversionPattern=[%-5p][%d] %m%n
-
- #File definition
-log4cplus.appender.file=log4cplus::RollingFileAppender
-log4cplus.appender.file.File=/tmp/logging.txt
-log4cplus.appender.file.MaxFileSize=16MB
-log4cplus.appender.file.MaxBackupIndex=1
-log4cplus.appender.file.Threshold=ERROR
-log4cplus.appender.file.layout=log4cplus::PatternLayout
-log4cplus.appender.file.layout.ConversionPattern=[%-5p][%D{%Y/%m/%d %H:%M:%S:%q}][%-l][%t] %m%n</code>
+<code>\#Logger definition  
+log4cplus.logger.fty-test=INFO, console, file  
+  
+\#Console Definition  
+log4cplus.appender.console=log4cplus::ConsoleAppender  
+log4cplus.appender.console.layout=log4cplus::PatternLayout  
+log4cplus.appender.console.layout.ConversionPattern=[%-5p][%d] %m%n  
+  
+\#File definition  
+log4cplus.appender.file=log4cplus::RollingFileAppender  
+log4cplus.appender.file.File=/tmp/logging.txt  
+log4cplus.appender.file.MaxFileSize=16MB  
+log4cplus.appender.file.MaxBackupIndex=1  
+log4cplus.appender.file.Threshold=ERROR  
+log4cplus.appender.file.layout=log4cplus::PatternLayout  
+log4cplus.appender.file.layout.ConversionPattern=[%-5p][%D{%Y/%m/%d %H:%M:%S:%q}][%-l][%t] %m%n  </code>
 
 Note that the name after the "log4cplus.logger." string **MUST BE** the same as the "component"
 parameter when you create a Ftylog object.
