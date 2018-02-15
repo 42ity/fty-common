@@ -86,8 +86,8 @@ typedef struct _common_fty_commons_t common_fty_commons_t;
 
 //  Public classes, each with its own header file
 #ifdef FTY_COMMON_BUILD_DRAFT_API
-#include "log_fty_log.h"
-#include "common_fty_commons.h"
+#include "log/fty_log.h"
+#include "common/fty_commons.h"
 #endif // FTY_COMMON_BUILD_DRAFT_API
 
 #ifdef FTY_COMMON_BUILD_DRAFT_API
