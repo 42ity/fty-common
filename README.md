@@ -19,7 +19,7 @@ In the main .h file add #include \<fty_common.h\>
 In the main .h file add #include \<common/fty_commons.h\> 
 
 ### Log System
-By default (no log configuration file), the log system use the BIOS_LOG_LEVEL variable to set the log level of the agent
+By default (no log configuration file), the log system use the **BIOS_LOG_LEVEL** variable to set the log level of the agent
 and logs a redirected to the stdout console.
 
 This system define 6 levels for logs with in order of importance  (low to high) : 
@@ -33,8 +33,8 @@ This system define 6 levels for logs with in order of importance  (low to high) 
 
 #### Agent coded with C++ : 
 In the main .h file add : 
->#include <fty_common.h>
->A global variable of type Ftylog * (class)
+* #include <fty_common.h>
+* A global variable of type Ftylog * (class)
 In the cpp file, use the constructor : 
 <code>Ftylog::Ftylog(std::string component, std::string configFile)</code>
 This constructor  has two parameters : 
@@ -45,8 +45,8 @@ Call delete for destroy the Ftylog object.
 
 #### Agent coded with C : 
 In the main .h file add : 
->#include <log/fty_log.h>
->A global variable of type Ftylog * (struct)
+* #include <\log/fty_log.h\>
+* A global variable of type Ftylog * (struct)
 In the c file, for initialize the log object call this functions :
 <code>Ftylog * new_ftylog(const char * component, const char * logConfigFile)</code>
 Same parameters as the c++ Ftylog constructor
@@ -56,37 +56,36 @@ Call the procedure void delete_ftylog(Ftylog * log)  to destroy the Ftylog struc
 #### How to log
 Use defined macro to log any event in the software. 
 This macro are : 
-<code>* log_trace(<log object>,...)   : log a TRACE event.
-* log_debug(<log object>,...)   : log a DEBUG event. 
-* log_info(<log object>,...)    : log a INFO event.
-* log_warning(<log object>,...) : log a WARN event.
-* log_error(<log object>,...)   : log a ERROR event.
-* log_fatal(<log object>,...)   : log a FATAL event.</code>
+<code>* log_trace(\<log object\>,...)   : log a TRACE event.
+* log_debug(\<log object\>,...)   : log a DEBUG event. 
+* log_info(\<log object\>,...)    : log a INFO event.
+* log_warning(\<log object\>,...) : log a WARN event.
+* log_error(\<log object\>,...)   : log a ERROR event.
+* log_fatal(\<log object\>,...)   : log a FATAL event.</code>
 
 The "..." section is a string follow by any parameters as the printf functions.
 
 #### How to format log
-The log system use the format of patternlayout of log4cplus 
-(see http://log4cplus.sourceforge.net/docs/html/classlog4cplus_1_1PatternLayout.html).
+The log system use the format of patternlayout of log4cplus (see http://log4cplus.sourceforge.net/docs/html/classlog4cplus_1_1PatternLayout.html).
 
-If there is no configuration file, the default format is : 
-"%d{%b %-2d %H:%M:%S.%q} %h %t [%i] -%-5p- %M (%l) %m%n"
+If there is no configuration file, the default format is :
+<code>"%d{%b %-2d %H:%M:%S.%q} %h %t [%i] -%-5p- %M (%l) %m%n"</code>
 
 For example, with this code :
 <code>Ftylog * test = new Ftylog("test-agent","");
 log_info(test, "This is a %s log test number %d", "info", 1);</code>
 
 The log generated will be : 
-Feb 15 10:28:29.036 jessie64 140004551534400 [2528] -INFO - log_fty_log_test (src/log/fty_log.cc:481) This is a info log test number 1 
+>Feb 15 10:28:29.036 jessie64 140004551534400 [2528] -INFO - log_fty_log_test (src/log/fty_log.cc:481) This is a info log test number 1 
 
 In your system, you can define a environment variable named BIOS_LOG_PATTERN to define
 a format pattern for all agent using fty_common and if the agent doesn't use a log configuration file.
 
 #### Log configuration file
-The agent can define a path to a log configuration file.
-The file use the format of a log4cplus configuration file (which is largely inspired from log4j format).
+The agent can define a path to a log configuration file. The file use the format of a log4cplus configuration file (which is largely inspired from log4j format).
 So for a fty-test agent, to redirect INFO message to the console and the ERROR message in a file, 
 the log configuration file will be : 
+
 <code>#Logger definition
 log4cplus.logger.fty-test=INFO, console, file
 
@@ -111,9 +110,9 @@ parameter when you create a Ftylog object.
 For agent with a verbose mode, you can call the class procedure FtyLog::setVerboseMode()
 (or setVerboseMode(Ftylog* log) for C code) to change log system : 
 
->It defined a console log with the log level TRACE with the default format or 
+* It defined a console log with the log level TRACE with the default format or 
     the format defined by the environment variable BIOS_LOG_PATTERN.
->If there are other log redirection, for each redirection the verbose mode will change 
+* If there are other log redirection, for each redirection the verbose mode will change 
     the log level to the old log level of the agent if no log level are defined for it.
 
 For example if an agent is in INFO log level with two file with one with ERROR log level, the verbose mode will modified with this result : 
