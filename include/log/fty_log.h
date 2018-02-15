@@ -98,7 +98,7 @@ private:
 
   //Set log level with level from syslog.h for debug, info, warning, error and fatal
   // log level set to trace level otherwise
-  void setLogLevel(int level);
+  void setLogLevelFromEnv(const char* level);
 
   //Set needed variables from env 
   void setVarEnv();

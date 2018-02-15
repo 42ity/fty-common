@@ -96,10 +96,10 @@ void Ftylog::setVarEnv()
   //By default, set TRACE level
   setLogLevelTrace();
 
-  char *varEnv = getenv("BIOS_LOG_LEVEL");
+  const char *varEnv = getenv("BIOS_LOG_LEVEL");
   if (varEnv && !std::string(varEnv).empty())
   {
-    setLogLevel(atoi(varEnv));
+    setLogLevelFromEnv(varEnv);
   }
 
   varEnv = getenv("BIOS_LOG_PATTERN");
@@ -117,6 +117,7 @@ void Ftylog::setConsoleAppender()
   //Create and affect layout
   append->setLayout(std::auto_ptr<log4cplus::Layout> (new log4cplus::PatternLayout(_layoutPattern)));
   append.get()->setName(LOG4CPLUS_TEXT("Console" + this->_agentName));
+
   //Add appender to logger
   _logger.addAppender(append);
 }
@@ -132,7 +133,7 @@ void Ftylog::setVeboseMode()
   {
     log4cplus::Appender & app = *appenderPtr;
 
-    if (0 == strcmp(typeid (app).name(), typeid (log4cplus::ConsoleAppender).name()))
+    if (streq(typeid (app).name(), typeid (log4cplus::ConsoleAppender).name()))
     {
       //If any, remove it
       _logger.removeAppender(appenderPtr);
@@ -210,33 +211,41 @@ void Ftylog::loadAppenders()
   }
 }
 
-void Ftylog::setLogLevel(int level)
+void Ftylog::setLogLevelFromEnv(const char* level)
 {
-  //IF not a number, set log level to TRACE
-  if (level == NAN)
+  //IF empty string, set log level to TRACE
+  if (std::string(level).empty())
   {
     setLogLevelTrace();
     return;
   }
+  //Set trace level by default
+  setLogLevelTrace();
 
-  switch (level)
+
+  if (streq(level, STR(LOG_DEBUG)) == 0)
   {
-  case LOG_DEBUG:
     setLogLevelDebug();
-    break;
-  case LOG_INFO:
+  }
+  else if (streq(level, STR(LOG_INFO)) == 0)
+  {
     setLogLevelInfo();
-    break;
-  case LOG_WARNING:
+  }
+  else if (streq(level, STR(LOG_WARNING)) == 0)
+  {
     setLogLevelWarning();
-    break;
-  case LOG_ERR:
+  }
+  else if (streq(level, STR(LOG_ERR)) == 0)
+  {
     setLogLevelError();
-    break;
-  case LOG_CRIT:
+  }
+  else if (streq(level, STR(LOG_CRIT)) == 0)
+  {
     setLogLevelFatal();
-    break;
-  default:
+  }
+  else
+  {
+    //Set trace level by default
     setLogLevelTrace();
   }
 }
@@ -353,11 +362,13 @@ void Ftylog::insertLog(log4cplus::LogLevel level,
 //Wrapper for C code use
 ////////////////////////
 //construtor
+
 Ftylog * new_ftylog(const char * component, const char * logConfigFile)
 {
-  return new Ftylog(std::string(component),std::string(logConfigFile));
+  return new Ftylog(std::string(component), std::string(logConfigFile));
 }
 //destructor
+
 void delete_ftylog(Ftylog * log)
 {
   delete log;
@@ -366,12 +377,14 @@ void delete_ftylog(Ftylog * log)
 
 
 //setter
+
 void setConfigFile(Ftylog * log, const char * file)
 {
   log->setConfigFile(std::string(file));
 }
 
 //Set the logger to a specific log level
+
 void setLogLevelTrace(Ftylog * log)
 {
   log->setLogLevelTrace();
@@ -403,6 +416,7 @@ void setLogLevelFatal(Ftylog * log)
 }
 
 //Check the log level 
+
 bool isLogTrace(Ftylog * log)
 {
   return log->isLogTrace();
