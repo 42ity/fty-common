@@ -116,7 +116,7 @@ log4cplus.appender.file.layout.ConversionPattern=[%-5p][%D{%Y/%m/%d %H:%M:%S:%q}
 Note that the name after the "log4cplus.logger." string **MUST BE** the same as the "component"
 parameter when you create a Ftylog object.
 
-The object where a log events are redirected is call an appender.  
+The object where log events are redirected is call an appender.  
 Log4cplus define several type of appender :  
 
 |    Type   |     Description    |  
