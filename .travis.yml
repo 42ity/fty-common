@@ -119,7 +119,7 @@ before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "android" ] ; then brew install binutils ; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "valgrind" ] ; then brew install valgrind ; fi
 - wget http://ftp.us.debian.org/debian/pool/main/g/gcc-6/libstdc++6_6.3.0-18_amd64.deb
-- sudo dpkg -i libstdc++6_6.3.0-18_amd64.deb
+- sudo dpkg --auto-deconfigure -i libstdc++6_6.3.0-18_amd64.deb 
 - wget http://ftp.us.debian.org/debian/pool/main/l/log4cplus/liblog4cplus-1.1-9_1.1.2-3.2_amd64.deb
 - sudo dpkg -i liblog4cplus-1.1-9_1.1.2-3.2_amd64.deb
 - wget http://ftp.us.debian.org/debian/pool/main/l/log4cplus/liblog4cplus-dev_1.1.2-3.2_amd64.deb
