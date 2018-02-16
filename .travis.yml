@@ -110,9 +110,9 @@ matrix:
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "android" ] ; then brew install binutils ; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "valgrind" ] ; then brew install valgrind ; fi
-- sudo gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8B48AD6246925553
-- sudo gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 7638D0442B90D010
-- sudo gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EF0F382A1A7B6500
+- apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8B48AD6246925553
+- apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 7638D0442B90D010
+- apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EF0F382A1A7B6500
 - sudo add-apt-repository "deb http://ftp.fr.debian.org/debian/ stretch main" -y
 - sudo apt-get update
 - sudo apt-get install liblog4cplus-dev 
