@@ -121,7 +121,7 @@ before_install:
 - wget http://ftp.us.debian.org/debian/pool/main/g/gcc-6/gcc-6-base_6.3.0-18_amd64.deb
 - sudo dpkg -i gcc-6-base_6.3.0-18_amd64.deb
 - wget http://ftp.us.debian.org/debian/pool/main/g/gcc-6/libstdc++6_6.3.0-18_amd64.deb
-- sudo dpkg -i libstdc++6_6.3.0-18_amd64.deb 
+- sudo dpkg --auto-deconfigure -i libstdc++6_6.3.0-18_amd64.deb 
 - wget http://ftp.us.debian.org/debian/pool/main/l/log4cplus/liblog4cplus-1.1-9_1.1.2-3.2_amd64.deb
 - sudo dpkg -i liblog4cplus-1.1-9_1.1.2-3.2_amd64.deb
 - wget http://ftp.us.debian.org/debian/pool/main/l/log4cplus/liblog4cplus-dev_1.1.2-3.2_amd64.deb
