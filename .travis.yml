@@ -111,7 +111,7 @@ before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "android" ] ; then brew install binutils ; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "valgrind" ] ; then brew install valgrind ; fi
 - sudo add-apt-repository "deb http://ftp.fr.debian.org/debian/ stretch main"
-- wget -qO - http://ftp.fr.debian.org/debian/dists/stretch/Release.gpg | sudo apt-key add -
+- wget -qO - https://ftp.fr.debian.org/debian/dists/stretch/Release.gpg | sudo apt-key add -
 - sudo apt-get update
 - sudo apt-get install liblog4cplus-dev 
  
