@@ -118,6 +118,9 @@ matrix:
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "android" ] ; then brew install binutils ; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "valgrind" ] ; then brew install valgrind ; fi
+- sudo add-apt-repository  http://obs.roz.lab.etn.com:82/Convergence/Debian_8.0/
+- sudo apt-get update -q 
+- sudo apt-get install liblog4cplus-dev -y
 
 # Hand off to generated script for each BUILD_TYPE
 script: ./ci_build.sh
