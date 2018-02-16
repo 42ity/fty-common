@@ -110,6 +110,7 @@ matrix:
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "android" ] ; then brew install binutils ; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "valgrind" ] ; then brew install valgrind ; fi
+- sudo add-apt-repository http://archive.ubuntu.com/ubuntu zesty InRelease -y
 - sudo apt-get update
 - sudo apt-get install liblog4cplus-dev 
  
