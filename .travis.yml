@@ -110,18 +110,9 @@ matrix:
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "android" ] ; then brew install binutils ; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "valgrind" ] ; then brew install valgrind ; fi
-- wget http://ftp.us.debian.org/debian/pool/main/g/gcc-6/gcc-6-base_6.3.0-18_amd64.deb
-- sudo dpkg -i gcc-6-base_6.3.0-18_amd64.deb
-- wget http://ftp.us.debian.org/debian/pool/main/libs/libsigc++-2.0/libsigc++-2.0-0v5_2.10.0-1_amd64.deb
-- wget http://ftp.us.debian.org/debian/pool/main/g/gcc-6/libstdc++6_6.3.0-18_amd64.deb
-- wget http://ftp.us.debian.org/debian/pool/main/a/aptitude/aptitude_0.8.7-1_amd64.deb
-- wget http://ftp.us.debian.org/debian/pool/main/c/cwidget/libcwidget3v5_0.5.17-4+b1_amd64.deb
-- sudo dpkg --auto-deconfigure -i libsigc++-2.0-0v5_2.10.0-1_amd64.deb libstdc++6_6.3.0-18_amd64.deb aptitude_0.8.7-1_amd64.deb libcwidget3v5_0.5.17-4+b1_amd64.deb
-- wget http://ftp.us.debian.org/debian/pool/main/l/log4cplus/liblog4cplus-1.1-9_1.1.2-3.2_amd64.deb
-- sudo dpkg -i liblog4cplus-1.1-9_1.1.2-3.2_amd64.deb
-- wget http://ftp.us.debian.org/debian/pool/main/l/log4cplus/liblog4cplus-dev_1.1.2-3.2_amd64.deb
-- sudo dpkg -i liblog4cplus-dev_1.1.2-3.2_amd64.deb
-
+- sudo apt-get update
+- sudo apt-get install liblog4cplus-dev 
+ 
 # Hand off to generated script for each BUILD_TYPE
 script: ./ci_build.sh
 before_deploy: . ./ci_deploy.sh && ./ci_deploy_obs.sh
