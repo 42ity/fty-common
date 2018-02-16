@@ -105,23 +105,17 @@ matrix:
         sources: *pkg_src_zeromq_ubuntu14
         packages:
         - *pkg_deps_common
-  - env: BUILD_TYPE=cmake DO_CLANG_FORMAT_CHECK=1 CLANG_FORMAT=clang-format-5.0
-    os: linux
-    dist: trusty
-    addons:
-      apt:
-        sources:
-        - llvm-toolchain-trusty-5.0
-        packages:
-        - clang-5.0
+  
 
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "android" ] ; then brew install binutils ; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "valgrind" ] ; then brew install valgrind ; fi
 - wget http://ftp.us.debian.org/debian/pool/main/g/gcc-6/gcc-6-base_6.3.0-18_amd64.deb
 - sudo dpkg -i gcc-6-base_6.3.0-18_amd64.deb
+- wget http://ftp.us.debian.org/debian/pool/main/libs/libsigc++-2.0/libsigc++-2.0-0v5_2.10.0-1_amd64.deb
+- sudo dpkg -i libsigc++-2.0-0v5_2.10.0-1_amd64.deb
 - wget http://ftp.us.debian.org/debian/pool/main/g/gcc-6/libstdc++6_6.3.0-18_amd64.deb
-- sudo dpkg --auto-deconfigure -i libstdc++6_6.3.0-18_amd64.deb 
+- sudo dpkg -i libstdc++6_6.3.0-18_amd64.deb 
 - wget http://ftp.us.debian.org/debian/pool/main/l/log4cplus/liblog4cplus-1.1-9_1.1.2-3.2_amd64.deb
 - sudo dpkg -i liblog4cplus-1.1-9_1.1.2-3.2_amd64.deb
 - wget http://ftp.us.debian.org/debian/pool/main/l/log4cplus/liblog4cplus-dev_1.1.2-3.2_amd64.deb
