@@ -115,8 +115,8 @@ before_install:
 - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EF0F382A1A7B6500
 - sudo add-apt-repository "deb http://ftp.fr.debian.org/debian/ stretch main" -y
 - sudo apt-get update
-- sudo apt-get install liblog4cplus-dev 
-- sudo find / -name logger.h
+- sudo apt-get install liblog4cplus-dev
+- sudo ./installLog4cplusPc
  
 # Hand off to generated script for each BUILD_TYPE
 script: ./ci_build.sh

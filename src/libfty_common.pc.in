@@ -12,7 +12,7 @@ Name: libfty_common
 Description: Provides common tools for agents
 Version: @VERSION@
 
-Requires:
+Requires:@pkgconfig_name_liblog4cplus@ >= 1.0.0
 
 Libs: -L${libdir} -lfty_common
 Cflags: -I${includedir} @pkg_config_defines@

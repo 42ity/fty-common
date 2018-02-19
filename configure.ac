@@ -139,7 +139,7 @@ PREVIOUS_LIBS="${LIBS}"
 
 was_liblog4cplus_check_lib_detected=no
 
-search_liblog4cplus="no"
+search_liblog4cplus="yes"
 
 AC_ARG_WITH([liblog4cplus],
     [
@@ -156,6 +156,10 @@ AS_CASE([x"${with_liblog4cplus}"],
     [xyes], [search_liblog4cplus="yes"],
     [xno],  [search_liblog4cplus="no"])
 
+dnl We do not abort right now, because the maintainer/developer may have
+dnl something particular in mind, e.g. to build just parts of a project.
+AS_IF([test x"${search_liblog4cplus}" = xno],
+    [AC_MSG_WARN([Required dependency on liblog4cplus was explicitly disabled during configuration by '--with-liblog4cplus=no'; subsequent full build of fty-common may fail])])
 
 AS_IF([test x"${search_liblog4cplus}" = xyes], [
     # Archive previously detected and supplied flags
@@ -166,7 +170,6 @@ AS_IF([test x"${search_liblog4cplus}" = xyes], [
     found_linkname=""
     PKG_CHECK_MODULES([liblog4cplus], [liblog4cplus >= 1.0.0],
     [
-        AC_DEFINE(HAVE_LIBLOG4CPLUS, 1, [The optional liblog4cplus library is to be used])
         PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE $liblog4cplus_LIBS"
         was_liblog4cplus_check_lib_detected=pkgcfg
         found_pkgconfig="liblog4cplus"
@@ -182,11 +185,11 @@ AS_IF([test x"${search_liblog4cplus}" = xyes], [
                 liblog4cplus_synthetic_cflags="-I${with_liblog4cplus}/include"
                 liblog4cplus_synthetic_libs="-L${with_liblog4cplus}/lib -lliblog4cplus"
             else
-            AC_MSG_WARN([Header file ${with_liblog4cplus}/include/log4cplus/logger.h was not found. Please check liblog4cplus prefix])
+            AC_MSG_ERROR([Header file ${with_liblog4cplus}/include/log4cplus/logger.h was not found. Please check liblog4cplus prefix])
             fi
         else
             AC_CHECK_HEADER([log4cplus/logger.h], [],
-            AC_MSG_WARN([Header file log4cplus/logger.h was not found in default search paths])
+            AC_MSG_ERROR([Header file log4cplus/logger.h was not found in default search paths])
                 )
         fi
 
@@ -195,9 +198,8 @@ AS_IF([test x"${search_liblog4cplus}" = xyes], [
                 was_liblog4cplus_check_lib_detected=yes
                 PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE -lliblog4cplus"
                 found_linkname="liblog4cplus"
-                AC_DEFINE(HAVE_LIBLOG4CPLUS, 1, [The optional liblog4cplus library is to be used (as -lliblog4cplus)])
             ],
-            [])
+            [AC_MSG_ERROR([cannot link with -lliblog4cplus, install liblog4cplus])])
     ])
 
 dnl END of PKG_CHECK_MODULES and/or direct tests for liblog4cplus
@@ -218,7 +220,7 @@ dnl END of PKG_CHECK_MODULES and/or direct tests for liblog4cplus
             ],
         [xno], [
                 AC_SUBST([pkgconfig_name_liblog4cplus],[liblog4cplus])
-            AC_MSG_WARN([Cannot find pkg-config metadata for liblog4cplus 1.0.0 or higher])
+            AC_MSG_ERROR([Cannot find pkg-config metadata for liblog4cplus 1.0.0 or higher])
     ])
 ])
 dnl END of enabled attempts to search for liblog4cplus

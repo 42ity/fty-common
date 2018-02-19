@@ -204,9 +204,6 @@ default|default-Werror|default-with-docs|valgrind)
         $CI_TIME make -j4
         $CI_TIME make install
         cd "${BASE_PWD}"
-        CONFIG_OPTS+=("--with-liblog4cplus=yes")
-    else
-        CONFIG_OPTS+=("--with-liblog4cplus=yes")
     fi
 
     # Build and check this project; note that zprojects always have an autogen.sh

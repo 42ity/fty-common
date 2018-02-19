@@ -91,7 +91,7 @@ This package contains development files for fty-common: provides common tools fo
 
 %build
 sh autogen.sh
-%{configure} --enable-drafts=%{DRAFTS} --with-liblog4cplus=yes
+%{configure} --enable-drafts=%{DRAFTS}
 make %{_smp_mflags}
 
 %install
