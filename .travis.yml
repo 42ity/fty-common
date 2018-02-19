@@ -115,8 +115,6 @@ before_install:
 - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EF0F382A1A7B6500
 - sudo add-apt-repository "deb http://ftp.fr.debian.org/debian/ jessie main" -y
 - sudo apt-get update
-- sudo apt-get remove liblog4cplus-dev
-- sudo apt-get autoremove
 - sudo apt-get install liblog4cplus-dev
 - sudo ./installLog4cplusPc
  
