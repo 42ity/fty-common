@@ -30,7 +30,9 @@
 //  Set up environment for the application
 
 //  External dependencies
+#if defined (HAVE_LIBLOG4CPLUS)
 #include <log4cplus/logger.h>
+#endif
 
 //  FTY_COMMON version macros for compile-time API detection
 #define FTY_COMMON_VERSION_MAJOR 1
