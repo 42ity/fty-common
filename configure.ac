@@ -168,14 +168,14 @@ AS_IF([test x"${search_liblog4cplus}" = xyes], [
 
     found_pkgconfig=""
     found_linkname=""
-    PKG_CHECK_MODULES([liblog4cplus], [liblog4cplus >= 1.0.0],
+    PKG_CHECK_MODULES([liblog4cplus], [liblog4cplus >= 0.0.0],
     [
         PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE $liblog4cplus_LIBS"
         was_liblog4cplus_check_lib_detected=pkgcfg
         found_pkgconfig="liblog4cplus"
     ],
     [
-        AC_MSG_NOTICE([Package liblog4cplus not found with needed constraints; falling back to defined compilability tests])
+        AC_MSG_NOTICE([Package liblog4cplus not found; falling back to defined compilability tests])
 
         liblog4cplus_synthetic_cflags=""
         liblog4cplus_synthetic_libs="-lliblog4cplus"
@@ -220,7 +220,7 @@ dnl END of PKG_CHECK_MODULES and/or direct tests for liblog4cplus
             ],
         [xno], [
                 AC_SUBST([pkgconfig_name_liblog4cplus],[liblog4cplus])
-            AC_MSG_ERROR([Cannot find pkg-config metadata for liblog4cplus 1.0.0 or higher])
+            AC_MSG_ERROR([Cannot find pkg-config metadata for liblog4cplus 0.0.0 or higher])
     ])
 ])
 dnl END of enabled attempts to search for liblog4cplus

@@ -26,7 +26,7 @@
 @end
 */
 
-#include "fty_common_classes.h"
+#include "../fty_common_classes.h"
 #include <stdio.h>
 
 

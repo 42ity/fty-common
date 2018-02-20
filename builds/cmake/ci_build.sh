@@ -55,7 +55,7 @@ fi
 [ -z "$CI_TIME" ] || echo "`date`: Starting build of dependencies (if any)..."
 if ! ((command -v dpkg-query >/dev/null 2>&1 && dpkg-query --list liblog4cplus-dev >/dev/null 2>&1) || \
        (command -v brew >/dev/null 2>&1 && brew ls --versions liblog4cplus >/dev/null 2>&1)); then
-    $CI_TIME git clone --quiet --depth 1 https://github.com/log4cplus/log4cplus.git liblog4cplus
+    $CI_TIME git clone --quiet --depth 1 --branch rel_1_1_2 https://github.com/log4cplus/log4cplus.git liblog4cplus
     BASE_PWD=${PWD}
     cd liblog4cplus
     CCACHE_BASEDIR=${PWD}

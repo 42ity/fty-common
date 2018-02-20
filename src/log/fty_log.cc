@@ -37,7 +37,7 @@
 #include <log4cplus/logger.h>
 #include <log4cplus/consoleappender.h>
 
-#include "fty_common_classes.h"
+#include "../fty_common_classes.h"
 
 using namespace log4cplus::helpers;
 //constructor
