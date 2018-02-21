@@ -25,14 +25,14 @@
 // Trick to avoid conflict with CXXTOOLS logger, currently the BIOS code
 // prefers OUR logger macros
 #if defined(LOG_CXXTOOLS_H) || defined(CXXTOOLS_LOG_CXXTOOLS_H)
-# undef log_error
-# undef log_debug
-# undef log_info
-# undef log_fatal
-# undef log_warn
+#undef log_error
+#undef log_debug
+#undef log_info
+#undef log_fatal
+#undef log_warn
 #else
-# define LOG_CXXTOOLS_H
-# define CXXTOOLS_LOG_CXXTOOLS_H
+#define LOG_CXXTOOLS_H
+#define CXXTOOLS_LOG_CXXTOOLS_H
 #endif
 
 #ifdef __cplusplus
@@ -106,7 +106,7 @@ private:
   //Load appenders from the config file 
   // or set the default console appender if no can't load from the config file
   void loadAppenders();
-  
+
 public:
   //Constructor/destructor
   Ftylog(std::string _component, std::string logConfigFile = "");
@@ -155,6 +155,7 @@ public:
   // -Add a new console appender
   void setVeboseMode();
 };
+
 #else
 typedef struct Ftylog Ftylog;
 #endif
