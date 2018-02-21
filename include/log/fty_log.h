@@ -202,7 +202,7 @@ void setVeboseMode(Ftylog * log);
 #endif
 
 //  Self test of this class
-FTY_COMMON_EXPORT void
+void
 log_fty_log_test(bool verbose);
 
 //  @end
