@@ -17,8 +17,8 @@ src_libfty_common_la_SOURCES = \
 
 if ENABLE_DRAFTS
 src_libfty_common_la_SOURCES += \
-    src/log/fty_log.cc \
-    src/common/fty_commons.cc
+    src/fty-common/log/fty_log.cc \
+    src/fty-common/common/fty_commons.cc
 
 endif
 

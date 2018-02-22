@@ -50,7 +50,7 @@ Call delete for destroy the Ftylog object.
 
 ### For agents coded with C : 
 In the main .h file add : 
-* #include \<log/fty_log.h\>
+* #include \<fty-common/log/fty_log.h\>
 * A global variable of type Ftylog * (struct)
 In the c file, for initialize the log object call this function :  
 <code>Ftylog * new_ftylog(const char * component, const char * logConfigFile)</code>
@@ -181,7 +181,7 @@ And for C code :
 In the main .h file add #include \<fty_common.h\> 
 
 ### For agents coded with C : 
-In the main .h file add #include \<common/fty_commons.h\> 
+In the main .h file add #include \<fty-common/common/fty_commons.h\> 
 
 ### Macro
 The following macros are defined :  

@@ -8,8 +8,8 @@ nobase_include_HEADERS = \
 
 if ENABLE_DRAFTS
 nobase_include_HEADERS += \
-    log/fty_log.h \
-    common/fty_commons.h
+    fty-common/log/fty_log.h \
+    fty-common/common/fty_commons.h
 
 endif
 

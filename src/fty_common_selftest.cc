@@ -38,8 +38,8 @@ static test_item_t
 all_tests [] = {
 #ifdef FTY_COMMON_BUILD_DRAFT_API
 // Tests for draft public classes:
-    { "log_fty_log", log_fty_log_test },
-    { "common_fty_commons", common_fty_commons_test },
+    { "fty_common_log_fty_log", fty_common_log_fty_log_test },
+    { "fty_common_common_fty_commons", fty_common_common_fty_commons_test },
 #endif // FTY_COMMON_BUILD_DRAFT_API
 #ifdef FTY_COMMON_BUILD_DRAFT_API
     { "private_classes", fty_common_private_selftest },
@@ -108,8 +108,8 @@ main (int argc, char **argv)
         if (streq (argv [argn], "--list")
         ||  streq (argv [argn], "-l")) {
             puts ("Available tests:");
-            puts ("    log_fty_log\t\t- draft");
-            puts ("    common_fty_commons\t\t- draft");
+            puts ("    fty_common_log_fty_log\t\t- draft");
+            puts ("    fty_common_common_fty_commons\t\t- draft");
             puts ("    private_classes\t- draft");
             return 0;
         }

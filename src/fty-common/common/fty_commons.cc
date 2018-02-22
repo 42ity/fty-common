@@ -26,12 +26,12 @@
 @end
 */
 
-#include "../fty_common_classes.h"
+#include "../../fty_common_classes.h"
 #include <stdio.h>
 
 
 void
-common_fty_commons_test (bool verbose)
+fty_common_common_fty_commons_test (bool verbose)
 {
     printf (" * fty_commons: ");
 

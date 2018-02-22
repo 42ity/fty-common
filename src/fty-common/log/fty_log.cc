@@ -27,7 +27,6 @@
  */
 #include <stdio.h>
 #include <stdarg.h>
-#include <sys/syslog.h>
 #include <unistd.h>
 #include <fstream>
 #include <typeinfo>
@@ -37,11 +36,11 @@
 #include <log4cplus/logger.h>
 #include <log4cplus/consoleappender.h>
 
-#include "../fty_common_classes.h"
+#include "../../fty_common_classes.h"
 
 using namespace log4cplus::helpers;
-//constructor
 
+//constructor
 Ftylog::Ftylog(std::string component, std::string configFile)
 {
   _agentName = component;
@@ -61,11 +60,9 @@ Ftylog::Ftylog(std::string component, std::string configFile)
 
   //load appenders
   loadAppenders();
-
 }
 
-//Clean object in destructor
-
+//Clean objects in destructor
 Ftylog::~Ftylog()
 {
   if (NULL != _watchConfigFile)
@@ -76,32 +73,33 @@ Ftylog::~Ftylog()
   _logger.shutdown();
 }
 
+//getter
 std::string Ftylog::getAgentName()
 {
   return _agentName;
 }
 
 //setter
-
 void Ftylog::setConfigFile(std::string file)
 {
   _configFile = file;
   loadAppenders();
 }
 
-//Log functions
-
+//Initialize from environment variables
 void Ftylog::setVarEnv()
 {
   //By default, set TRACE level
   setLogLevelTrace();
 
+  //get BIOS_LOG_LEVEL value and set correction logging level
   const char *varEnv = getenv("BIOS_LOG_LEVEL");
   if (varEnv && !std::string(varEnv).empty())
   {
     setLogLevelFromEnv(varEnv);
   }
 
+  //Get BIOS_LOG_PATTERN for a default patternlayout
   varEnv = getenv("BIOS_LOG_PATTERN");
   if (varEnv && !std::string(varEnv).empty())
   {
@@ -109,6 +107,7 @@ void Ftylog::setVarEnv()
   }
 }
 
+//Add a simple ConsoleAppender to th logger
 void Ftylog::setConsoleAppender()
 {
   _logger.removeAllAppenders();
@@ -122,6 +121,7 @@ void Ftylog::setConsoleAppender()
   _logger.addAppender(append);
 }
 
+//Switch the logging system to verbose
 void Ftylog::setVeboseMode()
 {
   //Save the loglevel of the logger
@@ -160,12 +160,13 @@ void Ftylog::setVeboseMode()
   _logger.addAppender(append);
 }
 
+//Set appenders from log config file if exist
+// or set a basic ConsoleAppender
 void Ftylog::loadAppenders()
 {
-  bool loadDefault = 0;
+  //If true, set default ConsoleAppender
+  bool loadDefault = false;
 
-  //Remove previous appender
-  _logger.removeAllAppenders();
   //Stop the watch confile file thread if any 
   if (NULL != _watchConfigFile)
   {
@@ -173,13 +174,12 @@ void Ftylog::loadAppenders()
     _watchConfigFile = NULL;
   }
 
-  //if no path return 1
+  //if no path to log config file, set default ConsoleAppender
   if (_configFile.empty())
   {
-    loadDefault = 1;
+    loadDefault = true;
   }
 
-  //file can be access with read
   if (!loadDefault)
   {
     //file can be accessed with read rights
@@ -189,57 +189,61 @@ void Ftylog::loadAppenders()
     }
     else
     {
-      //Print a log in the stderr
-      fprintf(stderr, "[ERROR]: %s:%d (%s) can't read file %s \n", __FILE__, __LINE__, __func__, _configFile.c_str());
-      loadDefault = 1;
+      //Print an error log
+      log_error(this, "Can't read file %s \n",  _configFile.c_str());
+      //Set default COnsoleAppender
+      loadDefault = true;
     }
   }
-  //Load the file
+
+  //Remove previous appender
+  _logger.removeAllAppenders();
+
+  //Load the file if exist and readable
   if (!loadDefault)
   {
     log4cplus::PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT(_configFile));
   }
 
-  //if no appender configured for this logger, set the console appenders
+  //if no appender configured for this logger, set default ConsoleAppender
   if (loadDefault || 0 == _logger.getAllAppenders().size())
   {
     setConsoleAppender();
   }
   else
   {
+    //Start the thread watching the modification of the log config file
     _watchConfigFile = new log4cplus::ConfigureAndWatchThread(_configFile.c_str(), 10000);
   }
 }
 
+//Set the logging level corresponding to the BIOS_LOG_LEVEL value
 void Ftylog::setLogLevelFromEnv(const char* level)
 {
-  //IF empty string, set log level to TRACE
+  //If empty string, set log level to TRACE
   if (std::string(level).empty())
   {
     setLogLevelTrace();
     return;
   }
-  //Set trace level by default
-  setLogLevelTrace();
 
-
-  if (streq(level, STR(LOG_DEBUG)) == 0)
+  if (streq(level, "LOG_DEBUG") )
   {
     setLogLevelDebug();
   }
-  else if (streq(level, STR(LOG_INFO)) == 0)
+  else if (streq(level, "LOG_INFO"))
   {
     setLogLevelInfo();
   }
-  else if (streq(level, STR(LOG_WARNING)) == 0)
+  else if (streq(level, "LOG_WARNING"))
   {
     setLogLevelWarning();
   }
-  else if (streq(level, STR(LOG_ERR)) == 0)
+  else if (streq(level, "LOG_ERR"))
   {
     setLogLevelError();
   }
-  else if (streq(level, STR(LOG_CRIT)) == 0)
+  else if (streq(level, "LOG_CRIT"))
   {
     setLogLevelFatal();
   }
@@ -250,6 +254,7 @@ void Ftylog::setLogLevelFromEnv(const char* level)
   }
 }
 
+//Set logger to a specific logging level
 void Ftylog::setLogLevelTrace()
 {
   _logger.setLogLevel(log4cplus::TRACE_LOG_LEVEL);
@@ -280,6 +285,7 @@ void Ftylog::setLogLevelFatal()
   _logger.setLogLevel(log4cplus::FATAL_LOG_LEVEL);
 }
 
+//Return true if the logging level is include in the logger log level
 bool Ftylog::isLogLevel(log4cplus::LogLevel level)
 {
   return _logger.getLogLevel() <= level;
@@ -315,13 +321,12 @@ bool Ftylog::isLogFatal()
   return this->isLogLevel(log4cplus::FATAL_LOG_LEVEL);
 }
 
-void Ftylog::insertLog(log4cplus::LogLevel level,
-                       const char* file, int line,
+//Call log4cplus system to print logs in logger appenders
+void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
                        const char* func, const char* format, ...)
 {
   va_list args;
   va_start(args, format);
-
   char *buffer;
   int r;
 
@@ -346,7 +351,7 @@ void Ftylog::insertLog(log4cplus::LogLevel level,
 
   if (buffer == NULL)
   {
-    fprintf(stderr, "Buffer == NULL\n");
+    log_error(this, "Buffer == NULL");
     va_end(args);
     return;
   }
@@ -361,30 +366,27 @@ void Ftylog::insertLog(log4cplus::LogLevel level,
 ////////////////////////
 //Wrapper for C code use
 ////////////////////////
-//construtor
 
+//construtor
 Ftylog * new_ftylog(const char * component, const char * logConfigFile)
 {
   return new Ftylog(std::string(component), std::string(logConfigFile));
 }
-//destructor
 
+//destructor
 void delete_ftylog(Ftylog * log)
 {
   delete log;
   log = NULL;
 }
 
-
 //setter
-
 void setConfigFile(Ftylog * log, const char * file)
 {
   log->setConfigFile(std::string(file));
 }
 
 //Set the logger to a specific log level
-
 void setLogLevelTrace(Ftylog * log)
 {
   log->setLogLevelTrace();
@@ -416,7 +418,6 @@ void setLogLevelFatal(Ftylog * log)
 }
 
 //Check the log level 
-
 bool isLogTrace(Ftylog * log)
 {
   return log->isLogTrace();
@@ -447,6 +448,7 @@ bool isLogFatal(Ftylog * log)
   return log->isLogTrace();
 }
 
+//Print log in logger appenders
 void insertLog(Ftylog * log, int level, const char* file, int line,
                const char* func, const char* format, ...)
 {
@@ -456,14 +458,14 @@ void insertLog(Ftylog * log, int level, const char* file, int line,
   va_end(args);
 }
 
+//Switch to verbose mode
 void setVeboseMode(Ftylog * log)
 {
   log->setVeboseMode();
 }
 
 //Test function
-
-void log_fty_log_test(bool verbose)
+void fty_common_log_fty_log_test(bool verbose)
 {
   printf(" * fty_log \n");
   Ftylog* test = new Ftylog("fty-log-agent", "");

@@ -11,10 +11,10 @@
 *.xml7
 
 # Ignore the source doc texts generated from program sources
-log_fty_log.txt
-log_fty_log.doc
-common_fty_commons.txt
-common_fty_commons.doc
+fty_common_log_fty_log.txt
+fty_common_log_fty_log.doc
+fty_common_common_fty_commons.txt
+fty_common_common_fty_commons.doc
 
 # Make sure to track the manually maintained project description
 !*.adoc

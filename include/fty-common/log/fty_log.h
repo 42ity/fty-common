@@ -76,6 +76,7 @@
 #define log_fatal(ftylogger,...) \
         log_macro(50000,ftylogger, __VA_ARGS__)
 
+//Default layout pattern
 #define LOGPATTERN "%d{%b %-2d %H:%M:%S.%q} %h %t [%i] -%-5p- %M (%l) %m%n"
 
 //  @interface
@@ -84,10 +85,15 @@
 class Ftylog
 {
 private:
+  //Name of the agent/component
   std::string _agentName;
+  //Path to the log configuration file if any
   std::string _configFile;
+  //Layout pattern for logs
   std::string _layoutPattern;
+  //log4cplus object to print logs
   log4cplus::Logger _logger;
+  //Thread for watching modification of the log configuration file if any
   log4cplus::ConfigureAndWatchThread * _watchConfigFile;
 
   //Return true if level is included in the logger level
@@ -148,7 +154,7 @@ public:
                  const char* func, const char* format, ...);
 
   //Load a specific appender if verbose mode is set to true : 
-  // -Save the logger log level and set it to TRACE log level
+  // -Save the logger logging level and set it to TRACE logging level
   // -Remove an already existing ConsoleAppender
   // -For the other appender, set the threshold parameter to the old logger log level
   //    if no loglevel defined for this appender
@@ -203,7 +209,7 @@ void setVeboseMode(Ftylog * log);
 
 //  Self test of this class
 void
-log_fty_log_test(bool verbose);
+fty_common_log_fty_log_test(bool verbose);
 
 //  @end
 #endif

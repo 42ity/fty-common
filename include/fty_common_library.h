@@ -77,17 +77,17 @@
 //  These classes are stable or legacy and built in all releases
 //  Draft classes are by default not built in stable releases
 #ifdef FTY_COMMON_BUILD_DRAFT_API
-typedef struct _log_fty_log_t log_fty_log_t;
-#define LOG_FTY_LOG_T_DEFINED
-typedef struct _common_fty_commons_t common_fty_commons_t;
-#define COMMON_FTY_COMMONS_T_DEFINED
+typedef struct _fty_common_log_fty_log_t fty_common_log_fty_log_t;
+#define FTY_COMMON_LOG_FTY_LOG_T_DEFINED
+typedef struct _fty_common_common_fty_commons_t fty_common_common_fty_commons_t;
+#define FTY_COMMON_COMMON_FTY_COMMONS_T_DEFINED
 #endif // FTY_COMMON_BUILD_DRAFT_API
 
 
 //  Public classes, each with its own header file
 #ifdef FTY_COMMON_BUILD_DRAFT_API
-#include "log/fty_log.h"
-#include "common/fty_commons.h"
+#include "fty-common/log/fty_log.h"
+#include "fty-common/common/fty_commons.h"
 #endif // FTY_COMMON_BUILD_DRAFT_API
 
 #ifdef FTY_COMMON_BUILD_DRAFT_API

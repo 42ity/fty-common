@@ -42,8 +42,8 @@ extern "C"
   
 //  @interface
 //  Self test of this class
-FTY_COMMON_EXPORT void
-    common_fty_commons_test (bool verbose);
+void
+    fty_common_common_fty_commons_test (bool verbose);
 
 //  @end
 
