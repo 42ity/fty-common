@@ -28,7 +28,7 @@
         pretty-print = "no" keep-tree = "true" />
 
     <use project = "liblog4cplus" header = "log4cplus/logger.h"
-        test = "appender_test" repository="--branch REL_1_1_2 https://github.com/log4cplus/log4cplus.git" />
+        test = "appender_test" release="REL_1_1_2" repository="https://github.com/log4cplus/log4cplus.git" />
     
     <class name = "fty-common/log/fty_log">Log management</class>
     <class name = "fty-common/common/fty_commons" >Singleton object and common functions</class>
