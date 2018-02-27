@@ -75,13 +75,13 @@ The "..." section is a string follow by any parameters as the printf functions.
 The logging system use the format from patternlayout of log4cplus (see http://log4cplus.sourceforge.net/docs/html/classlog4cplus_1_1PatternLayout.html).
 
 If there is no configuration file, the default format is :  
-<code>"%d{%b %-2d %H:%M:%S.%q} %h %t [%i] -%-5p- %M (%l) %m%n"</code>
+<code>"[%t] -%-5p- %M (%l) %m%n"</code>
 
 For example, with this code :  
 <code>log_info(test, "This is a %s log test number %d", "info", 1);</code>
 
 The log generated will be :  
-<code>Feb 15 10:28:29.036 jessie64 140004551534400 [2528] -INFO - log_fty_log_test (src/log/fty_log.cc:481) This is a info log test number 1</code> 
+<code>[140004551534400] -INFO - log_fty_log_test (src/log/fty_log.cc:481) This is a info log test number 1</code> 
 
 In your system, you can set an environment variable named BIOS_LOG_PATTERN to set a format pattern for all agents using fty-common and if the agent does not use a log configuration file.
 
@@ -190,3 +190,60 @@ In the main .h file add #include \<fty-common/common/fty_commons.h\>
 The following macros are defined :  
  * #define STR(X) #X
  * #define streq(s1,s2) (!strcmp ((s1), (s2))) (if not already set)  
+
+## How compile using fty-common  
+
+### project.xml  
+Add this bloc in the project.xml file :   
+
+````
+<use project = "fty-common" libname = "libfty_common" header="fty-common.h"
+        repository = "https://github.com/42ity/fty-common.git"
+        test = "fty_commmon_selftest" >
+        <use project = "liblog4cplus" header = "log4cplus/logger.h"
+        test = "appender_test" release="REL_1_1_2" repository="https://github.com/log4cplus/log4cplus.git" />
+</use>
+````  
+
+The header value must be change from fty-common.h to fty-common/log/fty_log.h for C project.
+
+### How to pass travis check
+Travis use an old version of log4cplus, so to avoid any errors,   
+add this two lines in the before_install section of the travis.yml file:  
+<code>- sudo apt-get remove liblog4cplus-dev</code>  
+<code>- sudo apt-get autoremove</code>
+
+Travis will get from github the correct version of log4cplus (within the project.xml file), but this one does not have  
+the file liblog4cplus.pc for pkconfig. So this file must be generated before linking with fty-common.  
+
+To correct this :  
+ * add a file named liblog4cplus.pc.in at the root of the project
+ * add an executable file named installLog4cplusPc in the root folder of the project
+
+And add this following line in  the before_install section of the travis.yml file:  
+<code>- sudo ./installLog4cplusPc</code>
+
+Content of liblog4cplus.pc.in :
+
+````
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib/@DEB_HOST_MULTIARCH@
+includedir=${prefix}/include
+
+Name: log4cplus
+Description: log4cplus
+Version: 1.1.2-3.2
+Libs: -L${libdir} -llog4cplus
+Cflags: -I${includedir}
+````  
+
+Content of installLog4cplusPc :
+
+````
+#!/usr/bin/env bash
+#During travis check, install the .pc file for log4cplus
+var="$(dpkg-architecture -qDEB_HOST_MULTIARCH)"
+sed -e "s/@DEB_HOST_MULTIARCH@/${var}/g" ./liblog4cplus.pc.in > /usr/lib/${var}/pkgconfig/liblog4cplus.pc
+chmod 644 /usr/lib/${var}/pkgconfig/liblog4cplus.pc
+````  
