@@ -7,7 +7,7 @@ set -ex
 
 # Verify all required dependencies with repos can be checked out
 cd "$REPO_DIR/.."
-git clone --quiet --depth 1 --branch rel_1_1_2 https://github.com/log4cplus/log4cplus.git liblog4cplus
+git clone --quiet --depth 1 -b REL_1_1_2 https://github.com/log4cplus/log4cplus.git liblog4cplus
 cd -
 
 if ! ((command -v dpkg-query >/dev/null 2>&1 && dpkg-query --list zproject >/dev/null 2>&1) || \
