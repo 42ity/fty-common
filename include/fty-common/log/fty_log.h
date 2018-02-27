@@ -48,7 +48,7 @@
 #else
 #define log_macro(level,ftylogger, ...) \
     do { \
-        insertLog(ftylogger,(level), __FILE__, __LINE__, __func__, __VA_ARGS__); \
+        ftylog_insertLog(ftylogger,(level), __FILE__, __LINE__, __func__, __VA_ARGS__); \
     } while(0)
 #endif
 
@@ -77,7 +77,7 @@
         log_macro(50000,ftylogger, __VA_ARGS__)
 
 //Default layout pattern
-#define LOGPATTERN "%d{%b %-2d %H:%M:%S.%q} %h %t [%i] -%-5p- %M (%l) %m%n"
+#define LOGPATTERN "[%t] -%-5p- %M (%l) %m%n"
 
 //  @interface
 #ifdef __cplusplus
@@ -175,33 +175,33 @@ extern "C"
 //wrapper to use for C code only
 ///////////////////////////////
 //Constructor
-Ftylog * new_ftylog(const char * component, const char * logConfigFile);
+Ftylog * ftylog_new(const char * component, const char * logConfigFile);
 //destructor
-void delete_ftylog(Ftylog * log);
+void ftylog_delete(Ftylog * log);
 
 //setter
-void setConfigFile(Ftylog * log, const char * file);
+void ftylog_setConfigFile(Ftylog * log, const char * file);
 
 //Set the logger to a specific log level
-void setLogLevelTrace(Ftylog * log);
-void setLogLevelDebug(Ftylog * log);
-void setLogLevelInfo(Ftylog * log);
-void setLogLevelWarning(Ftylog * log);
-void setLogLevelError(Ftylog * log);
-void setLogLevelFatal(Ftylog * log);
+void ftylog_setLogLevelTrace(Ftylog * log);
+void ftylog_setLogLevelDebug(Ftylog * log);
+void ftylog_setLogLevelInfo(Ftylog * log);
+void ftylog_setLogLevelWarning(Ftylog * log);
+void ftylog_setLogLevelError(Ftylog * log);
+void ftylog_setLogLevelFatal(Ftylog * log);
 
 //Check the log level 
-bool isLogTrace(Ftylog * log);
-bool isLogDebug(Ftylog * log);
-bool isLogInfo(Ftylog * log);
-bool isLogWarning(Ftylog * log);
-bool isLogError(Ftylog * log);
-bool isLogFatal(Ftylog * log);
+bool ftylog_isLogTrace(Ftylog * log);
+bool ftylog_isLogDebug(Ftylog * log);
+bool ftylog_isLogInfo(Ftylog * log);
+bool ftylog_isLogWarning(Ftylog * log);
+bool ftylog_isLogError(Ftylog * log);
+bool ftylog_isLogFatal(Ftylog * log);
 
-void insertLog(Ftylog * log, int level, const char* file, int line,
+void ftylog_insertLog(Ftylog * log, int level, const char* file, int line,
                const char* func, const char* format, ...);
 
-void setVeboseMode(Ftylog * log);
+void ftylog_setVeboseMode(Ftylog * log);
 
 #ifdef __cplusplus
 }

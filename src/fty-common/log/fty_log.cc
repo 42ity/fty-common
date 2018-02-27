@@ -213,7 +213,7 @@ void Ftylog::loadAppenders()
   else
   {
     //Start the thread watching the modification of the log config file
-    _watchConfigFile = new log4cplus::ConfigureAndWatchThread(_configFile.c_str(), 10000);
+    _watchConfigFile = new log4cplus::ConfigureAndWatchThread(_configFile.c_str(), 60000);
   }
 }
 
@@ -368,88 +368,88 @@ void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
 ////////////////////////
 
 //construtor
-Ftylog * new_ftylog(const char * component, const char * logConfigFile)
+Ftylog * ftylog_new(const char * component, const char * logConfigFile)
 {
   return new Ftylog(std::string(component), std::string(logConfigFile));
 }
 
 //destructor
-void delete_ftylog(Ftylog * log)
+void ftylog_delete(Ftylog * log)
 {
   delete log;
   log = NULL;
 }
 
 //setter
-void setConfigFile(Ftylog * log, const char * file)
+void ftylog_setConfigFile(Ftylog * log, const char * file)
 {
   log->setConfigFile(std::string(file));
 }
 
 //Set the logger to a specific log level
-void setLogLevelTrace(Ftylog * log)
+void ftylog_setLogLevelTrace(Ftylog * log)
 {
   log->setLogLevelTrace();
 }
 
-void setLogLevelDebug(Ftylog * log)
+void ftylog_setLogLevelDebug(Ftylog * log)
 {
   log->setLogLevelDebug();
 }
 
-void setLogLevelInfo(Ftylog * log)
+void ftylog_setLogLevelInfo(Ftylog * log)
 {
   log->setLogLevelInfo();
 }
 
-void setLogLevelWarning(Ftylog * log)
+void ftylog_setLogLevelWarning(Ftylog * log)
 {
   log->setLogLevelWarning();
 }
 
-void setLogLevelError(Ftylog * log)
+void ftylog_setLogLevelError(Ftylog * log)
 {
   log->setLogLevelError();
 }
 
-void setLogLevelFatal(Ftylog * log)
+void ftylog_setLogLevelFatal(Ftylog * log)
 {
   log->setLogLevelFatal();
 }
 
 //Check the log level 
-bool isLogTrace(Ftylog * log)
+bool ftylog_isLogTrace(Ftylog * log)
 {
   return log->isLogTrace();
 }
 
-bool isLogDebug(Ftylog * log)
+bool ftylog_isLogDebug(Ftylog * log)
 {
   return log->isLogDebug();
 }
 
-bool isLogInfo(Ftylog * log)
+bool ftylog_isLogInfo(Ftylog * log)
 {
   return log->isLogInfo();
 }
 
-bool isLogWarning(Ftylog * log)
+bool ftylog_isLogWarning(Ftylog * log)
 {
   return log->isLogWarning();
 }
 
-bool isLogError(Ftylog * log)
+bool ftylog_isLogError(Ftylog * log)
 {
   return log->isLogError();
 }
 
-bool isLogFatal(Ftylog * log)
+bool ftylog_isLogFatal(Ftylog * log)
 {
   return log->isLogTrace();
 }
 
 //Print log in logger appenders
-void insertLog(Ftylog * log, int level, const char* file, int line,
+void ftylog_insertLog(Ftylog * log, int level, const char* file, int line,
                const char* func, const char* format, ...)
 {
   va_list args;
@@ -459,7 +459,7 @@ void insertLog(Ftylog * log, int level, const char* file, int line,
 }
 
 //Switch to verbose mode
-void setVeboseMode(Ftylog * log)
+void ftylog_setVeboseMode(Ftylog * log)
 {
   log->setVeboseMode();
 }

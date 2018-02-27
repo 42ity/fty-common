@@ -53,11 +53,11 @@ In the main .h file add :
 * #include \<fty-common/log/fty_log.h\>
 * A global variable of type Ftylog * (struct)
 In the c file, for initialize the log object call this function :  
-<code>Ftylog * new_ftylog(const char * component, const char * logConfigFile)</code>
+<code>Ftylog * ftylog_new(const char * component, const char * logConfigFile)</code>
 
 Same parameters as the c++ Ftylog constructor
 
-Call the procedure void delete_ftylog(Ftylog * log)  to destroy the Ftylog struct
+Call the procedure void ftylog_delete(Ftylog * log)  to destroy the Ftylog struct
 
 ### How to log
 Use these macros to log any event in the agent : 
@@ -110,7 +110,10 @@ log4cplus.appender.file.layout.ConversionPattern=[%-5p][%D{%Y/%m/%d %H:%M:%S:%q}
 ````
 
 Note that the name after the "log4cplus.logger." string **MUST BE** the same as the "component"
-parameter when you create a Ftylog object.
+parameter when you create a Ftylog object.  
+  
+Every minute, a small thread check if the log configuration file has been modified or not.  
+If modified, the logging system reload the log configuration file.
 
 The object where log events are redirected is call "appender".  
 Log4cplus define several types of appenders :  
@@ -148,12 +151,12 @@ The following class functions test if a log level is included in the log level o
 * bool FtyLog::isLogFatal()
 
 And for C code : 
-* bool isLogTrace(Ftylog * log)
-* bool isLogDebug(Ftylog * log)
-* bool isLogInfo(Ftylog * log)
-* bool isLogWarning(Ftylog * log)
-* bool isLogError(Ftylog * log)
-* bool isLogFatal(Ftylog * log)
+* bool ftylog_isLogTrace(Ftylog * log)
+* bool ftylog_isLogDebug(Ftylog * log)
+* bool ftylog_isLogInfo(Ftylog * log)
+* bool ftylog_isLogWarning(Ftylog * log)
+* bool ftylog_isLogError(Ftylog * log)
+* bool ftylog_isLogFatal(Ftylog * log)
 
 For example if the log level of the agent is INFO, the function isLogError() will return true and the function isLogDebug() will return false.
 
@@ -169,12 +172,12 @@ This class procedures are :
 * void FtyLog::setLogLevelFatal()
 
 And for C code : 
-* void setLogLevelTrace(Ftylog * log)
-* void setLogLevelDebug(Ftylog * log)
-* void setLogLevelInfo(Ftylog * log)
-* void setLogLevelWarning(Ftylog * log)
-* void setLogLevelError(Ftylog * log)
-* void setLogLevelFatal(Ftylog * log)
+* void ftylog_setLogLevelTrace(Ftylog * log)
+* void ftylog_setLogLevelDebug(Ftylog * log)
+* void ftylog_setLogLevelInfo(Ftylog * log)
+* void ftylog_setLogLevelWarning(Ftylog * log)
+* void ftylog_setLogLevelError(Ftylog * log)
+* void ftylog_setLogLevelFatal(Ftylog * log)
 
 ## How to use Common functions
 ### For agent coded with C++ : 
