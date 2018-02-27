@@ -1,0 +1,2 @@
+AM_CXXFLAGS += \
+    -Wno-error=deprecated-declarations

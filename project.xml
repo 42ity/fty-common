@@ -1,0 +1,36 @@
+<project
+    name = "fty-common"
+    description = "Provides common tools for agents"
+    script = "zproject.gsl"
+    email = "EatonIPCOpenSource@eaton.com"
+    url = "https://42ity.org"
+    license = "GPL-2.0+"
+    repository = "https://github.com/42ity/fty-common"
+    header = "fty_common.h"
+    >
+
+    <target name = "debian" />
+    <target name = "redhat" />
+    <target name = "travis" />
+    <target name = "jenkins" >
+        <option name = "agent_label" value = "devel-image &amp;&amp; x86_64" />
+        <option name = "triggers_pollSCM" value = "H/2 * * * *" />
+        <option name = "test_cppcheck" value = "1" />
+        <option name = "build_docs" value = "1" />
+        <option name = "dist_docs" value = "1" />
+    </target>
+
+    <include filename = "license.xml" />
+    <version major = "1" minor = "0" patch = "0" />
+    <abi current = "1" revision = "0" age = "0" />
+
+    <classfilename use-cxx = "true" source-extension = "cc" header-extension = "h"
+        pretty-print = "no" keep-tree = "true" />
+
+    <use project = "liblog4cplus" header = "log4cplus/logger.h"
+        test = "appender_test" repository="--branch REL_1_1_2 https://github.com/log4cplus/log4cplus.git" />
+    
+    <class name = "fty-common/log/fty_log">Log management</class>
+    <class name = "fty-common/common/fty_commons" >Singleton object and common functions</class>
+</project>
+
