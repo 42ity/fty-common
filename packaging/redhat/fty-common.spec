@@ -47,7 +47,7 @@ BuildRequires:  libtool
 BuildRequires:  pkgconfig
 BuildRequires:  xmlto
 BuildRequires:  gcc-c++
-BuildRequires:  liblog4cplus-devel
+BuildRequires:  log4cplus-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
@@ -71,7 +71,7 @@ This package contains shared library for fty-common: provides common tools for a
 Summary:        provides common tools for agents
 Group:          System/Libraries
 Requires:       libfty_common1 = %{version}
-Requires:       liblog4cplus-devel
+Requires:       log4cplus-devel
 
 %description devel
 provides common tools for agents development tools
