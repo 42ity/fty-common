@@ -33,7 +33,6 @@
 #include <log4cplus/hierarchy.h>
 #include <log4cplus/loggingmacros.h>
 #include <log4cplus/loglevel.h>
-#include <log4cplus/logger.h>
 #include <log4cplus/consoleappender.h>
 
 #include "../../fty_common_classes.h"
@@ -56,10 +55,15 @@ Ftylog::Ftylog(std::string component, std::string configFile)
   _logger = log;
 
   //Get log level from bios and set to the logger
-  setVarEnv();
+  //even if there is a log configuration file
+  setLogLevelFromEnv();
 
+  //Get pattern laoyout from env
+  setPatternFromEnv();
+  
   //load appenders
   loadAppenders();
+
 }
 
 //Clean objects in destructor
@@ -87,7 +91,7 @@ void Ftylog::setConfigFile(std::string file)
 }
 
 //Initialize from environment variables
-void Ftylog::setVarEnv()
+void Ftylog::setLogLevelFromEnv()
 {
   //By default, set TRACE level
   setLogLevelTrace();
@@ -98,9 +102,11 @@ void Ftylog::setVarEnv()
   {
     setLogLevelFromEnv(varEnv);
   }
-
+}
+void Ftylog::setPatternFromEnv()
+{
   //Get BIOS_LOG_PATTERN for a default patternlayout
-  varEnv = getenv("BIOS_LOG_PATTERN");
+  const char * varEnv = getenv("BIOS_LOG_PATTERN");
   if (varEnv && !std::string(varEnv).empty())
   {
     _layoutPattern = varEnv;

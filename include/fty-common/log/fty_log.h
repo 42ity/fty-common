@@ -107,7 +107,8 @@ private:
   void setLogLevelFromEnv(const char* level);
 
   //Set needed variables from env 
-  void setVarEnv();
+  void setLogLevelFromEnv();
+  void setPatternFromEnv();
 
   //Load appenders from the config file 
   // or set the default console appender if no can't load from the config file
