@@ -174,15 +174,15 @@ default|default-Werror|default-with-docs|valgrind)
     # or MacOS packages; other OSes are not currently supported by Travis cloud
     [ -z "$CI_TIME" ] || echo "`date`: Starting build of dependencies (if any)..."
 
-    # Start of recipe for dependency: liblog4cplus
-    if ! (command -v dpkg-query >/dev/null 2>&1 && dpkg-query --list liblog4cplus-dev >/dev/null 2>&1) || \
-           (command -v brew >/dev/null 2>&1 && brew ls --versions liblog4cplus >/dev/null 2>&1) \
+    # Start of recipe for dependency: log4cplus
+    if ! (command -v dpkg-query >/dev/null 2>&1 && dpkg-query --list log4cplus-dev >/dev/null 2>&1) || \
+           (command -v brew >/dev/null 2>&1 && brew ls --versions log4cplus >/dev/null 2>&1) \
     ; then
         echo ""
         BASE_PWD=${PWD}
-        echo "`date`: INFO: Building prerequisite 'liblog4cplus' from Git repository..." >&2
-        $CI_TIME git clone --quiet --depth 1 -b REL_1_1_2 https://github.com/log4cplus/log4cplus.git liblog4cplus
-        cd liblog4cplus
+        echo "`date`: INFO: Building prerequisite 'log4cplus' from Git repository..." >&2
+        $CI_TIME git clone --quiet --depth 1 -b REL_1_1_2 https://github.com/log4cplus/log4cplus.git log4cplus
+        cd log4cplus
         CCACHE_BASEDIR=${PWD}
         export CCACHE_BASEDIR
         git --no-pager log --oneline -n1

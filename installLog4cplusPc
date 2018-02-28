@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-#During travis check, install the .pc file for log4cplus
-var="$(dpkg-architecture -qDEB_HOST_MULTIARCH)"
-sed -e "s/@DEB_HOST_MULTIARCH@/${var}/g" ./liblog4cplus.pc.in > /usr/lib/${var}/pkgconfig/liblog4cplus.pc
-chmod 644 /usr/lib/${var}/pkgconfig/liblog4cplus.pc

@@ -27,7 +27,7 @@
     <classfilename use-cxx = "true" source-extension = "cc" header-extension = "h"
         pretty-print = "no" keep-tree = "true" />
 
-    <use project = "liblog4cplus" header = "log4cplus/logger.h"
+    <use project = "log4cplus" header = "log4cplus/logger.h"
         test = "appender_test" release="REL_1_1_2" repository="https://github.com/log4cplus/log4cplus.git" />
     
     <class name = "fty-common/log/fty_log">Log management</class>
