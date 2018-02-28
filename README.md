@@ -200,7 +200,7 @@ Add this bloc in the project.xml file :
 <use project = "fty-common" libname = "libfty_common" header="fty-common.h"
         repository = "https://github.com/42ity/fty-common.git"
         test = "fty_commmon_selftest" >
-        <use project = "liblog4cplus" header = "log4cplus/logger.h"
+        <use project = "log4cplus" header = "log4cplus/logger.h"
         test = "appender_test" release="REL_1_1_2" repository="https://github.com/log4cplus/log4cplus.git" />
 </use>
 ````  
