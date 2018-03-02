@@ -200,7 +200,7 @@ Add this bloc in the project.xml file :
 <use project = "fty-common" libname = "libfty_common" header="fty-common.h"
         repository = "https://github.com/42ity/fty-common.git"
         test = "fty_commmon_selftest" >
-        <use project = "liblog4cplus" header = "log4cplus/logger.h"
+        <use project = "log4cplus" header = "log4cplus/logger.h"
         test = "appender_test" release="REL_1_1_2" repository="https://github.com/log4cplus/log4cplus.git" />
 </use>
 ````  
@@ -212,38 +212,3 @@ Travis use an old version of log4cplus, so to avoid any errors,
 add this two lines in the before_install section of the travis.yml file:  
 <code>- sudo apt-get remove liblog4cplus-dev</code>  
 <code>- sudo apt-get autoremove</code>
-
-Travis will get from github the correct version of log4cplus (within the project.xml file), but this one does not have  
-the file liblog4cplus.pc for pkconfig. So this file must be generated before linking with fty-common.  
-
-To correct this :  
- * add a file named liblog4cplus.pc.in at the root of the project
- * add an executable file named installLog4cplusPc in the root folder of the project
-
-And add this following line in  the before_install section of the travis.yml file:  
-<code>- sudo ./installLog4cplusPc</code>
-
-Content of liblog4cplus.pc.in :
-
-````
-prefix=/usr
-exec_prefix=${prefix}
-libdir=${exec_prefix}/lib/@DEB_HOST_MULTIARCH@
-includedir=${prefix}/include
-
-Name: log4cplus
-Description: log4cplus
-Version: 1.1.2-3.2
-Libs: -L${libdir} -llog4cplus
-Cflags: -I${includedir}
-````  
-
-Content of installLog4cplusPc :
-
-````
-#!/usr/bin/env bash
-#During travis check, install the .pc file for log4cplus
-var="$(dpkg-architecture -qDEB_HOST_MULTIARCH)"
-sed -e "s/@DEB_HOST_MULTIARCH@/${var}/g" ./liblog4cplus.pc.in > /usr/lib/${var}/pkgconfig/liblog4cplus.pc
-chmod 644 /usr/lib/${var}/pkgconfig/liblog4cplus.pc
-````  
