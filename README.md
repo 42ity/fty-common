@@ -197,7 +197,7 @@ The following macros are defined :
 Add this bloc in the project.xml file :   
 
 ````
-<use project = "fty-common" libname = "libfty_common" header="fty-common.h"
+<use project = "fty-common" libname = "libfty_common" header="fty_common.h"
         repository = "https://github.com/42ity/fty-common.git"
         test = "fty_commmon_selftest" >
         <use project = "log4cplus" header = "log4cplus/logger.h"
@@ -205,7 +205,7 @@ Add this bloc in the project.xml file :
 </use>
 ````  
 
-The header value must be change from fty-common.h to fty-common/log/fty_log.h for C project.
+The header value must be change from fty_common.h to fty-common/log/fty_log.h for C project.
 
 ### How to pass travis check
 Travis use an old version of log4cplus, so to avoid any errors,   
