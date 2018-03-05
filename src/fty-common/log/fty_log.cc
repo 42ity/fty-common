@@ -30,6 +30,8 @@
 #include <unistd.h>
 #include <fstream>
 #include <typeinfo>
+#include <thread>
+#include <sstream>
 #include <log4cplus/hierarchy.h>
 #include <log4cplus/loggingmacros.h>
 #include <log4cplus/loglevel.h>
@@ -196,7 +198,7 @@ void Ftylog::loadAppenders()
     else
     {
       //Print an error log
-      log_error(this, "Can't read file %s \n",  _configFile.c_str());
+      log_error_log(this, "Can't read file %s \n",  _configFile.c_str());
       //Set default COnsoleAppender
       loadDefault = true;
     }
@@ -357,7 +359,7 @@ void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
 
   if (buffer == NULL)
   {
-    log_error(this, "Buffer == NULL");
+    log_error_log(this, "Buffer == NULL");
     va_end(args);
     return;
   }
@@ -367,6 +369,54 @@ void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
 
   free(buffer);
   va_end(args);
+}
+
+////////////////////////
+//manageftylog section
+////////////////////////
+Ftylog *  ManageFtyLog::_ftylogdefault = NULL;
+
+Ftylog* ManageFtyLog::getInstanceFtylog()
+{
+  if (NULL == _ftylogdefault )
+  {
+    std::ostringstream threadId;
+    threadId <<  std::this_thread::get_id();
+    std::string name = "log-default-" + threadId.str();
+    _ftylogdefault = new Ftylog(name);
+    log_debug_log(_ftylogdefault, "new logger");
+  }
+  
+  return _ftylogdefault;
+}
+
+void ManageFtyLog::setInstanceFtylog(std::string _component, std::string logConfigFile )
+{
+  if (NULL != _ftylogdefault )
+  {
+    log_debug_log(_ftylogdefault, "delete old logger");
+    delete _ftylogdefault;
+  }
+  _ftylogdefault = new Ftylog(_component,logConfigFile);
+}
+
+void ManageFtyLog::setInstanceFtylog(Ftylog * logger )
+{
+  if (NULL != _ftylogdefault )
+  {
+    log_debug_log(_ftylogdefault, "delete old logger");
+    delete _ftylogdefault;
+  }
+  _ftylogdefault = logger;
+}
+
+void ManageFtyLog::deleteInstanceFtylog()
+{
+  if (NULL != _ftylogdefault )
+  {
+    log_debug_log(_ftylogdefault, "delete logger");
+    delete _ftylogdefault;
+  }
 }
 
 ////////////////////////
@@ -470,6 +520,26 @@ void ftylog_setVeboseMode(Ftylog * log)
   log->setVeboseMode();
 }
 
+Ftylog * ftylog_getInstance()
+{
+  return ManageFtyLog::getInstanceFtylog();
+}
+
+void ftylog_setInstanceLog(Ftylog * logger)
+{
+  ManageFtyLog::setInstanceFtylog(logger);
+}
+
+void ftylog_setInstance(const char * component,const char * configFile)
+{
+  ManageFtyLog::setInstanceFtylog(std::string(component),std::string(configFile));
+}
+
+void ftylog_deleteInstance()
+{
+  ManageFtyLog::deleteInstanceFtylog();
+}
+
 //Test function
 void fty_common_log_fty_log_test(bool verbose)
 {
@@ -479,8 +549,8 @@ void fty_common_log_fty_log_test(bool verbose)
   printf(" * Check level test \n");
 
   test->setLogLevelTrace();
-  log_trace(test, "This is a simple trace log");
-  log_trace(test, "This is a %s log test number %d", "trace", 1);
+  log_trace_log(test, "This is a simple trace log");
+  log_trace_log(test, "This is a %s log test number %d", "trace", 1);
   assert(test->isLogTrace());
   assert(test->isLogDebug());
   assert(test->isLogInfo());
@@ -489,8 +559,8 @@ void fty_common_log_fty_log_test(bool verbose)
   assert(test->isLogFatal());
 
   test->setLogLevelDebug();
-  log_debug(test, "This is a simple debug log");
-  log_debug(test, "This is a %s log test number %d", "debug", 1);
+  log_debug_log(test, "This is a simple debug log");
+  log_debug_log(test, "This is a %s log test number %d", "debug", 1);
   assert(!test->isLogTrace());
   assert(test->isLogDebug());
   assert(test->isLogInfo());
@@ -499,8 +569,8 @@ void fty_common_log_fty_log_test(bool verbose)
   assert(test->isLogFatal());
 
   test->setLogLevelInfo();
-  log_info(test, "This is a simple info log");
-  log_info(test, "This is a %s log test number %d", "info", 1);
+  log_info_log(test, "This is a simple info log");
+  log_info_log(test, "This is a %s log test number %d", "info", 1);
   assert(!test->isLogTrace());
   assert(!test->isLogDebug());
   assert(test->isLogInfo());
@@ -509,8 +579,8 @@ void fty_common_log_fty_log_test(bool verbose)
   assert(test->isLogFatal());
 
   test->setLogLevelWarning();
-  log_warning(test, "This is a simple warning log");
-  log_warning(test, "This is a %s log test number %d", "warning", 1);
+  log_warning_log(test, "This is a simple warning log");
+  log_warning_log(test, "This is a %s log test number %d", "warning", 1);
   assert(!test->isLogTrace());
   assert(!test->isLogDebug());
   assert(!test->isLogInfo());
@@ -519,8 +589,8 @@ void fty_common_log_fty_log_test(bool verbose)
   assert(test->isLogFatal());
 
   test->setLogLevelError();
-  log_error(test, "This is a simple error log");
-  log_error(test, "This is a %s log test number %d", "error", 1);
+  log_error_log(test, "This is a simple error log");
+  log_error_log(test, "This is a %s log test number %d", "error", 1);
   assert(!test->isLogTrace());
   assert(!test->isLogDebug());
   assert(!test->isLogInfo());
@@ -529,8 +599,8 @@ void fty_common_log_fty_log_test(bool verbose)
   assert(test->isLogFatal());
 
   test->setLogLevelFatal();
-  log_fatal(test, "This is a simple fatal log");
-  log_fatal(test, "This is a %s log test number %d", "fatal", 1);
+  log_fatal_log(test, "This is a simple fatal log");
+  log_fatal_log(test, "This is a %s log test number %d", "fatal", 1);
   assert(!test->isLogTrace());
   assert(!test->isLogDebug());
   assert(!test->isLogInfo());
@@ -542,8 +612,8 @@ void fty_common_log_fty_log_test(bool verbose)
   printf(" * Check log config file test\n");
   test->setConfigFile("./src/selftest-ro/test-config.conf");
 
-  log_info(test, "This is a simple info log");
-  log_info(test, "This is a %s log test number %d", "info", 1);
+  log_info_log(test, "This is a simple info log");
+  log_info_log(test, "This is a %s log test number %d", "info", 1);
 
   //file is created
   assert(access("./src/selftest-rw/logfile.log", F_OK) != -1);
@@ -558,7 +628,7 @@ void fty_common_log_fty_log_test(bool verbose)
 
   printf(" * Check verbose \n");
   test->setVeboseMode();
-  log_trace(test, "This is a verbose trace log");
+  log_trace_log(test, "This is a verbose trace log");
   printf(" * Check verbose : OK \n");
 
   //delete the log file test
@@ -567,6 +637,18 @@ void fty_common_log_fty_log_test(bool verbose)
   delete test;
   test = NULL;
 
+  printf(" * Check default log \n");
+  setenv("BIOS_LOG_PATTERN","%c [%t] -%-5p- %M (%l) %m%n" , 1);
+  log_trace("This is a simple info log with default logger");
+  log_debug("This is a simple info log with default logger");
+  log_info("This is a simple info log with default logger");
+  log_warning("This is a simple info log with default logger");
+  log_error("This is a simple info log with default logger");
+  log_fatal("This is a simple info log with default logger");
+  ManageFtyLog::deleteInstanceFtylog();
+  printf(" * Check default log : OK \n");
+
+  
   //  @selftest
   printf("OK\n");
 }

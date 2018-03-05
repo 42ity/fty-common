@@ -52,35 +52,62 @@
     } while(0)
 #endif
 
+//Logging with explicit logger
 /* Prints message with TRACE level. 0 <=> log4cplus::TRACE_LOG_LEVEL */
-#define log_trace(ftylogger,...) \
+#define log_trace_log(ftylogger,...) \
         log_macro(0,ftylogger, __VA_ARGS__)
 
 /* Prints message with DEBUG level. 10000 <=> log4cplus::DEBUG_LOG_LEVEL */
-#define log_debug(ftylogger,...) \
+#define log_debug_log(ftylogger,...) \
         log_macro(10000,ftylogger, __VA_ARGS__)
 
 /* Prints message with INFO level. 20000 <=> log4cplus::INFO_LOG_LEVEL */
-#define log_info(ftylogger,...) \
+#define log_info_log(ftylogger,...) \
         log_macro(20000,ftylogger, __VA_ARGS__)
 
 /* Prints message with WARNING level 30000 <=> log4cplus::WARN_LOG_LEVEL*/
-#define log_warning(ftylogger,...) \
+#define log_warning_log(ftylogger,...) \
         log_macro(30000,ftylogger, __VA_ARGS__)
 
 /* Prints message with ERROR level 40000 <=> log4cplus::ERROR_LOG_LEVEL*/
-#define log_error(ftylogger,...) \
+#define log_error_log(ftylogger,...) \
         log_macro(40000,ftylogger, __VA_ARGS__)
 
 /* Prints message with FATAL level. 50000 <=> log4cplus::FATAL_LOG_LEVEL*/
-#define log_fatal(ftylogger,...) \
+#define log_fatal_log(ftylogger,...) \
         log_macro(50000,ftylogger, __VA_ARGS__)
+
+//Logging with default logger
+/* Prints message with TRACE level. 0 <=> log4cplus::TRACE_LOG_LEVEL */
+#define log_trace(...) \
+        log_macro(0,ftylog_getInstance(), __VA_ARGS__)
+
+/* Prints message with DEBUG level. 10000 <=> log4cplus::DEBUG_LOG_LEVEL */
+#define log_debug(...) \
+        log_macro(10000,ftylog_getInstance(), __VA_ARGS__)
+
+/* Prints message with INFO level. 20000 <=> log4cplus::INFO_LOG_LEVEL */
+#define log_info(...) \
+        log_macro(20000,ftylog_getInstance(), __VA_ARGS__)
+
+/* Prints message with WARNING level 30000 <=> log4cplus::WARN_LOG_LEVEL*/
+#define log_warning(...) \
+        log_macro(30000,ftylog_getInstance(), __VA_ARGS__)
+
+/* Prints message with ERROR level 40000 <=> log4cplus::ERROR_LOG_LEVEL*/
+#define log_error(...) \
+        log_macro(40000,ftylog_getInstance(), __VA_ARGS__)
+
+/* Prints message with FATAL level. 50000 <=> log4cplus::FATAL_LOG_LEVEL*/
+#define log_fatal(...) \
+        log_macro(50000,ftylog_getInstance(), __VA_ARGS__)
 
 //Default layout pattern
 #define LOGPATTERN "[%t] -%-5p- %M (%l) %m%n"
 
 //  @interface
 #ifdef __cplusplus
+//Log class
 
 class Ftylog
 {
@@ -143,7 +170,7 @@ public:
   bool isLogError();
   bool isLogFatal();
 
-  /*! \brief do logging
+  /*! \brief insertLog
     An internal logging function, use specific log_error, log_debug  macros!
     \param level - level for message, see \ref log4cplus::logLevel 
     \param file - name of file issued print, usually content of __FILE__ macro
@@ -161,6 +188,28 @@ public:
   //    if no loglevel defined for this appender
   // -Add a new console appender
   void setVeboseMode();
+};
+
+//singleton for logger managment
+class ManageFtyLog
+{
+private:
+  //Avoid use of the following procedures/functions
+  ManageFtyLog(){};
+  ~ManageFtyLog(){};
+  ManageFtyLog(const ManageFtyLog&) = delete;
+  ManageFtyLog& operator=(const ManageFtyLog&) = delete;
+  static Ftylog *  _ftylogdefault;
+public:
+  
+  // Return the Ftylog obect from the instance
+  static Ftylog* getInstanceFtylog();
+  //Create or replace the Ftylog object in the instance using a new Ftylog object
+  static void setInstanceFtylog(std::string _component, std::string logConfigFile = "");
+  //Create or replace the Ftylog object in the instance using an existing Ftylog object
+  static void setInstanceFtylog(Ftylog* logger);
+  //Delete the Ftylog object in the instance
+  static void deleteInstanceFtylog();
 };
 
 #else
@@ -199,10 +248,26 @@ bool ftylog_isLogWarning(Ftylog * log);
 bool ftylog_isLogError(Ftylog * log);
 bool ftylog_isLogFatal(Ftylog * log);
 
+//Procedure to print the log in the appenders
 void ftylog_insertLog(Ftylog * log, int level, const char* file, int line,
-               const char* func, const char* format, ...);
+                      const char* func, const char* format, ...);
 
+//Load a specific appender if verbose mode is set to true : 
+// -Save the logger logging level and set it to TRACE logging level
+// -Remove an already existing ConsoleAppender
+// -For the other appender, set the threshold parameter to the old logger log level
+//    if no loglevel defined for this appender
+// -Add a new console appender
 void ftylog_setVeboseMode(Ftylog * log);
+
+// Return the Ftylog obect from the instance (C code) or create a new one if not existing
+Ftylog * ftylog_getInstance();
+//Create or replace the Ftylog object in the instance using a new Ftylog object
+void ftylog_setInstanceLog(Ftylog * logger);
+//Create or replace the Ftylog object in the instance using an existing Ftylog object
+void ftylog_setInstance(const char * component, const char* configFile);
+//Delete the Ftylog object in the instance
+void ftylog_deleteInstance();
 
 #ifdef __cplusplus
 }
