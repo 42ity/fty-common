@@ -392,21 +392,13 @@ Ftylog* ManageFtyLog::getInstanceFtylog()
 
 void ManageFtyLog::setInstanceFtylog(std::string _component, std::string logConfigFile )
 {
-  if (NULL != _ftylogdefault )
-  {
-    log_debug_log(_ftylogdefault, "delete old logger");
-    delete _ftylogdefault;
-  }
+  deleteInstanceFtylog();
   _ftylogdefault = new Ftylog(_component,logConfigFile);
 }
 
 void ManageFtyLog::setInstanceFtylog(Ftylog * logger )
 {
-  if (NULL != _ftylogdefault )
-  {
-    log_debug_log(_ftylogdefault, "delete old logger");
-    delete _ftylogdefault;
-  }
+  deleteInstanceFtylog();
   _ftylogdefault = logger;
 }
 
@@ -416,6 +408,7 @@ void ManageFtyLog::deleteInstanceFtylog()
   {
     log_debug_log(_ftylogdefault, "delete logger");
     delete _ftylogdefault;
+    _ftylogdefault = NULL;
   }
 }
 
