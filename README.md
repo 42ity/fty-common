@@ -1,6 +1,6 @@
 # fty-common
 Library providing :  
-* Mutual procedures and functions that can be used by any fty-agent 
+* Mutual methods and functions that can be used by any fty-agent 
 * A logging system based on the [log4cplus 1.1-9](https://github.com/log4cplus/log4cplus/tree/1.1.x) utility. 
 
 ## How to build
@@ -36,9 +36,6 @@ With this matching between the values of BIOS_LOG_LEVEL and the log level set by
 
 
 ### For agents coded with C++ : 
-In the main .h file add : 
-* #include <fty_common.h>
-* A global variable of type Ftylog * (class)
 In the cpp file, use the constructor :  
 <code>Ftylog::Ftylog(std::string component, std::string configFile = "")</code>
 
@@ -46,28 +43,58 @@ This constructor has two parameters :
 * component : name of the agent ex : fty-alert-list
 * configFile (optional) : path to the log config file.
 
-Call delete for destroy the Ftylog object.
+And call this method with the Ftylog object :  
+<code>void ManageFtyLog::setInstanceFtylog(Ftylog * logger )</code>  
+This method makes the Ftylog object accessible in the agent's threads and shared libraries  
+by using this function : 
+<code>Ftylog * ManageFtyLog::getInstanceFtylog()</code>  
+NB : if there is no Ftylog object, this function create a new one with following paramters :  
+ * component  : "log-default-\<process Id\>"
+ * configFile : ""
+
+Instead of create an Ftylog object and calling the method to make the Ftylog object accessible, you can use 
+the method <code>void ManageFtyLog::setInstanceFtylog(std::string component, std::string configFile = "" )</code>    
+who does both
+
+Use this following method for destroy the Ftylog object :  
+<code>void ManageFtyLog::deleteInstanceFtylog()</code>  
 
 ### For agents coded with C : 
-In the main .h file add : 
-* #include \<fty-common/log/fty_log.h\>
-* A global variable of type Ftylog * (struct)
-In the c file, for initialize the log object call this function :  
-<code>Ftylog * ftylog_new(const char * component, const char * logConfigFile)</code>
-
+In the c file, for initialize the log object, call this function :  
+<code>Ftylog * ftylog_new(const char * component, const char * logConfigFile)</code>  
 Same parameters as the c++ Ftylog constructor
 
-Call the procedure void ftylog_delete(Ftylog * log)  to destroy the Ftylog struct
+Use this method to share the Ftylog object in the agent : 
+<code>void ftylog_setInstanceLog(Ftylog * logger )</code>  
+  
+And for get the Ftylog object, call <code>Ftylog * ftylog_getInstance()</code>  
+NB : As C++ code, if there is no Ftylog object, this function create a new one with following paramters :  
+ * component  : "log-default-\<process Id\>"
+ * configFile : ""
+
+
+As C++ code, method <code>void ftylog_setInstance(const char * component, const char * logConfigFile )</code>  
+make a new Ftylog object and set it accessible.  
+
+Call the method <code>void ftylog_deleteInstance()</code> to destroy the Ftylog instance
 
 ### How to log
-Use these macros to log any event in the agent : 
+Use these macros to log any event in the agent (C++ or C) : 
 
-* log_trace(\<log object\>,...) : log a TRACE event.  
-* log_debug(\<log object\>,...) : log a DEBUG event.   
-* log_info(\<log object\>,...) : log a INFO event.  
-* log_warning(\<log object\>,...) : log a WARN event.  
-* log_error(\<log object\>,...) : log a ERROR event.  
-* log_fatal(\<log object\>,...) : log a FATAL event.  
+* log_trace(...) : log a TRACE event.  
+* log_debug(...) : log a DEBUG event.   
+* log_info(...) : log a INFO event.  
+* log_warning(...) : log a WARN event.  
+* log_error(...) : log a ERROR event.  
+* log_fatal(...) : log a FATAL event.  
+  
+Or with a Ftylog object :  
+* log_trace_log(\<log object\>,...) : log a TRACE event.  
+* log_debug_log(\<log object\>,...) : log a DEBUG event.   
+* log_info_log(\<log object\>,...) : log a INFO event.  
+* log_warning_log(\<log object\>,...) : log a WARN event.  
+* log_error_log(\<log object\>,...) : log a ERROR event.  
+* log_fatal_log(\<log object\>,...) : log a FATAL event.  
   
 The "..." section is a string follow by any parameters as the printf functions.
 
@@ -135,8 +162,8 @@ Log4cplus define several types of appenders :
 See [here](http://log4cplus.sourceforge.net/docs/html/classlog4cplus_1_1Appender.html) for more informations about appenders
 
 ### Verbose mode
-For agent with a verbose mode, you can call the class procedure FtyLog::setVerboseMode()
-(or setVerboseMode(Ftylog* log) for C code) to change logging system : 
+For agent with a verbose mode, you can call the class method FtyLog::setVerboseMode()
+(or ftylog_setVerboseMode(Ftylog* log) for C code) to change logging system : 
 
 * It set (or overwrites if existing ) a ConsoleAppender object with the TRACE logging level with default format or 
     format defined by the BIOS_LOG_PATTERN environment variable.
@@ -161,9 +188,9 @@ And for C code :
 For example if the log level of the agent is INFO, the function isLogError() will return true and the function isLogDebug() will return false.
 
 ### Use for Test only 
-The following procedures change dynamically the logging level of the Ftylog object to a specific log level, so **only use it for testing**.
+The following methods change dynamically the logging level of the Ftylog object to a specific log level, so **only use it for testing**.
 
-This class procedures are : 
+This class methods are : 
 * void FtyLog::setLogLevelTrace()
 * void FtyLog::setLogLevelDebug()
 * void FtyLog::setLogLevelInfo()
@@ -197,7 +224,7 @@ The following macros are defined :
 Add this bloc in the project.xml file :   
 
 ````
-<use project = "fty-common" libname = "libfty_common" header="fty-common.h"
+<use project = "fty-common" libname = "libfty_common" header="fty_common.h"
         repository = "https://github.com/42ity/fty-common.git"
         test = "fty_commmon_selftest" >
         <use project = "log4cplus" header = "log4cplus/logger.h"
@@ -205,7 +232,7 @@ Add this bloc in the project.xml file :
 </use>
 ````  
 
-The header value must be change from fty-common.h to fty-common/log/fty_log.h for C project.
+The header value must be change from fty_common.h to fty-common/log/fty_log.h for C project.
 
 ### How to pass travis check
 Travis use an old version of log4cplus, so to avoid any errors,   
