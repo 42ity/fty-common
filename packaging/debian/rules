@@ -42,6 +42,7 @@ override_dh_auto_test:
 
 override_dh_auto_configure:
 	dh_auto_configure -- \
+		--with-libtntnet=yes \
 		--with-docs=$(DOCS) \
 		--enable-drafts=$(DRAFTS)
 
