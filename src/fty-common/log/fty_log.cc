@@ -44,9 +44,27 @@ using namespace log4cplus::helpers;
 //constructor
 Ftylog::Ftylog(std::string component, std::string configFile)
 {
+  init(component,configFile);
+}
+
+Ftylog::Ftylog()
+{
+    std::ostringstream threadId;
+    threadId <<  std::this_thread::get_id();
+    std::string name = "log-default-" + threadId.str();
+    init(name);
+}
+
+void Ftylog::init(std::string component, std::string configFile)
+{
+  if (NULL != _watchConfigFile)
+  {
+    delete _watchConfigFile;
+    _watchConfigFile = NULL;
+  }
+  _logger.shutdown();
   _agentName = component;
   _configFile = configFile;
-  _watchConfigFile = NULL;
   _layoutPattern = LOGPATTERN;
 
   //initialize log4cplus
@@ -65,8 +83,8 @@ Ftylog::Ftylog(std::string component, std::string configFile)
   
   //load appenders
   loadAppenders();
-
 }
+
 
 //Clean objects in destructor
 Ftylog::~Ftylog()
@@ -90,6 +108,11 @@ void Ftylog::setConfigFile(std::string file)
 {
   _configFile = file;
   loadAppenders();
+}
+
+void Ftylog::change(std::string name,std::string configFile)
+{
+  init(name,configFile);
 }
 
 //Initialize from environment variables
@@ -374,42 +397,17 @@ void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
 ////////////////////////
 //manageftylog section
 ////////////////////////
-Ftylog *  ManageFtyLog::_ftylogdefault = NULL;
+
+Ftylog ManageFtyLog::_ftylogdefault=Ftylog();
 
 Ftylog* ManageFtyLog::getInstanceFtylog()
 {
-  if (NULL == _ftylogdefault )
-  {
-    std::ostringstream threadId;
-    threadId <<  std::this_thread::get_id();
-    std::string name = "log-default-" + threadId.str();
-    _ftylogdefault = new Ftylog(name);
-    log_debug_log(_ftylogdefault, "new logger");
-  }
-  
-  return _ftylogdefault;
+  return &_ftylogdefault;
 }
 
-void ManageFtyLog::setInstanceFtylog(std::string _component, std::string logConfigFile )
+void ManageFtyLog::setInstanceFtylog(std::string componentName, std::string logConfigFile )
 {
-  deleteInstanceFtylog();
-  _ftylogdefault = new Ftylog(_component,logConfigFile);
-}
-
-void ManageFtyLog::setInstanceFtylog(Ftylog * logger )
-{
-  deleteInstanceFtylog();
-  _ftylogdefault = logger;
-}
-
-void ManageFtyLog::deleteInstanceFtylog()
-{
-  if (NULL != _ftylogdefault )
-  {
-    log_debug_log(_ftylogdefault, "delete logger");
-    delete _ftylogdefault;
-    _ftylogdefault = NULL;
-  }
+  _ftylogdefault.change(componentName,logConfigFile);
 }
 
 ////////////////////////
@@ -518,26 +516,28 @@ Ftylog * ftylog_getInstance()
   return ManageFtyLog::getInstanceFtylog();
 }
 
-void ftylog_setInstanceLog(Ftylog * logger)
-{
-  ManageFtyLog::setInstanceFtylog(logger);
-}
-
 void ftylog_setInstance(const char * component,const char * configFile)
 {
   ManageFtyLog::setInstanceFtylog(std::string(component),std::string(configFile));
-}
-
-void ftylog_deleteInstance()
-{
-  ManageFtyLog::deleteInstanceFtylog();
 }
 
 //Test function
 void fty_common_log_fty_log_test(bool verbose)
 {
   printf(" * fty_log \n");
-  Ftylog* test = new Ftylog("fty-log-agent", "");
+  printf(" * Check default log \n");
+  ManageFtyLog::getInstanceFtylog()->setLogLevelTrace();
+  log_trace("This is a simple info log with default logger");
+  log_debug("This is a simple info log with default logger");
+  log_info("This is a simple info log with default logger");
+  log_warning("This is a simple info log with default logger");
+  log_error("This is a simple info log with default logger");
+  log_fatal("This is a simple info log with default logger");
+  printf(" * Check default log : OK \n");
+  
+  
+  ManageFtyLog::setInstanceFtylog("fty-log-agent");
+  Ftylog* test = ManageFtyLog::getInstanceFtylog();
 
   printf(" * Check level test \n");
 
@@ -627,21 +627,6 @@ void fty_common_log_fty_log_test(bool verbose)
   //delete the log file test
   remove("./src/selftest-rw/logfile.log");
 
-  delete test;
-  test = NULL;
-
-  printf(" * Check default log \n");
-  setenv("BIOS_LOG_PATTERN","%c [%t] -%-5p- %M (%l) %m%n" , 1);
-  log_trace("This is a simple info log with default logger");
-  log_debug("This is a simple info log with default logger");
-  log_info("This is a simple info log with default logger");
-  log_warning("This is a simple info log with default logger");
-  log_error("This is a simple info log with default logger");
-  log_fatal("This is a simple info log with default logger");
-  ManageFtyLog::deleteInstanceFtylog();
-  printf(" * Check default log : OK \n");
-
-  
   //  @selftest
   printf("OK\n");
 }
