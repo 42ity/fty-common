@@ -15,7 +15,7 @@ Project fty-common aims to ... (short marketing pitch)
 It delivers several programs with their respective man pages:
 
 and public classes in a shared library:
- fty_common_log_fty_log.3 fty_common_common_fty_commons.3
+ fty_common_log_fty_log.3 fty_common_common_fty_commons.3 fty_common_web_helpers.3 fty_common_web_sasl.3 fty_common_web_tokens.3 fty_common_web_utils_web.3 fty_common_common_str_defs.3 fty_common_common_filesystem.3 fty_common_db_dbpath.3
 
 Generally you can compile and link against it like this:
 ----

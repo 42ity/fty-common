@@ -1,21 +1,21 @@
 #
 #    fty-common - Provides common tools for agents
 #
-#    Copyright (C) 2014 - 2018 Eaton                                        
-#                                                                           
-#    This program is free software; you can redistribute it and/or modify   
-#    it under the terms of the GNU General Public License as published by   
-#    the Free Software Foundation; either version 2 of the License, or      
-#    (at your option) any later version.                                    
-#                                                                           
-#    This program is distributed in the hope that it will be useful,        
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of         
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          
-#    GNU General Public License for more details.                           
-#                                                                           
+#    Copyright (C) 2014 - 2018 Eaton
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
 #    You should have received a copy of the GNU General Public License along
 #    with this program; if not, write to the Free Software Foundation, Inc.,
-#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.            
+#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
 # To build with draft APIs, use "--with drafts" in rpmbuild for local builds or add
@@ -47,6 +47,12 @@ BuildRequires:  libtool
 BuildRequires:  pkgconfig
 BuildRequires:  xmlto
 BuildRequires:  gcc-c++
+BuildRequires:  libsodium-devel
+BuildRequires:  zeromq-devel
+BuildRequires:  czmq-devel
+BuildRequires:  cxxtools-devel
+BuildRequires:  libtntnet-devel
+BuildRequires:  tntdb-devel
 BuildRequires:  log4cplus-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
@@ -71,6 +77,12 @@ This package contains shared library for fty-common: provides common tools for a
 Summary:        provides common tools for agents
 Group:          System/Libraries
 Requires:       libfty_common1 = %{version}
+Requires:       libsodium-devel
+Requires:       zeromq-devel
+Requires:       czmq-devel
+Requires:       cxxtools-devel
+Requires:       libtntnet-devel
+Requires:       tntdb-devel
 Requires:       log4cplus-devel
 
 %description devel
@@ -91,7 +103,7 @@ This package contains development files for fty-common: provides common tools fo
 
 %build
 sh autogen.sh
-%{configure} --enable-drafts=%{DRAFTS}
+%{configure} --enable-drafts=%{DRAFTS} --with-libtntnet=yes
 make %{_smp_mflags}
 
 %install

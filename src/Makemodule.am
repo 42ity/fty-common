@@ -18,7 +18,14 @@ src_libfty_common_la_SOURCES = \
 if ENABLE_DRAFTS
 src_libfty_common_la_SOURCES += \
     src/fty-common/log/fty_log.cc \
-    src/fty-common/common/fty_commons.cc
+    src/fty-common/common/fty_commons.cc \
+    src/fty-common/web/helpers.cc \
+    src/fty-common/web/sasl.cc \
+    src/fty-common/web/tokens.cc \
+    src/fty-common/web/utils_web.cc \
+    src/fty-common/common/str_defs.cc \
+    src/fty-common/common/filesystem.cc \
+    src/fty-common/db/dbpath.cc
 
 endif
 

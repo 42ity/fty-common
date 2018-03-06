@@ -13,11 +13,17 @@ AM_CXXFLAGS = \
     -std=c++11
 
 AM_CPPFLAGS = \
+    ${libsodium_CFLAGS} \
+    ${libzmq_CFLAGS} \
+    ${czmq_CFLAGS} \
+    ${cxxtools_CFLAGS} \
+    ${libtntnet_CFLAGS} \
+    ${tntdb_CFLAGS} \
     ${log4cplus_CFLAGS} \
     -D__STDC_FORMAT_MACROS \
     -I$(srcdir)/include
 
-project_libs = ${log4cplus_LIBS}
+project_libs = ${libsodium_LIBS} ${libzmq_LIBS} ${czmq_LIBS} ${cxxtools_LIBS} ${libtntnet_LIBS} ${tntdb_LIBS} ${log4cplus_LIBS}
 
 SUBDIRS = doc
 SUBDIRS += include
@@ -38,6 +44,12 @@ DISTCLEANFILES =
 
 if ENABLE_DIST_CMAKEFILES
 EXTRA_DIST += \
+    Findlibsodium.cmake \
+    Findlibzmq.cmake \
+    Findczmq.cmake \
+    Findcxxtools.cmake \
+    Findlibtntnet.cmake \
+    Findtntdb.cmake \
     Findlog4cplus.cmake \
     CMakeLists.txt
 endif
