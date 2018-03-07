@@ -35,12 +35,20 @@
 #define CXXTOOLS_LOG_CXXTOOLS_H
 #endif
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 #include <log4cplus/configurator.h>
 #endif
 //Macro for logging
 
+/*! \brief Portable way to get current thread ID */
+uintmax_t get_current_pthread_id(void);
+uintmax_t get_current_thread_id(void);
+char * asprintf_thread_id(void);
+
 #ifdef __cplusplus
+
 #define log_macro(level,ftylogger, ...) \
     do { \
         ftylogger->insertLog((level), __FILE__, __LINE__, __func__, __VA_ARGS__); \

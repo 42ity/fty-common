@@ -32,6 +32,7 @@
 #include <typeinfo>
 #include <thread>
 #include <sstream>
+# include <sys/syscall.h>
 #include <log4cplus/hierarchy.h>
 #include <log4cplus/loggingmacros.h>
 #include <log4cplus/loglevel.h>
@@ -40,6 +41,88 @@
 #include "../../fty_common_classes.h"
 
 using namespace log4cplus::helpers;
+
+uintmax_t
+get_current_pthread_id(void)
+{
+    int sp = sizeof(pthread_t), si = sizeof(uintmax_t);
+    uintmax_t thread_id = (uintmax_t)pthread_self();
+
+    if ( sp < si ) {
+        // Zero-out extra bits that an uintmax_t value could
+        // have populated above the smaller pthread_t value
+        int shift_bits = (si - sp) << 3; // * 8
+        thread_id = ( (thread_id << shift_bits ) >> shift_bits );
+    }
+
+    return thread_id;
+}
+
+// This routine aims to return LWP number wherever we
+// know how to get its ID.
+uintmax_t
+get_current_thread_id(void)
+{
+    // Note: implementations below all assume that the routines
+    // return a numeric value castable to uintmax_t, and should
+    // fail during compilation otherwise so we can then fix it.
+    uintmax_t thread_id = 0;
+#if defined(__linux__)
+    // returned actual type: long
+    thread_id = syscall(SYS_gettid);
+#elif defined(__FreeBSD__)
+    // returned actual type: int
+    thread_id = pthread_getthreadid_np();
+#elif defined(__sun)
+// TODO: find a way to extract the LWP ID in current PID
+// It is known ways exist for Solaris 8-11...
+    // returned actual type: pthread_t (which is uint_t in Sol11 at least)
+    thread_id = pthread_self();
+#elif defined(__APPLE__ )
+    pthread_t temp_thread_id;
+    (void)pthread_threadid_np(pthread_self(), &temp_thread_id);
+    thread_id = temp_thread_id;
+#else
+#error "Platform not supported: get_current_thread_id() implementation missing"
+#endif
+    return thread_id;
+}
+char *
+asprintf_thread_id(void) {
+    uintmax_t process_id = (uintmax_t)getpid();
+    uintmax_t pthread_id = get_current_pthread_id();
+    uintmax_t thread_id = get_current_thread_id();
+    char *buf = NULL;
+    char *buf2 = NULL;
+
+    if (pthread_id != thread_id) {
+        if ( 0 > asprintf(&buf2, ".%ju", thread_id) ) {
+            if (buf2) {
+                free (buf2);
+                buf2 = NULL;
+            }
+        }
+    }
+
+    if ( 0 > asprintf(&buf, "%ju.%ju%s",
+        process_id, pthread_id, buf2 ? buf2 : ""
+    ) ) {
+        if (buf) {
+            free (buf);
+            buf = NULL;
+        }
+    }
+
+    if (buf2) {
+        free (buf2);
+        buf2 = NULL;
+    }
+
+    if (buf == NULL)
+        buf = strdup("");
+
+    return buf;
+}
 
 //constructor
 Ftylog::Ftylog(std::string component, std::string configFile)
