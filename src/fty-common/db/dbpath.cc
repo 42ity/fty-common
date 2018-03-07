@@ -29,17 +29,23 @@
 #include "fty-common/common/filesystem.h"
 
 static std::string
-s_get_dbpath() {
+s_get_dbpath_wo_trace() {
     std::string s_url =
             std::string("mysql:db=box_utf8;user=") +
                   ((getenv("DB_USER")   == NULL) ? "root" : getenv("DB_USER")) +
                   ((getenv("DB_PASSWD") == NULL) ? ""     :
                       std::string(";password=") + getenv("DB_PASSWD"));
+    return s_url;
+}
+
+static std::string
+s_get_dbpath() {
+    std::string s_url = s_get_dbpath_wo_trace();
     log_debug("s_get_dbpath() : generated DB_URL=%s", s_url.c_str());
     return s_url;
 }
 
-std::string url = s_get_dbpath();
+std::string url = s_get_dbpath_wo_trace();
 
 void dbpath () {
     log_info("Updating db url with DB_USER=%s ..",(getenv("DB_USER")   == NULL) ? "root" : getenv("DB_USER"));

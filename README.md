@@ -34,49 +34,24 @@ With this matching between the values of BIOS_LOG_LEVEL and the log level set by
 | LOG_DEBUG           |     DEBUG        |  
 | Other               |    TRACE         |  
 
-
 ### For agents coded with C++ : 
-In the cpp file, use the constructor :  
-<code>Ftylog::Ftylog(std::string component, std::string configFile = "")</code>
+In the main method of the cpp file, use this method :  
+<code>void ManageFtyLog::setInstanceFtylog(std::string component, std::string configFile = "" )</code>
 
-This constructor has two parameters : 
+This method has two parameters : 
 * component : name of the agent ex : fty-alert-list
 * configFile (optional) : path to the log config file.
 
-And call this method with the Ftylog object :  
-<code>void ManageFtyLog::setInstanceFtylog(Ftylog * logger )</code>  
-This method makes the Ftylog object accessible in the agent's threads and shared libraries  
-by using this function : 
+The Ftylog object is still accessible by using the function :  
 <code>Ftylog * ManageFtyLog::getInstanceFtylog()</code>  
-NB : if there is no Ftylog object, this function create a new one with following paramters :  
- * component  : "log-default-\<process Id\>"
- * configFile : ""
-
-Instead of create an Ftylog object and calling the method to make the Ftylog object accessible, you can use 
-the method <code>void ManageFtyLog::setInstanceFtylog(std::string component, std::string configFile = "" )</code>    
-who does both
-
-Use this following method for destroy the Ftylog object :  
-<code>void ManageFtyLog::deleteInstanceFtylog()</code>  
 
 ### For agents coded with C : 
-In the c file, for initialize the log object, call this function :  
-<code>Ftylog * ftylog_new(const char * component, const char * logConfigFile)</code>  
-Same parameters as the c++ Ftylog constructor
+In the main method of the c file, for initialize the log object, call this method :  
+<code>void ftylog_setInstance(const char * component, const char * logConfigFile )</code>
+ 
+Same parameters as the c++ method with configFile not optional.
 
-Use this method to share the Ftylog object in the agent : 
-<code>void ftylog_setInstanceLog(Ftylog * logger )</code>  
-  
 And for get the Ftylog object, call <code>Ftylog * ftylog_getInstance()</code>  
-NB : As C++ code, if there is no Ftylog object, this function create a new one with following paramters :  
- * component  : "log-default-\<process Id\>"
- * configFile : ""
-
-
-As C++ code, method <code>void ftylog_setInstance(const char * component, const char * logConfigFile )</code>  
-make a new Ftylog object and set it accessible.  
-
-Call the method <code>void ftylog_deleteInstance()</code> to destroy the Ftylog instance
 
 ### How to log
 Use these macros to log any event in the agent (C++ or C) : 
@@ -88,27 +63,19 @@ Use these macros to log any event in the agent (C++ or C) :
 * log_error(...) : log a ERROR event.  
 * log_fatal(...) : log a FATAL event.  
   
-Or with a Ftylog object :  
-* log_trace_log(\<log object\>,...) : log a TRACE event.  
-* log_debug_log(\<log object\>,...) : log a DEBUG event.   
-* log_info_log(\<log object\>,...) : log a INFO event.  
-* log_warning_log(\<log object\>,...) : log a WARN event.  
-* log_error_log(\<log object\>,...) : log a ERROR event.  
-* log_fatal_log(\<log object\>,...) : log a FATAL event.  
-  
 The "..." section is a string follow by any parameters as the printf functions.
 
 ### How to format log
 The logging system use the format from patternlayout of log4cplus (see http://log4cplus.sourceforge.net/docs/html/classlog4cplus_1_1PatternLayout.html).
 
 If there is no configuration file, the default format is :  
-<code>"[%t] -%-5p- %M (%l) %m%n"</code>
+<code>"%c [%t] -%-5p- %M (%l) %m%n"</code>
 
 For example, with this code :  
 <code>log_info(test, "This is a %s log test number %d", "info", 1);</code>
 
 The log generated will be :  
-<code>[140004551534400] -INFO - log_fty_log_test (src/log/fty_log.cc:481) This is a info log test number 1</code> 
+<code>log-default-67358592 [140004551534400] -INFO - log_fty_log_test (src/log/fty_log.cc:481) This is a info log test number 1</code> 
 
 In your system, you can set an environment variable named BIOS_LOG_PATTERN to set a format pattern for all agents using fty-common and if the agent does not use a log configuration file.
 
@@ -229,10 +196,38 @@ Add this bloc in the project.xml file :
         test = "fty_commmon_selftest" >
         <use project = "log4cplus" header = "log4cplus/logger.h"
         test = "appender_test" release="REL_1_1_2" repository="https://github.com/log4cplus/log4cplus.git" />
-</use>
+        <use project = "czmq"
+            repository="https://github.com/42ity/czmq.git" release = "v3.0.2-FTY-master"
+            min_major = "3" min_minor = "0" min_patch = "2" >
+            <use project = "libzmq"
+                repository="https://github.com/42ity/libzmq.git" release = "4.2.0-FTY-master" >
+                <use project = "libsodium" prefix = "sodium"
+                    repository = "https://github.com/42ity/libsodium.git"
+                    release = "1.0.5-FTY-master"
+                    test = "sodium_init" />
+            </use>
+        </use>
+
+        <use project = "cxxtools" test="cxxtools::Utf8Codec::Utf8Codec" header="cxxtools/allocator.h"
+            repository = "https://github.com/42ity/cxxtools.git"
+            release = "2.2-FTY-master"
+            />
+
+        <use project = "libtntnet" optional = "1"
+            repository = "https://github.com/42ity/tntnet.git"
+            release = "2.2-FTY-master"
+            />
+
+        <use project = "tntdb"
+            test="tntdb::Date::gmtime"
+            repository = "https://github.com/42ity/tntdb.git"
+            release = "1.3-FTY-master"
+            builddir = "tntdb" />
+    </use>
 ````  
 
-The header value must be change from fty_common.h to fty-common/log/fty_log.h for C project.
+The header value must be change from fty_common.h to fty-common/log/fty_log.h for C project.  
+In this use section, remove the dependecy already needed byt the agent/library.
 
 ### How to pass travis check
 Travis use an old version of log4cplus, so to avoid any errors,   

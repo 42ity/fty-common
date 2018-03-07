@@ -103,7 +103,7 @@
         log_macro(50000,ftylog_getInstance(), __VA_ARGS__)
 
 //Default layout pattern
-#define LOGPATTERN "[%t] -%-5p- %M (%l) %m%n"
+#define LOGPATTERN "%c [%t] -%-5p- %M (%l) %m%n"
 
 //  @interface
 #ifdef __cplusplus
@@ -123,6 +123,9 @@ private:
   //Thread for watching modification of the log configuration file if any
   log4cplus::ConfigureAndWatchThread * _watchConfigFile;
 
+  //Initialize the Ftylog object
+  void init (std::string _component, std::string logConfigFile = "");
+  
   //Return true if level is included in the logger level
   bool isLogLevel(log4cplus::LogLevel level);
 
@@ -144,6 +147,7 @@ private:
 public:
   //Constructor/destructor
   Ftylog(std::string _component, std::string logConfigFile = "");
+  Ftylog();
   ~Ftylog();
 
   //getter
@@ -153,6 +157,9 @@ public:
   //Set the path to the log config file
   //And try to load it
   void setConfigFile(std::string file);
+
+  //Change properties of the FtyLog object
+  void change(std::string name,std::string configFile);
 
   //Set the logger to a specific log level
   void setLogLevelTrace();
@@ -199,17 +206,13 @@ private:
   ~ManageFtyLog(){};
   ManageFtyLog(const ManageFtyLog&) = delete;
   ManageFtyLog& operator=(const ManageFtyLog&) = delete;
-  static Ftylog *  _ftylogdefault;
+  static Ftylog  _ftylogdefault;
 public:
   
   // Return the Ftylog obect from the instance
   static Ftylog* getInstanceFtylog();
   //Create or replace the Ftylog object in the instance using a new Ftylog object
-  static void setInstanceFtylog(std::string _component, std::string logConfigFile = "");
-  //Create or replace the Ftylog object in the instance using an existing Ftylog object
-  static void setInstanceFtylog(Ftylog* logger);
-  //Delete the Ftylog object in the instance
-  static void deleteInstanceFtylog();
+  static void setInstanceFtylog(std::string componentName, std::string logConfigFile = "");
 };
 
 #else
@@ -260,14 +263,10 @@ void ftylog_insertLog(Ftylog * log, int level, const char* file, int line,
 // -Add a new console appender
 void ftylog_setVeboseMode(Ftylog * log);
 
-// Return the Ftylog obect from the instance (C code) or create a new one if not existing
+// Return the Ftylog obect from the instance (C code)
 Ftylog * ftylog_getInstance();
-//Create or replace the Ftylog object in the instance using a new Ftylog object
-void ftylog_setInstanceLog(Ftylog * logger);
-//Create or replace the Ftylog object in the instance using an existing Ftylog object
-void ftylog_setInstance(const char * component, const char* configFile);
-//Delete the Ftylog object in the instance
-void ftylog_deleteInstance();
+//Initialize the Ftylog object in the instance
+void ftylog_setInstance(const char * component, const char* configFile );
 
 #ifdef __cplusplus
 }
