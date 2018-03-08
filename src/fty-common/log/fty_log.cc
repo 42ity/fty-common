@@ -354,10 +354,8 @@ bool Ftylog::isLogFatal()
 
 //Call log4cplus system to print logs in logger appenders
 void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
-                       const char* func, const char* format, ...)
+                       const char* func, const char* format, va_list args)
 {
-  va_list args;
-  va_start(args, format);
   char *buffer;
   int r;
 
@@ -391,6 +389,15 @@ void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
   log4cplus::detail::macro_forced_log(_logger, level, LOG4CPLUS_TEXT(buffer), file, line, func);
 
   free(buffer);
+  
+}
+
+void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
+                       const char* func, const char* format, ...)
+{
+  va_list args;
+  va_start(args, format);
+  insertLog(level,file,line,func,format,args);
   va_end(args);
 }
 
@@ -527,12 +534,12 @@ void fty_common_log_fty_log_test(bool verbose)
   printf(" * fty_log \n");
   printf(" * Check default log \n");
   ManageFtyLog::getInstanceFtylog()->setLogLevelTrace();
-  log_trace("This is a simple info log with default logger");
-  log_debug("This is a simple info log with default logger");
-  log_info("This is a simple info log with default logger");
-  log_warning("This is a simple info log with default logger");
-  log_error("This is a simple info log with default logger");
-  log_fatal("This is a simple info log with default logger");
+  log_trace("This is a simple %s log with default logger","trace");
+  log_debug("This is a simple %s log with default logger","debug");
+  log_info("This is a simple %s log with default logger","info");
+  log_warning("This is a simple %s log with default logger","warning");
+  log_error("This is a simple %s log with default logger","error");
+  log_fatal("This is a simple %s log with default logger","fatal");
   printf(" * Check default log : OK \n");
   
   
