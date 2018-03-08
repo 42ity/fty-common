@@ -153,7 +153,7 @@ private:
   //Load appenders from the config file 
   // or set the default console appender if no can't load from the config file
   void loadAppenders();
-
+  
 public:
   //Constructor/destructor
   Ftylog(std::string _component, std::string logConfigFile = "");
@@ -197,6 +197,9 @@ public:
    */
   void insertLog(log4cplus::LogLevel level, const char* file, int line,
                  const char* func, const char* format, ...);
+
+  void insertLog(log4cplus::LogLevel level, const char* file, int line,
+                 const char* func, const char* format, va_list args);
 
   //Load a specific appender if verbose mode is set to true : 
   // -Save the logger logging level and set it to TRACE logging level
