@@ -35,17 +35,10 @@
 #define CXXTOOLS_LOG_CXXTOOLS_H
 #endif
 
-#include <stdint.h>
-
 #ifdef __cplusplus
 #include <log4cplus/configurator.h>
 #endif
 //Macro for logging
-
-/*! \brief Portable way to get current thread ID */
-uintmax_t get_current_pthread_id(void);
-uintmax_t get_current_thread_id(void);
-char * asprintf_thread_id(void);
 
 #ifdef __cplusplus
 
@@ -109,6 +102,15 @@ char * asprintf_thread_id(void);
 /* Prints message with FATAL level. 50000 <=> log4cplus::FATAL_LOG_LEVEL*/
 #define log_fatal(...) \
         log_macro(50000,ftylog_getInstance(), __VA_ARGS__)
+
+#define LOG_START \
+    log_debug("start")
+
+#define LOG_END \
+    log_debug("end::normal")
+
+#define LOG_END_ABNORMAL(exp) \
+    log_error("end::abnormal with %s", (exp).what())
 
 //Default layout pattern
 #define LOGPATTERN "%c [%t] -%-5p- %M (%l) %m%n"
