@@ -362,7 +362,6 @@ void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
   //Check if the level of this log is included in the log level
   if (!isLogLevel(level))
   {
-    va_end(args);
     return;
   }
   //Construct the main log message
@@ -374,22 +373,18 @@ void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
     {
       free(buffer);
     }
-    va_end(args);
     return;
   }
 
   if (buffer == NULL)
   {
     log_error_log(this, "Buffer == NULL");
-    va_end(args);
     return;
   }
 
   //Give the printing job to log4cplus
   log4cplus::detail::macro_forced_log(_logger, level, LOG4CPLUS_TEXT(buffer), file, line, func);
-
   free(buffer);
-  
 }
 
 void Ftylog::insertLog(log4cplus::LogLevel level, const char* file, int line,
