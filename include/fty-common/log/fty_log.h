@@ -41,6 +41,7 @@
 //Macro for logging
 
 #ifdef __cplusplus
+
 #define log_macro(level,ftylogger, ...) \
     do { \
         ftylogger->insertLog((level), __FILE__, __LINE__, __func__, __VA_ARGS__); \
@@ -101,6 +102,15 @@
 /* Prints message with FATAL level. 50000 <=> log4cplus::FATAL_LOG_LEVEL*/
 #define log_fatal(...) \
         log_macro(50000,ftylog_getInstance(), __VA_ARGS__)
+
+#define LOG_START \
+    log_debug("start")
+
+#define LOG_END \
+    log_debug("end::normal")
+
+#define LOG_END_ABNORMAL(exp) \
+    log_error("end::abnormal with %s", (exp).what())
 
 //Default layout pattern
 #define LOGPATTERN "%c [%t] -%-5p- %M (%l) %m%n"

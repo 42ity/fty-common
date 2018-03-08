@@ -27,13 +27,13 @@
 #include <cxxtools/serializationinfo.h>
 #include <cxxtools/split.h>
 #include <stdlib.h> // for random()
-# include <sys/syscall.h>
+#include <sys/syscall.h>
 
 //#include "shared/subprocess.h"
 #include "fty-common/web/utils_web.h"
-//#include "shared/log.h"
 
 namespace utils {
+
 uintmax_t
 get_current_pthread_id(void)
 {
@@ -115,6 +115,7 @@ asprintf_thread_id(void) {
 
     return buf;
 }
+
 uint32_t
 string_to_element_id (const std::string& string) {
 
