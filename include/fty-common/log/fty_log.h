@@ -34,6 +34,8 @@
 #undef log_info
 #undef log_fatal
 #undef log_warn
+#undef log_define
+#define log_define(category)
 #else
 #define LOG_CXXTOOLS_H
 #define CXXTOOLS_LOG_CXXTOOLS_H
