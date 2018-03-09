@@ -76,6 +76,13 @@ liblog4cplus/
 
 # Travis build area
 tmp/
+cxxtools/
+czmq/
+libsodium/
+libtntnet/
+libzmq/
+log4cplus/
+tntdb/
 
 # Valgrind files
 callgrind*
@@ -132,3 +139,5 @@ src/fty-common/web/.dirstamp
 
 # editor backups
 *~
+
+# Mak

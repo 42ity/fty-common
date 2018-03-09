@@ -53,7 +53,7 @@ BuildRequires:  czmq-devel
 BuildRequires:  cxxtools-devel
 BuildRequires:  libtntnet-devel
 BuildRequires:  tntdb-devel
-BuildRequires:  libsasl2-devel
+BuildRequires:  cyrus-sasl-devel
 BuildRequires:  log4cplus-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
@@ -84,7 +84,7 @@ Requires:       czmq-devel
 Requires:       cxxtools-devel
 Requires:       libtntnet-devel
 Requires:       tntdb-devel
-Requires:       libsasl2-devel
+Requires:       cyrus-sasl-devel
 Requires:       log4cplus-devel
 
 %description devel
