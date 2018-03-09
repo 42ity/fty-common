@@ -36,6 +36,7 @@
 #include <libtntnet.h>
 #endif
 #include <tntdb.h>
+#include <sasl/sasl.h>
 #include <log4cplus/logger.h>
 
 //  FTY_COMMON version macros for compile-time API detection
@@ -118,9 +119,18 @@ typedef struct _fty_common_db_dbpath_t fty_common_db_dbpath_t;
 #endif // FTY_COMMON_BUILD_DRAFT_API
 
 #ifdef FTY_COMMON_BUILD_DRAFT_API
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //  Self test for private classes
 FTY_COMMON_EXPORT void
-    fty_common_private_selftest (bool verbose);
+    fty_common_private_selftest (bool verbose, const char *subtest);
+
+#ifdef __cplusplus
+}
+#endif
 #endif // FTY_COMMON_BUILD_DRAFT_API
 
 #endif

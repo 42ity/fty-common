@@ -91,7 +91,7 @@ pipeline {
         booleanParam (
             defaultValue: true,
             description: 'Require that there are no files not discovered changed/untracked via .gitignore after builds and tests?',
-            name: 'REQUIRE_GOOD_GITIGNORE')
+            name: 'CI_REQUIRE_GOOD_GITIGNORE')
         string (
             defaultValue: "10",
             description: 'When running tests, use this timeout (in minutes; be sure to leave enough for double-job of a distcheck too)',
@@ -128,7 +128,7 @@ pipeline {
                         unstash 'prepped'
                         sh 'CCACHE_BASEDIR="`pwd`" ; export CCACHE_BASEDIR; ./configure --enable-drafts=yes --with-docs=no'
                         sh 'CCACHE_BASEDIR="`pwd`" ; export CCACHE_BASEDIR; make -k -j4 || make'
-                        sh 'echo "Are GitIgnores good after make with drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make with drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         stash (name: 'built-draft', includes: '**/*', excludes: '**/cppcheck.xml')
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
@@ -146,7 +146,7 @@ pipeline {
                         unstash 'prepped'
                         sh 'CCACHE_BASEDIR="`pwd`" ; export CCACHE_BASEDIR; ./configure --enable-drafts=no --with-docs=no'
                         sh 'CCACHE_BASEDIR="`pwd`" ; export CCACHE_BASEDIR; make -k -j4 || make'
-                        sh 'echo "Are GitIgnores good after make without drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make without drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         stash (name: 'built-nondraft', includes: '**/*', excludes: '**/cppcheck.xml')
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
@@ -171,7 +171,7 @@ pipeline {
                             }
                         }
                         sh 'CCACHE_BASEDIR="`pwd`" ; export CCACHE_BASEDIR; make -k -j4 || make'
-                        sh 'echo "Are GitIgnores good after make with docs? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make with docs?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         stash (name: 'built-docs', includes: '**/*', excludes: '**/cppcheck.xml')
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
@@ -240,7 +240,7 @@ pipeline {
                            }
                           }
                         }
-                        sh 'echo "Are GitIgnores good after make check with drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make check with drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
                                 deleteDir()
@@ -269,7 +269,7 @@ pipeline {
                            }
                           }
                         }
-                        sh 'echo "Are GitIgnores good after make check without drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make check without drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
                                 deleteDir()
@@ -298,7 +298,7 @@ pipeline {
                            }
                           }
                         }
-                        sh 'echo "Are GitIgnores good after make memcheck with drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make memcheck with drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
                                 deleteDir()
@@ -327,7 +327,7 @@ pipeline {
                            }
                           }
                         }
-                        sh 'echo "Are GitIgnores good after make memcheck without drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make memcheck without drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
                                 deleteDir()
@@ -356,7 +356,7 @@ pipeline {
                            }
                           }
                         }
-                        sh 'echo "Are GitIgnores good after make distcheck with drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make distcheck with drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
                                 deleteDir()
@@ -385,7 +385,7 @@ pipeline {
                            }
                           }
                         }
-                        sh 'echo "Are GitIgnores good after make distcheck without drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make distcheck without drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
                                 deleteDir()
@@ -404,7 +404,7 @@ pipeline {
                             sh """CCACHE_BASEDIR="`pwd`" ; export CCACHE_BASEDIR; LD_LIBRARY_PATH="`pwd`/src/.libs:\${LD_LIBRARY_PATH}"; export LD_LIBRARY_PATH; make LD_LIBRARY_PATH="\${LD_LIBRARY_PATH}" DESTDIR="${params.USE_TEST_INSTALL_DESTDIR}/withDRAFT" install"""
                         }
                         sh """cd "${params.USE_TEST_INSTALL_DESTDIR}/withDRAFT" && find . -ls"""
-                        sh 'echo "Are GitIgnores good after make install with drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make install with drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
                                 deleteDir()
@@ -423,7 +423,7 @@ pipeline {
                             sh """CCACHE_BASEDIR="`pwd`" ; export CCACHE_BASEDIR; LD_LIBRARY_PATH="`pwd`/src/.libs:\${LD_LIBRARY_PATH}"; export LD_LIBRARY_PATH; make LD_LIBRARY_PATH="\${LD_LIBRARY_PATH}" DESTDIR="${params.USE_TEST_INSTALL_DESTDIR}/withoutDRAFT" install"""
                         }
                         sh """cd "${params.USE_TEST_INSTALL_DESTDIR}/withoutDRAFT" && find . -ls"""
-                        sh 'echo "Are GitIgnores good after make install without drafts? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make install without drafts?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
                                 deleteDir()
@@ -442,7 +442,7 @@ pipeline {
                             sh """CCACHE_BASEDIR="`pwd`" ; export CCACHE_BASEDIR; LD_LIBRARY_PATH="`pwd`/src/.libs:\${LD_LIBRARY_PATH}"; export LD_LIBRARY_PATH; make LD_LIBRARY_PATH="\${LD_LIBRARY_PATH}" DESTDIR="${params.USE_TEST_INSTALL_DESTDIR}/withDOCS" install"""
                         }
                         sh """cd "${params.USE_TEST_INSTALL_DESTDIR}/withDOCS" && find . -ls"""
-                        sh 'echo "Are GitIgnores good after make install with Docs? (should have no output below)"; git status -s || if [ "${params.REQUIRE_GOOD_GITIGNORE}" = false ]; then echo "WARNING GitIgnore tests found newly changed or untracked files" >&2 ; exit 0 ; else echo "FAILED GitIgnore tests" >&2 ; exit 1; fi'
+                        sh """ echo "Are GitIgnores good after make install with docs?"; make CI_REQUIRE_GOOD_GITIGNORE="${params.CI_REQUIRE_GOOD_GITIGNORE}" check-gitignore """
                         script {
                             if ( params.DO_CLEANUP_AFTER_BUILD ) {
                                 deleteDir()

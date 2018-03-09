@@ -57,9 +57,9 @@
     <!-- use project = "tntdb" test="tntdb::connectCached" header="tntdb/connect.h" / -->
     <!-- use project = "tntdb" test="tntdb::Date::gmtime" header="tntdb/connect.h" / -->
 
-  <!-- <use project = "libsasl2" header = "sasl/sasl.h"
+   <use project = "libsasl2" header = "sasl/sasl.h"
         debian_name="libsasl2-dev"
-        redhat_name="libsasl2-devel" /> -->
+        redhat_name="libsasl2-devel" /> 
 
     <use project = "log4cplus" header = "log4cplus/logger.h"
         test = "appender_test" release="REL_1_1_2" repository="https://github.com/log4cplus/log4cplus.git" />

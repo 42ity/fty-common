@@ -44,7 +44,7 @@
 
 //  Self test for private classes
 FTY_COMMON_PRIVATE void
-    fty_common_private_selftest (bool verbose);
+    fty_common_private_selftest (bool verbose, const char *subtest);
 
 #endif // FTY_COMMON_BUILD_DRAFT_API
 
