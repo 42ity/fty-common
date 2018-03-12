@@ -370,6 +370,16 @@ default|default-Werror|default-with-docs|valgrind)
         cd "${BASE_PWD}"
     fi
 
+    # Start of recipe for dependency: libsasl2
+    if ! (command -v dpkg-query >/dev/null 2>&1 && dpkg-query --list libsasl2-dev >/dev/null 2>&1) || \
+           (command -v brew >/dev/null 2>&1 && brew ls --versions libsasl2 >/dev/null 2>&1) \
+    ; then
+        echo ""
+        echo "WARNING: Can not build prerequisite 'libsasl2'" >&2
+        echo "because neither tarball nor repository sources are known for it," >&2
+        echo "and it was not installed as a package; this may cause the test to fail!" >&2
+    fi
+
     # Start of recipe for dependency: log4cplus
     if ! (command -v dpkg-query >/dev/null 2>&1 && dpkg-query --list log4cplus-dev >/dev/null 2>&1) || \
            (command -v brew >/dev/null 2>&1 && brew ls --versions log4cplus >/dev/null 2>&1) \
@@ -428,16 +438,16 @@ default|default-Werror|default-with-docs|valgrind)
     fi
     $CI_TIME make VERBOSE=1 all
 
-    echo "=== Are GitIgnores good after 'make all' with drafts? (should have no output below)"
-    git status -s || true
+    echo "=== Are GitIgnores good after 'make all' with drafts?"
+    make check-gitignore
     echo "==="
 
     (
         export DISTCHECK_CONFIGURE_FLAGS="--enable-drafts=yes ${CONFIG_OPTS[@]}"
         $CI_TIME make VERBOSE=1 DISTCHECK_CONFIGURE_FLAGS="$DISTCHECK_CONFIGURE_FLAGS" distcheck
 
-        echo "=== Are GitIgnores good after 'make distcheck' with drafts? (should have no output below)"
-        git status -s || true
+        echo "=== Are GitIgnores good after 'make distcheck' with drafts?"
+        make check-gitignore
         echo "==="
     )
 
@@ -459,8 +469,8 @@ default|default-Werror|default-with-docs|valgrind)
     ) || exit 1
     [ -z "$CI_TIME" ] || echo "`date`: Builds completed without fatal errors!"
 
-    echo "=== Are GitIgnores good after 'make distcheck' without drafts? (should have no output below)"
-    git status -s || true
+    echo "=== Are GitIgnores good after 'make distcheck' without drafts?"
+    make check-gitignore
     echo "==="
 
     if [ "$HAVE_CCACHE" = yes ]; then
