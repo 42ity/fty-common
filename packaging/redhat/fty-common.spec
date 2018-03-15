@@ -105,6 +105,8 @@ This package contains development files for fty-common: provides common tools fo
 
 %build
 sh autogen.sh
+# WORKAROUND for the fact that log4cplus installs its pkgconfig here
+export PKG_CONFIG_PATH="/usr/lib/pkgconfig"
 %{configure} --enable-drafts=%{DRAFTS} --with-libtntnet=yes
 make %{_smp_mflags}
 
