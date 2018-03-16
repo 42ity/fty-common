@@ -61,8 +61,11 @@
         debian_name="libsasl2-dev"
         redhat_name="cyrus-sasl-devel"
     />
+
     <use project = "log4cplus" header = "log4cplus/logger.h"
-        test = "appender_test" release="REL_1_1_2" repository="https://github.com/log4cplus/log4cplus.git" />
+        test = "appender_test"
+        release="1.1.2-FTY-master"
+        repository="https://github.com/42ity/log4cplus.git" />
 
     <class name = "fty-common/log/fty_log">Log management</class>
     <class name = "fty-common/common/fty_commons" >Singleton object and common functions</class>
@@ -71,7 +74,7 @@
     <class name = "fty-common/web/sasl" selftest = "0" />
     <class name = "fty-common/web/tokens" selftest = "0" />
     <class name = "fty-common/web/utils_web" selftest = "0" />
-    
+
     <class name = "fty-common/common/str_defs" selftest = "0" />
     <class name = "fty-common/common/filesystem" selftest = "0" />
     <class name = "fty-common/db/dbpath" selftest = "0" />
