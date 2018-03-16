@@ -195,7 +195,7 @@ Add this bloc in the project.xml file :
         repository = "https://github.com/42ity/fty-common.git"
         test = "fty_commmon_selftest" >
         <use project = "log4cplus" header = "log4cplus/logger.h"
-        test = "appender_test" release="REL_1_1_2" repository="https://github.com/log4cplus/log4cplus.git" />
+        test = "appender_test" release="1.1.2-FTY-master" repository="https://github.com/42ity/log4cplus.git" />
         <use project = "czmq"
             repository="https://github.com/42ity/czmq.git" release = "v3.0.2-FTY-master"
             min_major = "3" min_minor = "0" min_patch = "2" >
