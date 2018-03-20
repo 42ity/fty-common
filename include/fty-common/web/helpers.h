@@ -68,7 +68,8 @@ class UserInfo {
         UserInfo ():
             _profile {BiosProfile::Anonymous},
             _uid {-1},
-            _gid {-1}
+            _gid {-1},
+            _reauth {false}
         {};
 
         BiosProfile profile () const {return _profile;}
@@ -82,6 +83,9 @@ class UserInfo {
 
         std::string login () const {return _login;}
         void login (const std::string& login) {_login = login;}
+        
+        bool reauth () const { return _reauth;}
+        void reauth (bool reauth) {_reauth = reauth;}
 
         const char* toString();
 
@@ -90,6 +94,7 @@ class UserInfo {
         long int _uid;
         long int _gid;
         std::string _login;
+        bool _reauth;
 };
 
 // 1    contains chars from 'exclude'
