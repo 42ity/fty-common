@@ -208,6 +208,7 @@ void Ftylog::loadAppenders()
   //if no path to log config file, set default ConsoleAppender
   if (_configFile.empty())
   {
+    log_warning_log(this, "No log configuration file");
     loadDefault = true;
   }
 
@@ -221,7 +222,7 @@ void Ftylog::loadAppenders()
     else
     {
       //Print an error log
-      log_error_log(this, "Can't read file %s \n",  _configFile.c_str());
+      log_warning_log(this, "Can't read file %s",  _configFile.c_str());
       //Set default COnsoleAppender
       loadDefault = true;
     }
@@ -230,19 +231,15 @@ void Ftylog::loadAppenders()
   //Remove previous appender
   _logger.removeAllAppenders();
 
-  //Load the file if exist and readable
-  if (!loadDefault)
-  {
-    log4cplus::PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT(_configFile));
-  }
-
-  //if no appender configured for this logger, set default ConsoleAppender
-  if (loadDefault || 0 == _logger.getAllAppenders().size())
+  //if no file or file not valid, set default ConsoleAppender
+  if (loadDefault)
   {
     setConsoleAppender();
   }
   else
   {
+    //Load the file 
+    log4cplus::PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT(_configFile));
     //Start the thread watching the modification of the log config file
     _watchConfigFile = new log4cplus::ConfigureAndWatchThread(_configFile.c_str(), 60000);
   }
