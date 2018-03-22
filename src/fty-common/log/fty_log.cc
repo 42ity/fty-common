@@ -195,8 +195,11 @@ void Ftylog::setVeboseMode()
 // or set a basic ConsoleAppender
 void Ftylog::loadAppenders()
 {
-  //If true, set default ConsoleAppender
-  bool loadDefault = false;
+  //by default, laod console appenders
+  setConsoleAppender();
+  
+  //If true, load file
+  bool loadFile = false;
 
   //Stop the watch confile file thread if any 
   if (NULL != _watchConfigFile)
@@ -205,39 +208,34 @@ void Ftylog::loadAppenders()
     _watchConfigFile = NULL;
   }
 
-  //if no path to log config file, set default ConsoleAppender
-  if (_configFile.empty())
-  {
-    log_warning_log(this, "No log configuration file");
-    loadDefault = true;
-  }
-
-  if (!loadDefault)
+  //if path to log config file
+  if (!_configFile.empty())
   {
     //file can be accessed with read rights
     if (FILE * file = fopen(_configFile.c_str(), "r"))
     {
       fclose(file);
+      loadFile = true;
     }
     else
     {
-      //Print an error log
-      log_warning_log(this, "Can't read file %s",  _configFile.c_str());
-      //Set default COnsoleAppender
-      loadDefault = true;
+      log_error_log(this,"File %s can't be accessed with read rights",_configFile.c_str());
+      _configFile = "";
     }
-  }
-
-  //Remove previous appender
-  _logger.removeAllAppenders();
-
-  //if no file or file not valid, set default ConsoleAppender
-  if (loadDefault)
-  {
-    setConsoleAppender();
   }
   else
   {
+    log_warning_log(this,"No log configuration file defined");
+  }
+
+  //if no file or file not valid, set default ConsoleAppender
+  if (loadFile)
+  {
+    log_info_log(this,"Load Config file %s ",_configFile.c_str());
+
+    //Remove previous appender
+    _logger.removeAllAppenders();
+
     //Load the file 
     log4cplus::PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT(_configFile));
     //Start the thread watching the modification of the log config file
@@ -535,10 +533,10 @@ void fty_common_log_fty_log_test(bool verbose)
   printf(" * Check default log : OK \n");
   
   
-  ManageFtyLog::setInstanceFtylog("fty-log-agent");
-  Ftylog* test = ManageFtyLog::getInstanceFtylog();
 
   printf(" * Check level test \n");
+  ManageFtyLog::setInstanceFtylog("fty-log-agent");
+  Ftylog* test = ManageFtyLog::getInstanceFtylog();
 
   test->setLogLevelTrace();
   log_trace_log(test, "This is a simple trace log");
@@ -600,8 +598,10 @@ void fty_common_log_fty_log_test(bool verbose)
   assert(!test->isLogError());
   assert(test->isLogFatal());
 
+  test->setLogLevelTrace();
   printf(" * Check level test : OK \n");
   printf(" * Check log config file test\n");
+  test->setConfigFile("./src/selftest-ro/not-a-valid-file.conf");
   test->setConfigFile("./src/selftest-ro/test-config.conf");
 
   log_info_log(test, "This is a simple info log");
