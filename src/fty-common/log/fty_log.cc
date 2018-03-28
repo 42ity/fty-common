@@ -138,12 +138,13 @@ void Ftylog::setPatternFromEnv()
   }
 }
 
-//Add a simple ConsoleAppender to th logger
+//Add a simple ConsoleAppender to the logger
 void Ftylog::setConsoleAppender()
 {
   _logger.removeAllAppenders();
   //create appender
-  SharedObjectPtr<log4cplus::Appender> append(new log4cplus::ConsoleAppender(false, true));
+  // Note: the first bool argument controls logging to stderr(true) as output stream
+  SharedObjectPtr<log4cplus::Appender> append(new log4cplus::ConsoleAppender(true, true));
   //Create and affect layout
   append->setLayout(std::auto_ptr<log4cplus::Layout> (new log4cplus::PatternLayout(_layoutPattern)));
   append.get()->setName(LOG4CPLUS_TEXT("Console" + this->_agentName));
