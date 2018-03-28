@@ -220,7 +220,7 @@ void Ftylog::loadAppenders()
     }
     else
     {
-      log_error_log(this,"File %s can't be accessed with read rights",_configFile.c_str());
+      log_error_log(this,"File %s can't be accessed with read rights; this process will not monitor whether it becomes available later",_configFile.c_str());
       _configFile = "";
     }
   }
@@ -241,6 +241,10 @@ void Ftylog::loadAppenders()
     log4cplus::PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT(_configFile));
     //Start the thread watching the modification of the log config file
     _watchConfigFile = new log4cplus::ConfigureAndWatchThread(_configFile.c_str(), 60000);
+  }
+  else
+  {
+    log_info_log(this,"No log configuration file was loaded, will log to stderr by default");
   }
 }
 
