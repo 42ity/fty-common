@@ -324,7 +324,10 @@ get_mapping (const std::string& key)
         //fty-discovery
         {"FTY_DISCOVERY_TYPE",     "discovery/type"},
         {"FTY_DISCOVERY_SCANS",    "discovery/scans"},
-        {"FTY_DISCOVERY_IPS",      "discovery/ips"}
+        {"FTY_DISCOVERY_IPS",      "discovery/ips"},
+        //fty-session
+        {"FTY_SESSION_TIMEOUT_NO_ACTIVITY", "timeout/no_activity"},
+        {"FTY_SESSION_TIMEOUT_LEASE",       "timeout/lease_time"}
     };
     if (config_mapping.find (key) == config_mapping.end ())
         return key.c_str ();
@@ -352,6 +355,11 @@ get_path (const std::string& key)
     if (key.find ("FTY_DISCOVERY_") == 0)
     {
         return "/etc/fty-discovery/fty-discovery.cfg";
+    }
+    else
+    if (key.find ("FTY_SESSION_") == 0)
+    {
+      return "/etc/fty/fty-session.cfg";
     }
 
     // general config file
