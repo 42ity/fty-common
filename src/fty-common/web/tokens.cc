@@ -34,6 +34,8 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <mutex>
+#include <string>
+#include <czmq.h>
 
 #include "fty-common/web/tokens.h"
 #include "fty-common/log/fty_log.h"
@@ -146,6 +148,22 @@ BiosProfile tokens::gen_token(const char* user, std::string& token, long int* ex
             break;
         default:
             return BiosProfile::Anonymous;
+    }
+
+    zconfig_t *root = zconfig_load (utils::config::get_path ("FTY_SESSION_TIMEOUT_LEASE"));
+    if (root) {
+      const char *config_key = utils::config::get_mapping ("FTY_SESSION_TIMEOUT_LEASE");
+      zconfig_t *item = zconfig_locate (root, config_key);
+      if (item) {
+        std::string value = zconfig_value (item);
+        try {
+          *expires_in = std::stol (value);
+        } catch (...) {
+          //Nothing to do, just keep default values.
+          log_error("Error on %s stol conversion", value.c_str());
+        }
+      }
+      zconfig_destroy (&root);
     }
 
     long int tme = (long int)mono_time(NULL) + *expires_in;
