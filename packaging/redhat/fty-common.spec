@@ -1,3 +1,4 @@
+### NOTE: This file was customized after zproject generation, see below
 #
 #    fty-common - Provides common tools for agents
 #
