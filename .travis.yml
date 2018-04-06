@@ -16,8 +16,8 @@ os:
 # in the default container with sudo==false, consider requiring a docker
 # image and/or a newer Ubuntu Trusty baseline VM, by uncommenting below.
 # See the current docs on http://travis-ci.org for up-to-date options.
-sudo: false
-#sudo: required
+#sudo: false
+sudo: required
 
 #dist:
 #- trusty
@@ -139,7 +139,7 @@ before_install:
 
 before_script:
 - ./.travis.fixsasl
- 
+
 # Hand off to generated script for each BUILD_TYPE
 script: ./ci_build.sh
 before_deploy: . ./ci_deploy.sh && ./ci_deploy_obs.sh
