@@ -173,7 +173,7 @@ bool authenticate(const char *userid, const char *passwd, const char *service) {
     char pwpath[sizeof(srvaddr.sun_path)];
 
     if (!service) {
-        service = "bios";
+        service = "fty";
     }
 
     strcpy(pwpath, SASLAUTHD_MUX_PATH);
