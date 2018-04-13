@@ -16,6 +16,7 @@ nobase_include_HEADERS += \
     fty-common/web/utils_web.h \
     fty-common/common/str_defs.h \
     fty-common/common/filesystem.h \
+    fty-common/common/fty_uuid.h \
     fty-common/db/dbpath.h
 
 endif

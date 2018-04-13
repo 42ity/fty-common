@@ -27,6 +27,8 @@ fty_common_common_str_defs.txt
 fty_common_common_str_defs.doc
 fty_common_common_filesystem.txt
 fty_common_common_filesystem.doc
+fty_common_common_fty_uuid.txt
+fty_common_common_fty_uuid.doc
 fty_common_db_dbpath.txt
 fty_common_db_dbpath.doc
 

@@ -68,11 +68,12 @@
 #   define FTY_COMMON_EXPORT
 #   define FTY_COMMON_PRIVATE
 #else
-#   define FTY_COMMON_EXPORT
 #   if (defined __GNUC__ && __GNUC__ >= 4) || defined __INTEL_COMPILER
 #       define FTY_COMMON_PRIVATE __attribute__ ((visibility ("hidden")))
+#       define FTY_COMMON_EXPORT __attribute__ ((visibility ("default")))
 #   else
 #       define FTY_COMMON_PRIVATE
+#       define FTY_COMMON_EXPORT
 #   endif
 #endif
 
@@ -100,6 +101,8 @@ typedef struct _fty_common_common_str_defs_t fty_common_common_str_defs_t;
 #define FTY_COMMON_COMMON_STR_DEFS_T_DEFINED
 typedef struct _fty_common_common_filesystem_t fty_common_common_filesystem_t;
 #define FTY_COMMON_COMMON_FILESYSTEM_T_DEFINED
+typedef struct _fty_common_common_fty_uuid_t fty_common_common_ty_uuid_t;
+#define FTY_COMMON_COMMON_FTY_UUID_T_DEFINED
 typedef struct _fty_common_db_dbpath_t fty_common_db_dbpath_t;
 #define FTY_COMMON_DB_DBPATH_T_DEFINED
 #endif // FTY_COMMON_BUILD_DRAFT_API
@@ -115,6 +118,7 @@ typedef struct _fty_common_db_dbpath_t fty_common_db_dbpath_t;
 #include "fty-common/web/utils_web.h"
 #include "fty-common/common/str_defs.h"
 #include "fty-common/common/filesystem.h"
+#include "fty-common/common/fty_uuid.h"
 #include "fty-common/db/dbpath.h"
 #endif // FTY_COMMON_BUILD_DRAFT_API
 

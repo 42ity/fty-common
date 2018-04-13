@@ -26,7 +26,7 @@
 
     <classfilename use-cxx = "true" source-extension = "cc" header-extension = "h"
         pretty-print = "no" keep-tree = "true" />
-    
+
     <use project = "czmq"
         repository="https://github.com/42ity/czmq.git" release = "v3.0.2-FTY-master"
         min_major = "3" min_minor = "0" min_patch = "2" >
@@ -77,6 +77,8 @@
 
     <class name = "fty-common/common/str_defs" selftest = "0" />
     <class name = "fty-common/common/filesystem" selftest = "0" />
-    <class name = "fty-common/db/dbpath" selftest = "0" />
-</project>
+    <class name = "fty-common/common/fty_uuid" selftest = "0" > Calculates UUID for assets.</class>
 
+    <class name = "fty-common/db/dbpath" selftest = "0" />
+
+</project>
