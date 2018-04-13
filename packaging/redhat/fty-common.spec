@@ -55,6 +55,7 @@ BuildRequires:  libtntnet-devel
 BuildRequires:  tntdb-devel
 BuildRequires:  cyrus-sasl-devel
 BuildRequires:  log4cplus-devel
+BuildRequires:  openssl-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
@@ -86,6 +87,7 @@ Requires:       libtntnet-devel
 Requires:       tntdb-devel
 Requires:       cyrus-sasl-devel
 Requires:       log4cplus-devel
+Requires:       openssl-devel
 
 %description devel
 provides common tools for agents development tools

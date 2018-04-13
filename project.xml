@@ -67,6 +67,8 @@
         release="1.1.2-FTY-master"
         repository="https://github.com/42ity/log4cplus.git" />
 
+    <use project = "openssl" header = "openssl/sha.h" debian_name="libssl-dev"/>
+
     <class name = "fty-common/log/fty_log">Log management</class>
     <class name = "fty-common/common/fty_commons" >Singleton object and common functions</class>
 

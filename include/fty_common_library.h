@@ -38,6 +38,7 @@
 #include <tntdb.h>
 #include <sasl/sasl.h>
 #include <log4cplus/logger.h>
+#include <openssl/sha.h>
 
 //  FTY_COMMON version macros for compile-time API detection
 #define FTY_COMMON_VERSION_MAJOR 1
@@ -101,7 +102,7 @@ typedef struct _fty_common_common_str_defs_t fty_common_common_str_defs_t;
 #define FTY_COMMON_COMMON_STR_DEFS_T_DEFINED
 typedef struct _fty_common_common_filesystem_t fty_common_common_filesystem_t;
 #define FTY_COMMON_COMMON_FILESYSTEM_T_DEFINED
-typedef struct _fty_common_common_fty_uuid_t fty_common_common_ty_uuid_t;
+typedef struct _fty_common_common_fty_uuid_t fty_common_common_fty_uuid_t;
 #define FTY_COMMON_COMMON_FTY_UUID_T_DEFINED
 typedef struct _fty_common_db_dbpath_t fty_common_db_dbpath_t;
 #define FTY_COMMON_DB_DBPATH_T_DEFINED
