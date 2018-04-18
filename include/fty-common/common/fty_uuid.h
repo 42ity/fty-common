@@ -50,7 +50,7 @@ const char*
 // calculate uuid. I we don't and asset type is device we use ffff-...
 // otherwise some random uuid is generated for other asset types.
 FTY_COMMON_EXPORT const char*
-    fty_uuid_create (zhash_t *ext, char *asset_type);
+    fty_uuid_create (zhash_t *ext, char *asset_type, fty_uuid_t *uuid);
 
 //  Self test of this class
 void
