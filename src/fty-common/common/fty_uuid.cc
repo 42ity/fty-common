@@ -137,7 +137,7 @@ fty_uuid_create (zhash_t *ext, char *asset_type, fty_uuid_t *uuid)
 //  Self test of this class
 
 void
-fty_uuid_test (bool verbose)
+fty_common_common_fty_uuid_test (bool verbose)
 {
     printf (" * fty_uuid: ");
 
@@ -151,6 +151,15 @@ fty_uuid_test (bool verbose)
     id = fty_uuid_calculate (self, "EATON", "IPC3000", "LA71042052");
     assert (streq (id,  "c7cc6ffe-f36f-55ee-b5d4-3e40a2fe08a3"));
     fty_uuid_destroy (&self);
+
+    fty_uuid_t *fuuid = fty_uuid_new ();
+    zhash_t *ext = zhash_new ();
+    zhash_insert (ext,"model", (void*)"M1" );
+    const char *uuid = fty_uuid_create (ext, (char *) "room", fuuid);
+    assert (uuid);
+
+    zhash_destroy (&ext);
+    fty_uuid_destroy (&fuuid);
     //  @end
     printf ("OK\n");
 }

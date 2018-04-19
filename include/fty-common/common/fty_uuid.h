@@ -54,7 +54,7 @@ FTY_COMMON_EXPORT const char*
 
 //  Self test of this class
 void
-    fty_uuid_test (bool verbose);
+    fty_common_common_fty_uuid_test (bool verbose);
 
 //  @end
 
