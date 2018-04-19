@@ -115,6 +115,25 @@ fty_uuid_destroy (fty_uuid_t **self_p)
 }
 
 //  --------------------------------------------------------------------------
+// Returns uuid.
+// If we have all necessary information (serial nr, model, manufacturer) we
+// calculate uuid, if we don't and asset type is device we use ffff-...
+// otherwise some random uuid is generated for other asset types.
+
+const char*
+fty_uuid_create (zhash_t *ext, char *asset_type, fty_uuid_t *uuid)
+{
+    const char *serial = (const char *) zhash_lookup (ext, "serial_no");
+    const char *model = (const char *) zhash_lookup (ext, "model");
+    const char *mfr = (const char *) zhash_lookup (ext, "manufacturer");
+
+    if (streq (asset_type, "device")) {
+        return fty_uuid_calculate (uuid, mfr, model, serial);
+    }
+    return fty_uuid_generate (uuid);
+}
+
+//  --------------------------------------------------------------------------
 //  Self test of this class
 
 void

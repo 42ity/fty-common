@@ -45,23 +45,17 @@ const char*
 const char*
     fty_uuid_generate (fty_uuid_t *self);
 
+// Returns uuid.
+// If we have all necessary information (serial nr, model, manufacturer) we
+// calculate uuid. I we don't and asset type is device we use ffff-...
+// otherwise some random uuid is generated for other asset types.
+FTY_COMMON_EXPORT const char*
+    fty_uuid_create (zhash_t *ext, char *asset_type, fty_uuid_t *uuid);
+
 //  Self test of this class
 void
     fty_uuid_test (bool verbose);
 
-
-/*
-
-//  @interface
-//  Create a new fty_common_common_fty_uuid
-FTY_COMMON_EXPORT fty_common_common_fty_uuid_t *
-    fty_common_common_fty_uuid_new (void);
-
-//  Destroy the fty_common_common_fty_uuid
-FTY_COMMON_EXPORT void
-    fty_common_common_fty_uuid_destroy (fty_common_common_fty_uuid_t **self_p);
-
-*/
 //  @end
 
 #ifdef __cplusplus
