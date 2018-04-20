@@ -121,7 +121,7 @@ fty_uuid_destroy (fty_uuid_t **self_p)
 // otherwise some random uuid is generated for other asset types.
 
 const char*
-fty_uuid_create (zhash_t *ext, char *asset_type, fty_uuid_t *uuid)
+fty_uuid_create (zhash_t *ext, const char *asset_type, fty_uuid_t *uuid)
 {
     const char *serial = (const char *) zhash_lookup (ext, "serial_no");
     const char *model = (const char *) zhash_lookup (ext, "model");
@@ -155,7 +155,7 @@ fty_common_common_fty_uuid_test (bool verbose)
     fty_uuid_t *fuuid = fty_uuid_new ();
     zhash_t *ext = zhash_new ();
     zhash_insert (ext,"model", (void*)"M1" );
-    const char *uuid = fty_uuid_create (ext, (char *) "room", fuuid);
+    const char *uuid = fty_uuid_create (ext, "room", fuuid);
     assert (uuid);
 
     zhash_destroy (&ext);
