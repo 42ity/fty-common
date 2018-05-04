@@ -60,6 +60,10 @@ src/platform.h.in~
 src/stamp-h1
 src/test-suite.log
 src/.dirstamp
+src/fty-common/common/.dirstamp
+src/fty-common/db/.dirstamp
+src/fty-common/log/.dirstamp
+src/fty-common/web/.dirstamp
 
 # CMake cache
 CMakeCache.txt
@@ -79,7 +83,6 @@ cxxtools/
 libtntnet/
 tntdb/
 log4cplus/
-liblog4cplus/
 
 # Travis build area
 tmp/
@@ -132,10 +135,6 @@ bindings/qt/selftest/selftest
 
 #netbean directory
 nbproject/
-src/fty-common/common/.dirstamp
-src/fty-common/db/.dirstamp
-src/fty-common/log/.dirstamp
-src/fty-common/web/.dirstamp
 
 # editor backups
 *~

@@ -55,7 +55,7 @@ env:
 #   - BUILD_TYPE=check-py
 
 pkg_deps_prereqs: &pkg_deps_prereqs
-#    - liblog4cplus-dev
+    - libssl-dev
 #    - libsodium-dev
 #    - libzmq3-dev
 #    - libczmq-dev
@@ -64,6 +64,7 @@ pkg_deps_prereqs: &pkg_deps_prereqs
 #    - tntdb-dev
 #    - libsasl2-dev
 #    - log4cplus-dev
+#    - liblog4cplus-dev
 
 pkg_deps_doctools: &pkg_deps_doctools
     - asciidoc
