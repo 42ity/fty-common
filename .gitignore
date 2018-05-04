@@ -29,9 +29,9 @@ src/fty_common_selftest
 core
 
  # Distcheck workspace and archives
-fty-common-1.0.0/
-fty-common-1.0.0.tar.gz
-fty-common-1.0.0.zip
+fty-common-*/
+fty-common-*.tar.gz
+fty-common-*.zip
 
 # Man pages
 doc/*.1
@@ -60,6 +60,10 @@ src/platform.h.in~
 src/stamp-h1
 src/test-suite.log
 src/.dirstamp
+src/fty-common/common/.dirstamp
+src/fty-common/db/.dirstamp
+src/fty-common/log/.dirstamp
+src/fty-common/web/.dirstamp
 
 # CMake cache
 CMakeCache.txt
@@ -72,17 +76,16 @@ install_manifest.txt
 Testing/
 
 # Repositories downloaded by CI integration scripts
-liblog4cplus/
+libsodium/
+libzmq/
+czmq/
+cxxtools/
+libtntnet/
+tntdb/
+log4cplus/
 
 # Travis build area
 tmp/
-cxxtools/
-czmq/
-libsodium/
-libtntnet/
-libzmq/
-log4cplus/
-tntdb/
 
 # Valgrind files
 callgrind*
@@ -132,12 +135,6 @@ bindings/qt/selftest/selftest
 
 #netbean directory
 nbproject/
-src/fty-common/common/.dirstamp
-src/fty-common/db/.dirstamp
-src/fty-common/log/.dirstamp
-src/fty-common/web/.dirstamp
 
 # editor backups
 *~
-
-# Mak
