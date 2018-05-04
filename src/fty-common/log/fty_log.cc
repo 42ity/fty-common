@@ -1,21 +1,21 @@
 /*  =========================================================================
     fty_log - Log management
 
-    Copyright (C) 2014 - 2018 Eaton                                        
-                                                                           
-    This program is free software; you can redistribute it and/or modify   
-    it under the terms of the GNU General Public License as published by   
-    the Free Software Foundation; either version 2 of the License, or      
-    (at your option) any later version.                                    
-                                                                           
-    This program is distributed in the hope that it will be useful,        
-    but WITHOUT ANY WARRANTY; without even the implied warranty of         
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          
-    GNU General Public License for more details.                           
-                                                                           
+    Copyright (C) 2014 - 2018 Eaton
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
     You should have received a copy of the GNU General Public License along
     with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.            
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     =========================================================================
  */
 
@@ -78,9 +78,9 @@ void Ftylog::init(std::string component, std::string configFile)
   //even if there is a log configuration file
   setLogLevelFromEnv();
 
-  //Get pattern laoyout from env
+  //Get pattern layout from env
   setPatternFromEnv();
-  
+
   //load appenders
   loadAppenders();
 }
@@ -138,12 +138,13 @@ void Ftylog::setPatternFromEnv()
   }
 }
 
-//Add a simple ConsoleAppender to th logger
+//Add a simple ConsoleAppender to the logger
 void Ftylog::setConsoleAppender()
 {
   _logger.removeAllAppenders();
   //create appender
-  SharedObjectPtr<log4cplus::Appender> append(new log4cplus::ConsoleAppender(false, true));
+  // Note: the first bool argument controls logging to stderr(true) as output stream
+  SharedObjectPtr<log4cplus::Appender> append(new log4cplus::ConsoleAppender(true, true));
   //Create and affect layout
   append->setLayout(std::auto_ptr<log4cplus::Layout> (new log4cplus::PatternLayout(_layoutPattern)));
   append.get()->setName(LOG4CPLUS_TEXT("Console" + this->_agentName));
@@ -195,13 +196,13 @@ void Ftylog::setVeboseMode()
 // or set a basic ConsoleAppender
 void Ftylog::loadAppenders()
 {
-  //by default, laod console appenders
+  //by default, load console appenders
   setConsoleAppender();
-  
+
   //If true, load file
   bool loadFile = false;
 
-  //Stop the watch confile file thread if any 
+  //Stop the watch confile file thread if any
   if (NULL != _watchConfigFile)
   {
     delete _watchConfigFile;
@@ -219,7 +220,7 @@ void Ftylog::loadAppenders()
     }
     else
     {
-      log_error_log(this,"File %s can't be accessed with read rights",_configFile.c_str());
+      log_error_log(this,"File %s can't be accessed with read rights; this process will not monitor whether it becomes available later",_configFile.c_str());
       _configFile = "";
     }
   }
@@ -236,10 +237,14 @@ void Ftylog::loadAppenders()
     //Remove previous appender
     _logger.removeAllAppenders();
 
-    //Load the file 
+    //Load the file
     log4cplus::PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT(_configFile));
     //Start the thread watching the modification of the log config file
     _watchConfigFile = new log4cplus::ConfigureAndWatchThread(_configFile.c_str(), 60000);
+  }
+  else
+  {
+    log_info_log(this,"No log configuration file was loaded, will log to stderr by default");
   }
 }
 
@@ -461,7 +466,7 @@ void ftylog_setLogLevelFatal(Ftylog * log)
   log->setLogLevelFatal();
 }
 
-//Check the log level 
+//Check the log level
 bool ftylog_isLogTrace(Ftylog * log)
 {
   return log->isLogTrace();
@@ -531,8 +536,8 @@ void fty_common_log_fty_log_test(bool verbose)
   log_error("This is a simple %s log with default logger","error");
   log_fatal("This is a simple %s log with default logger","fatal");
   printf(" * Check default log : OK \n");
-  
-  
+
+
 
   printf(" * Check level test \n");
   ManageFtyLog::setInstanceFtylog("fty-log-agent");
@@ -610,7 +615,7 @@ void fty_common_log_fty_log_test(bool verbose)
   //file is created
   assert(access("./src/selftest-rw/logfile.log", F_OK) != -1);
 
-  //his size is not 0
+  //this size is not 0
   std::ifstream file("./src/selftest-rw/logfile.log", std::ifstream::in | std::ifstream::binary);
   file.seekg(0, std::ios::end);
   int fileSize = file.tellg();
