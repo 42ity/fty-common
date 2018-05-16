@@ -36,6 +36,7 @@
 #include <log4cplus/loggingmacros.h>
 #include <log4cplus/loglevel.h>
 #include <log4cplus/consoleappender.h>
+#include <log4cplus/mdc.h>
 
 #include "../../fty_common_classes.h"
 
@@ -190,6 +191,20 @@ void Ftylog::setVeboseMode()
   append.get()->setName(LOG4CPLUS_TEXT("Verbose-" + this->_agentName));
   //Add verbose appender to logger
   _logger.addAppender(append);
+}
+
+void Ftylog::setContext(const std::map<std::string, std::string>& contextParam)
+{
+  log4cplus::getMDC().clear();
+  for (auto const& entry: contextParam)
+  {
+    log4cplus::getMDC().put(entry.first, entry.second);
+  }
+}
+
+void Ftylog::clearContext()
+{
+  log4cplus::getMDC().clear();
 }
 
 //Set appenders from log config file if exist
