@@ -5,7 +5,11 @@
 
 ACLOCAL_AMFLAGS = -I config
 
+AM_CFLAGS = \
+    -Werror=format-security
+
 AM_CXXFLAGS = \
+    -Werror=format-security \
     -std=c++11
 
 AM_CPPFLAGS = \
@@ -51,8 +55,6 @@ EXTRA_DIST += \
     Findlibsasl2.cmake \
     Findlog4cplus.cmake \
     Findopenssl.cmake \
-    builds/cmake/Modules/ClangFormat.cmake \
-    builds/cmake/clang-format-check.sh.in \
     CMakeLists.txt
 endif
 

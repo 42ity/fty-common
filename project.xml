@@ -76,7 +76,8 @@
     <class name = "fty-common/web/sasl" selftest = "0" />
     <class name = "fty-common/web/tokens" selftest = "0" />
     <class name = "fty-common/web/utils_web" selftest = "0" />
-
+    <class name = "fty-common/web/audit_log" selftest = "0">Manage audit log</class>
+    
     <class name = "fty-common/common/str_defs" selftest = "0" />
     <class name = "fty-common/common/filesystem" selftest = "0" />
     <class name = "fty-common/common/fty_uuid" > Calculates UUID for assets.</class>

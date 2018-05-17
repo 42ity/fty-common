@@ -98,6 +98,8 @@ typedef struct _fty_common_web_tokens_t fty_common_web_tokens_t;
 #define FTY_COMMON_WEB_TOKENS_T_DEFINED
 typedef struct _fty_common_web_utils_web_t fty_common_web_utils_web_t;
 #define FTY_COMMON_WEB_UTILS_WEB_T_DEFINED
+typedef struct _fty_common_web_audit_log_t fty_common_web_audit_log_t;
+#define FTY_COMMON_WEB_AUDIT_LOG_T_DEFINED
 typedef struct _fty_common_common_str_defs_t fty_common_common_str_defs_t;
 #define FTY_COMMON_COMMON_STR_DEFS_T_DEFINED
 typedef struct _fty_common_common_filesystem_t fty_common_common_filesystem_t;
@@ -117,6 +119,7 @@ typedef struct _fty_common_db_dbpath_t fty_common_db_dbpath_t;
 #include "fty-common/web/sasl.h"
 #include "fty-common/web/tokens.h"
 #include "fty-common/web/utils_web.h"
+#include "fty-common/web/audit_log.h"
 #include "fty-common/common/str_defs.h"
 #include "fty-common/common/filesystem.h"
 #include "fty-common/common/fty_uuid.h"
