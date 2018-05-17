@@ -214,6 +214,17 @@ public:
   //    if no loglevel defined for this appender
   // -Add a new console appender
   void setVeboseMode();
+  
+  /**
+   * Set a context for a mapped diagnostic context (MDC)
+   * @param contextParam The context params mapped.
+   */
+  static void setContext(const std::map<std::string, std::string>& contextParam);
+  
+  /**
+   * Clear the mapped diagnostic context.
+   */
+  static void clearContext();
 };
 
 //singleton for logger managment
