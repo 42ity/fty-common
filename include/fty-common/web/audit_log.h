@@ -63,6 +63,19 @@ public:
   
   // Return singleton Audit Ftylog instance
   static Ftylog* getInstance();
+  
+  /**
+   * Set audit log context.
+   * @param token The token 
+   * @param username The user name
+   * @param userId The user id
+   */
+  static void setAuditLogContext(const std::string token, const std::string username, const unsigned int userId);
+  
+  /**
+   * Clear audit log context.
+   */
+  static void clearAuditLogContext();
 };
 
 #endif

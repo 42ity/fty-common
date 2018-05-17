@@ -36,3 +36,21 @@ Ftylog* AuditLogManager::getInstance()
   return &_auditlog;
 }
 
+void AuditLogManager::setAuditLogContext(const std::string token, const std::string username, const unsigned int userId)
+{
+  // Prepare context params for audit-log
+  std::hash<std::string> hash_token;
+  size_t contextToken = hash_token(token);
+  std::map<std::string, std::string> contextParam;
+  contextParam.insert(std::make_pair("sessionid", std::to_string(contextToken)));
+  contextParam.insert(std::make_pair("username", username));
+  contextParam.insert(std::make_pair("uid", std::to_string(userId)));
+  
+  // Set the fty-log context
+  Ftylog::setContext(contextParam);
+}
+
+void AuditLogManager::clearAuditLogContext()
+{
+  Ftylog::clearContext();
+}
