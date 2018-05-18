@@ -70,7 +70,7 @@ public:
    * @param username The user name
    * @param userId The user id
    */
-  static void setAuditLogContext(const std::string token, const std::string username, const unsigned int userId);
+  static void setAuditLogContext(const std::string token, const std::string username, const int userId);
   
   /**
    * Clear audit log context.

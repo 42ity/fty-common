@@ -36,7 +36,7 @@ Ftylog* AuditLogManager::getInstance()
   return &_auditlog;
 }
 
-void AuditLogManager::setAuditLogContext(const std::string token, const std::string username, const unsigned int userId)
+void AuditLogManager::setAuditLogContext(const std::string token, const std::string username, const int userId)
 {
   // Prepare context params for audit-log
   std::hash<std::string> hash_token;
