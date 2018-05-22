@@ -26,7 +26,7 @@
 @end
 */
 
-#include "fty_common_classes.h"
+#include "../../fty_common_classes.h"
 
 Ftylog AuditLogManager::_auditlog = Ftylog("www-audit", Ftylog::DEFAULT_LOG_CONFIG_FILE);
 
