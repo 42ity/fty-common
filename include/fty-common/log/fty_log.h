@@ -161,6 +161,10 @@ private:
   void loadAppenders();
   
 public:
+  
+  // Default layout configuration file.
+   static constexpr const char* DEFAULT_LOG_CONFIG_FILE = "/etc/fty/ftylog.cfg";
+  
   //Constructor/destructor
   Ftylog(std::string _component, std::string logConfigFile = "");
   Ftylog();

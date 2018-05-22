@@ -23,6 +23,7 @@ src_libfty_common_la_SOURCES += \
     src/fty-common/web/sasl.cc \
     src/fty-common/web/tokens.cc \
     src/fty-common/web/utils_web.cc \
+    src/fty-common/web/audit_log.cc \
     src/fty-common/common/str_defs.cc \
     src/fty-common/common/filesystem.cc \
     src/fty-common/common/fty_uuid.cc \
