@@ -51,7 +51,7 @@ BuildRequires:  libsodium-devel
 BuildRequires:  zeromq-devel
 BuildRequires:  czmq-devel
 BuildRequires:  cxxtools-devel
-BuildRequires:  libtntnet-devel
+BuildRequires:  tntnet-devel
 BuildRequires:  tntdb-devel
 BuildRequires:  cyrus-sasl-devel
 BuildRequires:  log4cplus-devel
@@ -83,7 +83,7 @@ Requires:       libsodium-devel
 Requires:       zeromq-devel
 Requires:       czmq-devel
 Requires:       cxxtools-devel
-Requires:       libtntnet-devel
+Requires:       tntnet-devel
 Requires:       tntdb-devel
 Requires:       cyrus-sasl-devel
 Requires:       log4cplus-devel
@@ -107,7 +107,7 @@ This package contains development files for fty-common: provides common tools fo
 
 %build
 sh autogen.sh
-%{configure} --enable-drafts=%{DRAFTS} --with-libtntnet=yes
+%{configure} --enable-drafts=%{DRAFTS}
 make %{_smp_mflags}
 
 %install

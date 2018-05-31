@@ -80,7 +80,7 @@ libsodium/
 libzmq/
 czmq/
 cxxtools/
-libtntnet/
+tntnet/
 tntdb/
 log4cplus/
 

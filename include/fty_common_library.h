@@ -32,9 +32,7 @@
 //  External dependencies
 #include <czmq.h>
 #include <cxxtools/allocator.h>
-#if defined (HAVE_LIBTNTNET)
-#include <libtntnet.h>
-#endif
+#include <tnt/tntnet.h>
 #include <tntdb.h>
 #include <sasl/sasl.h>
 #include <log4cplus/logger.h>
