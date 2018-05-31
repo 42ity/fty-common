@@ -28,10 +28,12 @@
         pretty-print = "no" keep-tree = "true" />
 
     <use project = "czmq"
-        repository="https://github.com/42ity/czmq.git" release = "v3.0.2-FTY-master"
+        repository="https://github.com/42ity/czmq.git"
+        release = "v3.0.2-FTY-master"
         min_major = "3" min_minor = "0" min_patch = "2" >
         <use project = "libzmq"
-            repository="https://github.com/42ity/libzmq.git" release = "4.2.0-FTY-master" >
+            repository="https://github.com/42ity/libzmq.git"
+            release = "4.2.0-FTY-master" >
             <use project = "libsodium" prefix = "sodium"
                 repository = "https://github.com/42ity/libsodium.git"
                 release = "1.0.5-FTY-master"
@@ -39,7 +41,9 @@
         </use>
     </use>
 
-    <use project = "cxxtools" test="cxxtools::Utf8Codec::Utf8Codec" header="cxxtools/allocator.h"
+    <use project = "cxxtools"
+        test="cxxtools::Utf8Codec::Utf8Codec"
+        header = "cxxtools/allocator.h"
         repository = "https://github.com/42ity/cxxtools.git"
         release = "2.2-FTY-master"
         />
@@ -62,7 +66,8 @@
         redhat_name="cyrus-sasl-devel"
     />
 
-    <use project = "log4cplus" header = "log4cplus/logger.h"
+    <use project = "log4cplus"
+        header = "log4cplus/logger.h"
         test = "appender_test"
         release="1.1.2-FTY-master"
         repository="https://github.com/42ity/log4cplus.git" />

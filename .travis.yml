@@ -16,6 +16,7 @@ os:
 # in the default container with sudo==false, consider requiring a docker
 # image and/or a newer Ubuntu Trusty baseline VM, by uncommenting below.
 # See the current docs on http://travis-ci.org for up-to-date options.
+# Here we need this for .travis.fixsasl below.
 #sudo: false
 sudo: required
 
@@ -50,10 +51,12 @@ env:
   matrix:
     - BUILD_TYPE=default
     - BUILD_TYPE=default-Werror
+### Note: we don't use CMake
 #   - BUILD_TYPE=cmake
 #   - BUILD_TYPE=android
 #   - BUILD_TYPE=check-py
 
+# NOTE: Our forks are checked out and built without pkg dependencies in use
 pkg_deps_prereqs: &pkg_deps_prereqs
     - libssl-dev
 #    - libsodium-dev
@@ -64,7 +67,6 @@ pkg_deps_prereqs: &pkg_deps_prereqs
 #    - tntdb-dev
 #    - libsasl2-dev
 #    - log4cplus-dev
-#    - liblog4cplus-dev
 
 pkg_deps_doctools: &pkg_deps_doctools
     - asciidoc
@@ -118,6 +120,7 @@ matrix:
         sources: *pkg_src_zeromq_ubuntu14
         packages:
         - *pkg_deps_common
+### Note: we don't use CMake
 #  - env: BUILD_TYPE=cmake DO_CLANG_FORMAT_CHECK=1 CLANG_FORMAT=clang-format-5.0
 # For non-cmake users, there is an autotools solution with a bit more overhead
 # to have dependencies ready and pass configure script before making this check):
@@ -135,8 +138,6 @@ matrix:
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "android" ] ; then brew install binutils ; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "valgrind" ] ; then brew install valgrind ; fi
-#- sudo apt-get remove liblog4cplus-dev
-#- sudo apt-get autoremove
 
 before_script:
 - ./.travis.fixsasl
