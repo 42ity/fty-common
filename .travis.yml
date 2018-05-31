@@ -63,7 +63,7 @@ pkg_deps_prereqs: &pkg_deps_prereqs
 #    - libzmq3-dev
 #    - libczmq-dev
 #    - cxxtools-dev
-#    - libtntnet-dev
+#    - tntnet-dev
 #    - tntdb-dev
 #    - libsasl2-dev
 #    - log4cplus-dev
@@ -139,6 +139,7 @@ before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "android" ] ; then brew install binutils ; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" -a "$BUILD_TYPE" == "valgrind" ] ; then brew install valgrind ; fi
 
+### Note: Fix up SASL pkgconfig before build
 before_script:
 - ./.travis.fixsasl
 

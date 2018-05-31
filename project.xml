@@ -48,7 +48,8 @@
         release = "2.2-FTY-master"
         />
 
-    <use project = "libtntnet" optional = "1"
+    <use project = "tntnet"
+        header = "tnt/tntnet.h"
         repository = "https://github.com/42ity/tntnet.git"
         release = "2.2-FTY-master"
         />
