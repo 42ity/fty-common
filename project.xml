@@ -13,7 +13,7 @@
     <target name = "redhat" />
     <target name = "travis" />
     <target name = "jenkins" >
-        <option name = "agent_label" value = "devel-image &amp;&amp; x86_64" />
+        <option name = "agent_label" value = "devel-image-ipm_1.4 &amp;&amp; x86_64" />
         <option name = "triggers_pollSCM" value = "H/2 * * * *" />
         <option name = "test_cppcheck" value = "1" />
         <option name = "build_docs" value = "1" />
@@ -29,14 +29,14 @@
 
     <use project = "czmq"
         repository="https://github.com/42ity/czmq.git"
-        release = "v3.0.2-FTY-master"
+        release = "release/IPM_Infra-1.4"
         min_major = "3" min_minor = "0" min_patch = "2" >
         <use project = "libzmq"
             repository="https://github.com/42ity/libzmq.git"
-            release = "4.2.0-FTY-master" >
+            release = "release/IPM_Infra-1.4" >
             <use project = "libsodium" prefix = "sodium"
                 repository = "https://github.com/42ity/libsodium.git"
-                release = "1.0.5-FTY-master"
+                release = "release/IPM_Infra-1.4"
                 test = "sodium_init" />
         </use>
     </use>
@@ -45,19 +45,19 @@
         test="cxxtools::Utf8Codec::Utf8Codec"
         header = "cxxtools/allocator.h"
         repository = "https://github.com/42ity/cxxtools.git"
-        release = "2.2-FTY-master"
+        release = "release/IPM_Infra-1.4"
         />
 
     <use project = "tntnet"
         header = "tnt/tntnet.h"
         repository = "https://github.com/42ity/tntnet.git"
-        release = "2.2-FTY-master"
+        release = "release/IPM_Infra-1.4"
         />
 
     <use project = "tntdb"
         test="tntdb::Date::gmtime"
         repository = "https://github.com/42ity/tntdb.git"
-        release = "1.3-FTY-master"
+        release = "release/IPM_Infra-1.4"
         builddir = "tntdb" />
     <!-- use project = "tntdb" test="tntdb::connectCached" header="tntdb/connect.h" / -->
     <!-- use project = "tntdb" test="tntdb::Date::gmtime" header="tntdb/connect.h" / -->
@@ -70,7 +70,7 @@
     <use project = "log4cplus"
         header = "log4cplus/logger.h"
         test = "appender_test"
-        release="1.1.2-FTY-master"
+        release="release/IPM_Infra-1.4"
         repository="https://github.com/42ity/log4cplus.git" />
 
     <use project = "openssl" header = "openssl/sha.h" debian_name="libssl-dev"/>
