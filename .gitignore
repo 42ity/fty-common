@@ -28,7 +28,7 @@ src/fty_common_selftest
 *.app
 core
 
- # Distcheck workspace and archives
+# Distcheck workspace and archives
 fty-common-*/
 fty-common-*.tar.gz
 fty-common-*.zip
@@ -111,7 +111,7 @@ src/app/gen/
 src/app/obj/
 src/app/local.properties
 
-# Android -dependencies
+# Android - dependencies
 src/app/jni/output
 
 # Python build directory
@@ -133,7 +133,7 @@ bindings/qt/selftest/selftest
 *.bak
 .test*
 
-#netbean directory
+# Netbeans directory
 nbproject/
 
 # editor backups
