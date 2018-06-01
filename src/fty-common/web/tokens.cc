@@ -38,7 +38,7 @@
 #include <czmq.h>
 
 #include "fty-common/web/tokens.h"
-#include "fty-common/log/fty_log.h"
+#include "fty-log/fty_log.h"
 
 //! Max time key is alive
 #define MAX_LIVE 24*3600

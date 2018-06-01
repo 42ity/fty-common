@@ -19,7 +19,7 @@
  */
 
 #include "fty-common/db/dbpath.h"
-#include "fty-common/log/fty_log.h"
+#include "fty-log/fty_log.h"
 
 #include <stdlib.h>
 #include <stdio.h>
