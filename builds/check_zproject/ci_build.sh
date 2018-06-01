@@ -11,6 +11,7 @@ git clone --quiet --depth 1 -b 1.0.5-FTY-master https://github.com/42ity/libsodi
 git clone --quiet --depth 1 -b 4.2.0-FTY-master https://github.com/42ity/libzmq.git libzmq
 git clone --quiet --depth 1 -b v3.0.2-FTY-master https://github.com/42ity/czmq.git czmq
 git clone --quiet --depth 1 -b 2.2-FTY-master https://github.com/42ity/cxxtools.git cxxtools
+git clone --quiet --depth 1 -b 2.2-FTY-master https://github.com/42ity/tntnet.git tntnet
 git clone --quiet --depth 1 -b 1.3-FTY-master https://github.com/42ity/tntdb.git tntdb
 git clone --quiet --depth 1 -b 1.1.2-FTY-master https://github.com/42ity/log4cplus.git log4cplus
 cd -
