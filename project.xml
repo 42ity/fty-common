@@ -66,15 +66,13 @@
         redhat_name="cyrus-sasl-devel"
     />
 
-    <use project = "log4cplus"
-        header = "log4cplus/logger.h"
-        test = "appender_test"
-        release="1.1.2-FTY-master"
-        repository="https://github.com/42ity/log4cplus.git" />
+     <use project = "fty-log" libname = "libfty_log" header="fty-log/fty_log.h" prefix="fty_log"
+            min_major = "1" min_minor = "0" min_patch = "0"
+            repository = "https://github.com/42ity/fty-log"
+            test = "fty_log_selftest" />
 
     <use project = "openssl" header = "openssl/sha.h" debian_name="libssl-dev"/>
 
-    <class name = "fty-common/log/fty_log">Log management</class>
     <class name = "fty-common/common/fty_commons" >Singleton object and common functions</class>
 
     <class name = "fty-common/web/helpers" selftest = "0" />

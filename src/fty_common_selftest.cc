@@ -44,7 +44,6 @@ static test_item_t
 all_tests [] = {
 #ifdef FTY_COMMON_BUILD_DRAFT_API
 // Tests for draft public classes:
-    { "fty_common_log_fty_log", fty_common_log_fty_log_test, false, true, NULL },
     { "fty_common_common_fty_commons", fty_common_common_fty_commons_test, false, true, NULL },
     { "fty_common_common_fty_uuid", fty_common_common_fty_uuid_test, false, true, NULL },
 #endif // FTY_COMMON_BUILD_DRAFT_API

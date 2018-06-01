@@ -715,93 +715,93 @@ dnl END of PKG_CHECK_MODULES and/or direct tests for libsasl2
 dnl END of enabled attempts to search for libsasl2
 
 
-was_log4cplus_check_lib_detected=no
+was_fty_log_check_lib_detected=no
 
-search_log4cplus="yes"
+search_libfty_log="yes"
 
-AC_ARG_WITH([log4cplus],
+AC_ARG_WITH([libfty_log],
     [
-        AS_HELP_STRING([--with-log4cplus],
-        [yes or no. Optionally specify log4cplus prefix (directory where its include/ and lib/ are located), but that is only used if pkgconfig metadata is not found first])
+        AS_HELP_STRING([--with-libfty_log],
+        [yes or no. Optionally specify libfty_log prefix (directory where its include/ and lib/ are located), but that is only used if pkgconfig metadata is not found first])
     ],
     [
-        search_log4cplus="yes"
+        search_libfty_log="yes"
     ],
     [
-        search_log4cplus="yes"
+        search_libfty_log="yes"
     ])
-AS_CASE([x"${with_log4cplus}"],
-    [xyes], [search_log4cplus="yes"],
-    [xno],  [search_log4cplus="no"])
+AS_CASE([x"${with_libfty_log}"],
+    [xyes], [search_libfty_log="yes"],
+    [xno],  [search_libfty_log="no"])
 
 dnl We do not abort right now, because the maintainer/developer may have
 dnl something particular in mind, e.g. to build just parts of a project.
-AS_IF([test x"${search_log4cplus}" = xno],
-    [AC_MSG_WARN([Required dependency on log4cplus was explicitly disabled during configuration by '--with-log4cplus=no'; subsequent full build of fty-common may fail])])
+AS_IF([test x"${search_libfty_log}" = xno],
+    [AC_MSG_WARN([Required dependency on fty_log was explicitly disabled during configuration by '--with-libfty_log=no'; subsequent full build of fty-common may fail])])
 
-AS_IF([test x"${search_log4cplus}" = xyes], [
+AS_IF([test x"${search_libfty_log}" = xyes], [
     # Archive previously detected and supplied flags
     PRE_SEARCH_CFLAGS="${CFLAGS}"
     PRE_SEARCH_LIBS="${LIBS}"
 
     found_pkgconfig=""
     found_linkname=""
-    PKG_CHECK_MODULES([log4cplus], [log4cplus >= 0.0.0],
+    PKG_CHECK_MODULES([fty_log], [libfty_log >= 1.0.0],
     [
-        PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE $log4cplus_LIBS"
-        was_log4cplus_check_lib_detected=pkgcfg
-        found_pkgconfig="log4cplus"
+        PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE $fty_log_LIBS"
+        was_fty_log_check_lib_detected=pkgcfg
+        found_pkgconfig="libfty_log"
     ],
     [
-        AC_MSG_NOTICE([Package log4cplus not found; falling back to defined compilability tests])
+        AC_MSG_NOTICE([Package libfty_log not found with needed constraints; falling back to defined compilability tests])
 
-        log4cplus_synthetic_cflags=""
-        log4cplus_synthetic_libs="-llog4cplus"
+        fty_log_synthetic_cflags=""
+        fty_log_synthetic_libs="-lfty_log"
 
-        if test -n "${with_log4cplus}" && test x"${with_log4cplus}" != xyes && test x"${with_log4cplus}" != xno; then
-            if test -r "${with_log4cplus}/include/log4cplus/logger.h"; then
-                log4cplus_synthetic_cflags="-I${with_log4cplus}/include"
-                log4cplus_synthetic_libs="-L${with_log4cplus}/lib -llog4cplus"
+        if test -n "${with_libfty_log}" && test x"${with_libfty_log}" != xyes && test x"${with_libfty_log}" != xno; then
+            if test -r "${with_libfty_log}/include/fty-log/fty_log.h"; then
+                fty_log_synthetic_cflags="-I${with_libfty_log}/include"
+                fty_log_synthetic_libs="-L${with_libfty_log}/lib -lfty_log"
             else
-            AC_MSG_ERROR([Header file ${with_log4cplus}/include/log4cplus/logger.h was not found. Please check log4cplus prefix])
+            AC_MSG_ERROR([Header file ${with_libfty_log}/include/fty-log/fty_log.h was not found. Please check libfty_log prefix])
             fi
         else
-            AC_CHECK_HEADER([log4cplus/logger.h], [],
-            AC_MSG_ERROR([Header file log4cplus/logger.h was not found in default search paths])
+            AC_CHECK_HEADER([fty-log/fty_log.h], [],
+            AC_MSG_ERROR([Header file fty-log/fty_log.h was not found in default search paths])
                 )
         fi
 
-        AC_CHECK_LIB([log4cplus], [appender_test],
+        AC_CHECK_LIB([fty_log], [fty_log_selftest],
             [
-                was_log4cplus_check_lib_detected=yes
-                PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE -llog4cplus"
-                found_linkname="log4cplus"
+                was_fty_log_check_lib_detected=yes
+                PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE -lfty_log"
+                found_linkname="fty_log"
             ],
-            [AC_MSG_ERROR([cannot link with -llog4cplus, install log4cplus])])
+            [AC_MSG_ERROR([cannot link with -lfty_log, install libfty_log])])
     ])
 
-dnl END of PKG_CHECK_MODULES and/or direct tests for log4cplus
-    AS_CASE(["x${was_log4cplus_check_lib_detected}"],
+dnl END of PKG_CHECK_MODULES and/or direct tests for libfty_log
+    AS_CASE(["x${was_fty_log_check_lib_detected}"],
         [xpkgcfg], [
-                AC_SUBST([pkgconfig_name_log4cplus],[${found_pkgconfig}])
-                CFLAGS="${log4cplus_CFLAGS} ${CFLAGS}"
-                LIBS="${log4cplus_LIBS} ${LIBS}"
+                AC_SUBST([pkgconfig_name_libfty_log],[${found_pkgconfig}])
+                CFLAGS="${fty_log_CFLAGS} ${CFLAGS}"
+                LIBS="${fty_log_LIBS} ${LIBS}"
             ],
         [xyes], [
-                AC_SUBST([pkgconfig_name_log4cplus],[${found_linkname}])
-                CFLAGS="${log4cplus_synthetic_cflags} ${CFLAGS}"
-                LDFLAGS="${log4cplus_synthetic_libs} ${LDFLAGS}"
-                LIBS="${log4cplus_synthetic_libs} ${LIBS}"
+                AC_SUBST([pkgconfig_name_libfty_log],[${found_linkname}])
+                CFLAGS="${fty_log_synthetic_cflags} ${CFLAGS}"
+                LDFLAGS="${fty_log_synthetic_libs} ${LDFLAGS}"
+                LIBS="${fty_log_synthetic_libs} ${LIBS}"
 
-                AC_SUBST([log4cplus_CFLAGS],[${log4cplus_synthetic_cflags}])
-                AC_SUBST([log4cplus_LIBS],[${log4cplus_synthetic_libs}])
+                AC_SUBST([fty_log_CFLAGS],[${fty_log_synthetic_cflags}])
+                AC_SUBST([fty_log_LIBS],[${fty_log_synthetic_libs}])
             ],
         [xno], [
-                AC_SUBST([pkgconfig_name_log4cplus],[log4cplus])
-            AC_MSG_ERROR([Cannot find pkg-config metadata for log4cplus 0.0.0 or higher])
+                AC_SUBST([pkgconfig_name_libfty_log],[libfty_log])
+            AC_MSG_ERROR([Cannot find pkg-config metadata for libfty_log 1.0.0 or higher])
     ])
 ])
-dnl END of enabled attempts to search for log4cplus
+dnl END of enabled attempts to search for libfty_log
 
 
 was_openssl_check_lib_detected=no

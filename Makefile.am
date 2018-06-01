@@ -16,12 +16,12 @@ AM_CPPFLAGS = \
     ${libtntnet_CFLAGS} \
     ${tntdb_CFLAGS} \
     ${libsasl2_CFLAGS} \
-    ${log4cplus_CFLAGS} \
+    ${fty_log_CFLAGS} \
     ${openssl_CFLAGS} \
     -D__STDC_FORMAT_MACROS \
     -I$(srcdir)/include
 
-project_libs = ${libsodium_LIBS} ${libzmq_LIBS} ${czmq_LIBS} ${cxxtools_LIBS} ${libtntnet_LIBS} ${tntdb_LIBS} ${libsasl2_LIBS} ${log4cplus_LIBS} ${openssl_LIBS}
+project_libs = ${libsodium_LIBS} ${libzmq_LIBS} ${czmq_LIBS} ${cxxtools_LIBS} ${libtntnet_LIBS} ${tntdb_LIBS} ${libsasl2_LIBS} ${fty_log_LIBS} ${openssl_LIBS}
 
 SUBDIRS = doc
 SUBDIRS += include
@@ -49,7 +49,7 @@ EXTRA_DIST += \
     Findlibtntnet.cmake \
     Findtntdb.cmake \
     Findlibsasl2.cmake \
-    Findlog4cplus.cmake \
+    Findfty_log.cmake \
     Findopenssl.cmake \
     builds/cmake/Modules/ClangFormat.cmake \
     builds/cmake/clang-format-check.sh.in \

@@ -37,7 +37,7 @@
 #endif
 #include <tntdb.h>
 #include <sasl/sasl.h>
-#include <log4cplus/logger.h>
+#include <fty-log/fty_log.h>
 #include <openssl/sha.h>
 
 //  FTY_COMMON version macros for compile-time API detection
@@ -86,8 +86,6 @@
 //  These classes are stable or legacy and built in all releases
 //  Draft classes are by default not built in stable releases
 #ifdef FTY_COMMON_BUILD_DRAFT_API
-typedef struct _fty_common_log_fty_log_t fty_common_log_fty_log_t;
-#define FTY_COMMON_LOG_FTY_LOG_T_DEFINED
 typedef struct _fty_common_common_fty_commons_t fty_common_common_fty_commons_t;
 #define FTY_COMMON_COMMON_FTY_COMMONS_T_DEFINED
 typedef struct _fty_common_web_helpers_t fty_common_web_helpers_t;
@@ -113,7 +111,6 @@ typedef struct _fty_common_db_dbpath_t fty_common_db_dbpath_t;
 
 //  Public classes, each with its own header file
 #ifdef FTY_COMMON_BUILD_DRAFT_API
-#include "fty-common/log/fty_log.h"
 #include "fty-common/common/fty_commons.h"
 #include "fty-common/web/helpers.h"
 #include "fty-common/web/sasl.h"
