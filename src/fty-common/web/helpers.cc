@@ -300,30 +300,11 @@ utf8_contains_chars (const std::string& input, const std::vector <char>& exclude
 static const std::vector <char> single_byte_excludes = {
     '\x00', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', '\x08', '\x09',
     '\x0a', '\x0b', '\x0c', '\x0d', '\x0e', '\x0e', '\x0f',
-    '\x22', // "
-    '\x24', // $
-    '\x25', // %
-    '\x27', // '
-    '\x28', // (
-    '\x29', // )
-    '\x2a', // *
-    '\x2f', // SOLIDUS
-    '\x40', // @
-    '\x5b', // [
-    '\x5c', // REVERSE SOLIDUS
-    '\x5d', // ]
-    '\x5e', // ^
-    '\x5f', // _
-    '\x60', // `
-    '\x7b', // {
-    '\x7c', // |
-    '\x7d', // }
-    '\x7e', // ~
 };
 
 bool check_asset_name (const std::string& param_name, const std::string& name, http_errors_t &errors) {
     if (utf8_contains_chars (name, single_byte_excludes) == 1) {
-        http_add_error ("", errors, "request-param-bad", param_name.c_str (), name.c_str (), "valid asset name (characters not allowed: \"$%'()*/@[\\]^_`{|}~)");
+        http_add_error ("", errors, "request-param-bad", param_name.c_str (), name.c_str (), "valid asset name (characters not allowed: \\x00 ... \\x0f");
         return false;
     }
     return true;
