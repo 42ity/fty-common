@@ -26,7 +26,7 @@
     #define __cplusplus
 #endif
 
-#include <fty-log/fty_log.h>
+#include <fty_log.h>
 #include <log4cplus/mdc.h>
 #include <log4cplus/ndc.h>
 

@@ -66,7 +66,7 @@
         redhat_name="cyrus-sasl-devel"
     />
 
-     <use project = "fty-log" libname = "libfty_log" header="fty-log/fty_log.h" prefix="fty_log"
+     <use project = "fty-log" libname = "libfty_log" header="fty_log.h" prefix="fty_log"
             min_major = "1" min_minor = "0" min_patch = "0"
             repository = "https://github.com/42ity/fty-log"
             test = "fty_log_selftest" />

@@ -759,15 +759,15 @@ AS_IF([test x"${search_libfty_log}" = xyes], [
         fty_log_synthetic_libs="-lfty_log"
 
         if test -n "${with_libfty_log}" && test x"${with_libfty_log}" != xyes && test x"${with_libfty_log}" != xno; then
-            if test -r "${with_libfty_log}/include/fty-log/fty_log.h"; then
+            if test -r "${with_libfty_log}/include/fty_log.h"; then
                 fty_log_synthetic_cflags="-I${with_libfty_log}/include"
                 fty_log_synthetic_libs="-L${with_libfty_log}/lib -lfty_log"
             else
-            AC_MSG_ERROR([Header file ${with_libfty_log}/include/fty-log/fty_log.h was not found. Please check libfty_log prefix])
+            AC_MSG_ERROR([Header file ${with_libfty_log}/include/fty_log.h was not found. Please check libfty_log prefix])
             fi
         else
-            AC_CHECK_HEADER([fty-log/fty_log.h], [],
-            AC_MSG_ERROR([Header file fty-log/fty_log.h was not found in default search paths])
+            AC_CHECK_HEADER([fty_log.h], [],
+            AC_MSG_ERROR([Header file fty_log.h was not found in default search paths])
                 )
         fi
 

@@ -42,9 +42,8 @@
 #include <cmath>
 #include <climits>
 #include <cxxtools/serializationinfo.h>
-#include "fty-log/fty_log.h"
-
 #include <tnt/http.h>
+#include <fty_log.h>
 
 #define BIOS_SCRIPT_USER "_bios-script"
 

@@ -37,7 +37,7 @@
 #endif
 #include <tntdb.h>
 #include <sasl/sasl.h>
-#include <fty-log/fty_log.h>
+#include <fty_log.h>
 #include <openssl/sha.h>
 
 //  FTY_COMMON version macros for compile-time API detection
