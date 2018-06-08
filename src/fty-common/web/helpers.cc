@@ -103,7 +103,9 @@ std::map <std::string, std::string> systemctl_service_names = {
     { "fty-alert-flexible", "" },
     // legacy compatibility
     { "bios-agent-smtp", "fty-email" },
-    { "bios-agent-rt", "fty-metric-cache" }
+    { "bios-agent-rt", "fty-metric-cache" },
+    // added value agents / generic name
+    { "licensing-agent", "etn-licensing" }
 };
 
 bool
