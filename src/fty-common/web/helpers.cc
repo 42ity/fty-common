@@ -154,16 +154,11 @@ iname_to_dbid (const std::string& url, const std::string& asset_name)
         int64_t id = 0;
 
         tntdb::Connection conn = tntdb::connectCached(url);
-        // MVY: This makes sure that passing of asset (display) name will work too
         tntdb::Statement st = conn.prepareCached(
-        " SELECT DISTINCT (asset.id_asset_element) "
-        " FROM "
-        "   t_bios_asset_element AS asset "
-        " LEFT JOIN t_bios_asset_ext_attributes AS ext "
-        " ON "
-        "   asset.id_asset_element = ext.id_asset_element "
-        " WHERE asset.name = :asset_name "
-        " OR (ext.keytag = \"name\" AND ext.value = :asset_name) "
+        " SELECT id_asset_element"
+-       " FROM"
+-       "   t_bios_asset_element"
+-       " WHERE name = :asset_name"
         );
 
         tntdb::Row row = st.set("asset_name", asset_name).selectRow();
