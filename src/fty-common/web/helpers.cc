@@ -105,7 +105,7 @@ std::map <std::string, std::string> systemctl_service_names = {
     { "bios-agent-smtp", "fty-email" },
     { "bios-agent-rt", "fty-metric-cache" },
     // added value agents / generic name
-    { "licensing-agent", "etn-licensing" }
+    { "etn-licensing", "" }
 };
 
 bool
@@ -124,15 +124,12 @@ systemctl_valid_service_name (std::string& service_name)
 }
 
 void
-systemctl_get_service_names (std::vector <std::string>& v) 
+systemctl_get_service_names (std::vector <std::string>& v)
 {
     for (const auto& i : systemctl_service_names) {
         v.push_back (i.first);
     }
 }
-
-
-
 
 const char* UserInfo::toString() {
     switch (_profile) {
