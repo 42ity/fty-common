@@ -157,9 +157,9 @@ iname_to_dbid (const std::string& url, const std::string& asset_name)
         tntdb::Connection conn = tntdb::connectCached(url);
         tntdb::Statement st = conn.prepareCached(
         " SELECT id_asset_element"
--       " FROM"
--       "   t_bios_asset_element"
--       " WHERE name = :asset_name"
+        " FROM"
+        "   t_bios_asset_element"
+        " WHERE name = :asset_name"
         );
 
         tntdb::Row row = st.set("asset_name", asset_name).selectRow();
