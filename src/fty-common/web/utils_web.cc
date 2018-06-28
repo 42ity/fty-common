@@ -325,6 +325,11 @@ get_mapping (const std::string& key)
         {"FTY_DISCOVERY_TYPE",     "discovery/type"},
         {"FTY_DISCOVERY_SCANS",    "discovery/scans"},
         {"FTY_DISCOVERY_IPS",      "discovery/ips"},
+        //fty-discovery parameters
+        {"FTY_DISCOVERY_DUMP_POOL",     "parameters/maxDumpPoolNumber"},
+        {"FTY_DISCOVERY_SCAN_POOL",     "parameters/maxScanPoolNumber"},
+        {"FTY_DISCOVERY_SCAN_TIMEOUT",  "parameters/nutScannerTimeOut"},
+        {"FTY_DISCOVERY_DUMP_LOOPTIME", "parameters/dumpDataLoopTime"},
         //fty-session
         {"FTY_SESSION_TIMEOUT_NO_ACTIVITY", "timeout/no_activity"},
         {"FTY_SESSION_TIMEOUT_LEASE",       "timeout/lease_time"}
