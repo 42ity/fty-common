@@ -14,6 +14,7 @@ git clone --quiet --depth 1 -b 2.2-FTY-master https://github.com/42ity/cxxtools.
 git clone --quiet --depth 1 -b 2.2-FTY-master https://github.com/42ity/tntnet.git tntnet
 git clone --quiet --depth 1 -b 1.3-FTY-master https://github.com/42ity/tntdb.git tntdb
 git clone --quiet --depth 1 -b 1.1.2-FTY-master https://github.com/42ity/log4cplus.git log4cplus
+git clone --quiet --depth 1 -b master https://github.com/42ity/fty-common-logging.git fty-common-logging
 cd -
 
 if ! ((command -v dpkg-query >/dev/null 2>&1 && dpkg-query --list zproject >/dev/null 2>&1) || \
