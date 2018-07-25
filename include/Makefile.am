@@ -8,7 +8,6 @@ nobase_include_HEADERS = \
 
 if ENABLE_DRAFTS
 nobase_include_HEADERS += \
-    fty-common/log/fty_log.h \
     fty-common/common/fty_commons.h \
     fty-common/web/helpers.h \
     fty-common/web/sasl.h \

@@ -11,8 +11,6 @@
 *.xml7
 
 # Ignore the source doc texts generated from program sources
-fty_common_log_fty_log.txt
-fty_common_log_fty_log.doc
 fty_common_common_fty_commons.txt
 fty_common_common_fty_commons.doc
 fty_common_web_helpers.txt

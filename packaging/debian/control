@@ -32,6 +32,7 @@ Build-Depends: debhelper (>= 9),
     libtntdb-dev,
     libsasl2-dev,
     liblog4cplus-dev,
+    libfty-common-logging-dev,
     libssl-dev,
     asciidoc-base | asciidoc, xmlto,
     dh-autoreconf
@@ -56,6 +57,7 @@ Depends:
     libtntdb-dev,
     libsasl2-dev,
     liblog4cplus-dev,
+    libfty-common-logging-dev,
     libssl-dev,
     libfty-common1 (= ${binary:Version})
 Description: fty-common development tools
