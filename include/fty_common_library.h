@@ -30,13 +30,7 @@
 //  Set up environment for the application
 
 //  External dependencies
-#include <czmq.h>
-#include <cxxtools/allocator.h>
-#include <tnt/tntnet.h>
-#include <tntdb.h>
-#include <sasl/sasl.h>
 #include <fty_log.h>
-#include <openssl/sha.h>
 
 //  FTY_COMMON version macros for compile-time API detection
 #define FTY_COMMON_VERSION_MAJOR 1
@@ -84,41 +78,20 @@
 //  These classes are stable or legacy and built in all releases
 //  Draft classes are by default not built in stable releases
 #ifdef FTY_COMMON_BUILD_DRAFT_API
-typedef struct _fty_common_common_fty_commons_t fty_common_common_fty_commons_t;
-#define FTY_COMMON_COMMON_FTY_COMMONS_T_DEFINED
-typedef struct _fty_common_web_helpers_t fty_common_web_helpers_t;
-#define FTY_COMMON_WEB_HELPERS_T_DEFINED
-typedef struct _fty_common_web_sasl_t fty_common_web_sasl_t;
-#define FTY_COMMON_WEB_SASL_T_DEFINED
-typedef struct _fty_common_web_tokens_t fty_common_web_tokens_t;
-#define FTY_COMMON_WEB_TOKENS_T_DEFINED
-typedef struct _fty_common_web_utils_web_t fty_common_web_utils_web_t;
-#define FTY_COMMON_WEB_UTILS_WEB_T_DEFINED
-typedef struct _fty_common_web_audit_log_t fty_common_web_audit_log_t;
-#define FTY_COMMON_WEB_AUDIT_LOG_T_DEFINED
-typedef struct _fty_common_common_str_defs_t fty_common_common_str_defs_t;
-#define FTY_COMMON_COMMON_STR_DEFS_T_DEFINED
-typedef struct _fty_common_common_filesystem_t fty_common_common_filesystem_t;
-#define FTY_COMMON_COMMON_FILESYSTEM_T_DEFINED
-typedef struct _fty_common_common_fty_uuid_t fty_common_common_fty_uuid_t;
-#define FTY_COMMON_COMMON_FTY_UUID_T_DEFINED
-typedef struct _fty_common_db_dbpath_t fty_common_db_dbpath_t;
-#define FTY_COMMON_DB_DBPATH_T_DEFINED
+typedef struct _fty_common_base_t fty_common_base_t;
+#define FTY_COMMON_BASE_T_DEFINED
+typedef struct _fty_common_str_defs_t fty_common_str_defs_t;
+#define FTY_COMMON_STR_DEFS_T_DEFINED
+typedef struct _fty_common_filesystem_t fty_common_filesystem_t;
+#define FTY_COMMON_FILESYSTEM_T_DEFINED
 #endif // FTY_COMMON_BUILD_DRAFT_API
 
 
 //  Public classes, each with its own header file
 #ifdef FTY_COMMON_BUILD_DRAFT_API
-#include "fty-common/common/fty_commons.h"
-#include "fty-common/web/helpers.h"
-#include "fty-common/web/sasl.h"
-#include "fty-common/web/tokens.h"
-#include "fty-common/web/utils_web.h"
-#include "fty-common/web/audit_log.h"
-#include "fty-common/common/str_defs.h"
-#include "fty-common/common/filesystem.h"
-#include "fty-common/common/fty_uuid.h"
-#include "fty-common/db/dbpath.h"
+#include "fty_common_base.h"
+#include "fty_common_str_defs.h"
+#include "fty_common_filesystem.h"
 #endif // FTY_COMMON_BUILD_DRAFT_API
 
 #ifdef FTY_COMMON_BUILD_DRAFT_API

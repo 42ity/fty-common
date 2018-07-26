@@ -47,16 +47,8 @@ BuildRequires:  libtool
 BuildRequires:  pkgconfig
 BuildRequires:  xmlto
 BuildRequires:  gcc-c++
-BuildRequires:  libsodium-devel
-BuildRequires:  zeromq-devel
-BuildRequires:  czmq-devel
-BuildRequires:  cxxtools-devel
-BuildRequires:  tntnet-devel
-BuildRequires:  tntdb-devel
-BuildRequires:  cyrus-sasl-devel
 BuildRequires:  log4cplus-devel
 BuildRequires:  fty-common-logging-devel
-BuildRequires:  openssl-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
@@ -80,16 +72,8 @@ This package contains shared library for fty-common: provides common tools for a
 Summary:        provides common tools for agents
 Group:          System/Libraries
 Requires:       libfty_common1 = %{version}
-Requires:       libsodium-devel
-Requires:       zeromq-devel
-Requires:       czmq-devel
-Requires:       cxxtools-devel
-Requires:       tntnet-devel
-Requires:       tntdb-devel
-Requires:       cyrus-sasl-devel
 Requires:       log4cplus-devel
 Requires:       fty-common-logging-devel
-Requires:       openssl-devel
 
 %description devel
 provides common tools for agents development tools
