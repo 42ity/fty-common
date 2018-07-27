@@ -28,7 +28,7 @@
 
 #include "../../fty_common_classes.h"
 
-Ftylog AuditLogManager::_auditlog = Ftylog("www-audit", FTY_COMMON_LOGGING_DEFAULT_CFG);
+Ftylog AuditLogManager::_auditlog = Ftylog("www-audit", "/etc/fty/wwwlog.cfg");
 
 //  return audit logger
 Ftylog* AuditLogManager::getInstance()
