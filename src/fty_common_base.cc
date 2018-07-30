@@ -19,32 +19,23 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMONS_H_INCLUDED
-#define FTY_COMMONS_H_INCLUDED
-#include <string.h>
+/*
+@header
+    fty_commons - Singleton object and common functions
+@discuss
+@end
+*/
 
-#define STR(X) #X
-
-#ifndef srteq
-#define streq(s1,s2) (!strcmp ((s1), (s2)))
-#endif
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#include "fty_common_classes.h"
+#include <stdio.h>
 
 
-#ifdef __cplusplus
-}
-#endif  
-  
-  
-//  @interface
-//  Self test of this class
 void
-    fty_common_common_fty_commons_test (bool verbose);
+fty_common_base_test (bool verbose)
+{
+    printf (" * fty_commons: ");
 
-//  @end
-
-#endif
+    
+    //  @end
+    printf ("OK\n");
+}

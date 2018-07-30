@@ -8,16 +8,9 @@ nobase_include_HEADERS = \
 
 if ENABLE_DRAFTS
 nobase_include_HEADERS += \
-    fty-common/common/fty_commons.h \
-    fty-common/web/helpers.h \
-    fty-common/web/sasl.h \
-    fty-common/web/tokens.h \
-    fty-common/web/utils_web.h \
-    fty-common/web/audit_log.h \
-    fty-common/common/str_defs.h \
-    fty-common/common/filesystem.h \
-    fty-common/common/fty_uuid.h \
-    fty-common/db/dbpath.h
+    fty_common_base.h \
+    fty_common_str_defs.h \
+    fty_common_filesystem.h
 
 endif
 

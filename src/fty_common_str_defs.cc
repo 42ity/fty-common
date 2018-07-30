@@ -24,7 +24,7 @@
  * \author Jim Klimov <EvgenyKlimov@Eaton.com>
  * \brief Not yet documented file
  */
-#include "fty-common/common/str_defs.h"
+#include "fty_common_str_defs.h"
 
 /* Implement variables declared in str_defs.h */
 

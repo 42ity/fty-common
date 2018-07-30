@@ -6,16 +6,8 @@ Maintainer: fty-common Developers <eatonipcopensource@eaton.com>
 Architecture: any
 Build-Depends: debhelper (>= 9),
     pkg-config,
-    libsodium-dev,
-    libzmq3-dev,
-    libczmq-dev,
-    libcxxtools-dev,
-    libtntnet-dev,
-    libtntdb-dev,
-    libsasl2-dev,
     liblog4cplus-dev,
     libfty-common-logging-dev,
-    libssl-dev,
     asciidoc-base | asciidoc, xmlto,
     dh-autoreconf
 
