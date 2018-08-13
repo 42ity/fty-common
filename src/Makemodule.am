@@ -18,6 +18,7 @@ src_libfty_common_la_SOURCES = \
 if ENABLE_DRAFTS
 src_libfty_common_la_SOURCES += \
     src/fty_common_base.cc \
+    src/fty_common_asset_types.cc \
     src/fty_common_str_defs.cc \
     src/fty_common_filesystem.cc
 
