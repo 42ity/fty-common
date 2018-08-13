@@ -13,6 +13,8 @@
 # Ignore the source doc texts generated from program sources
 fty_common_base.txt
 fty_common_base.doc
+fty_common_asset_types.txt
+fty_common_asset_types.doc
 fty_common_str_defs.txt
 fty_common_str_defs.doc
 fty_common_filesystem.txt

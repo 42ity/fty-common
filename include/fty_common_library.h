@@ -80,6 +80,8 @@
 #ifdef FTY_COMMON_BUILD_DRAFT_API
 typedef struct _fty_common_base_t fty_common_base_t;
 #define FTY_COMMON_BASE_T_DEFINED
+typedef struct _fty_common_asset_types_t fty_common_asset_types_t;
+#define FTY_COMMON_ASSET_TYPES_T_DEFINED
 typedef struct _fty_common_str_defs_t fty_common_str_defs_t;
 #define FTY_COMMON_STR_DEFS_T_DEFINED
 typedef struct _fty_common_filesystem_t fty_common_filesystem_t;
@@ -90,6 +92,7 @@ typedef struct _fty_common_filesystem_t fty_common_filesystem_t;
 //  Public classes, each with its own header file
 #ifdef FTY_COMMON_BUILD_DRAFT_API
 #include "fty_common_base.h"
+#include "fty_common_asset_types.h"
 #include "fty_common_str_defs.h"
 #include "fty_common_filesystem.h"
 #endif // FTY_COMMON_BUILD_DRAFT_API

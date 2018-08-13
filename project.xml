@@ -39,7 +39,8 @@
     </use>
 
     <class name = "fty_common_base" >Singleton object and common functions</class>
-    
+
+    <class name = "fty_common_asset_types" selftest = "0"> Definitions of asset types and subtypes</class>
     <class name = "fty_common_str_defs" selftest = "0" />
     <class name = "fty_common_filesystem" selftest = "0" />
 
