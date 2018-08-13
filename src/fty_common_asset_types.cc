@@ -220,6 +220,27 @@ operation2str (asset_operation operation)
     }
 }
 
+asset_operation
+str2operation (const std::string &operation)
+{
+    std::string t (operation);
+    std::transform(t.begin(), t.end(), t.begin(), ::tolower);
+    if(t == "create") {
+        return asset_operation::INSERT;
+    } else if(t == "delete") {
+        return asset_operation::DELETE;
+    } else if(t == "retire") {
+        return asset_operation::RETIRE;
+    } else if(t == "inventory") {
+        return asset_operation::INVENTORY;
+    } else if(t == "update") {
+        return asset_operation::UPDATE;
+    } else if(t == "get") {
+        return asset_operation::GET;
+    }
+    return asset_operation::INVENTORY;
+}
+
 bool
 is_epdu(int x) {
     return x == asset_subtype::EPDU;
