@@ -73,14 +73,6 @@ namespace persist {
         INVENTORY
     };
 
-
-    typedef struct _LIMITATIONS_STRUCT
-    {
-        int max_active_power_devices;
-        int global_configurability;
-
-    } LIMITATIONS_STRUCT;
-
     std::string
     operation2str (asset_operation operation);
 
