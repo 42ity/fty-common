@@ -63,10 +63,22 @@ bool is_dir( const char  *path );
 std::vector<std::string> items_in_directory( const char *path );
 
 /**
+ * \brief check if certain item exists
+ * \param path to the directory and item name
+ */
+bool is_item_in_directory (const std::string& path, std::vector <std::string>& items);
+
+/**
  * \brief get list of all regular files in directory
  * \param path to the directory
  */
 std::vector<std::string> files_in_directory( const char *path );
+
+/**
+ * \brief check if certain file exists in given directory
+ * \param path to the directory and file name
+ */
+bool is_file_in_directory (const std::string& path, std::vector <std::string>& files);
 
 /**
  * \brief create directory (if not exists
