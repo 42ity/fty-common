@@ -1,6 +1,6 @@
-/* 
+/*
 Copyright (C) 2014 - 2018 Eaton
- 
+
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
@@ -46,7 +46,7 @@ bool is_dir( const char  *path ) {
 
 std::vector<std::string> items_in_directory( const char *path ) {
     std::vector<std::string> result;
-    
+
     DIR * dir = opendir( path );
     if(dir) {
         struct dirent* entry;
@@ -58,14 +58,58 @@ std::vector<std::string> items_in_directory( const char *path ) {
     return result;
 }
 
+bool
+is_item_in_directory (
+        const std::string& path,
+        std::vector <std::string>& items
+        ) {
+
+    DIR *dir = opendir (path.c_str ());
+    if (!dir) {
+        return false;
+    }
+
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp (entry->d_name, ".") == 0 ||
+            strcmp (entry->d_name, "..") == 0) {
+            continue;
+        }
+        items.push_back (entry->d_name);
+    }
+    closedir (dir);
+    return true;
+}
+
 std::vector<std::string> files_in_directory( const char *path ) {
     std::vector<std::string> result;
     std::string spath = path; spath += path_separator();
-    
+
     for( auto it : items_in_directory( path ) ) {
         if( is_file( (spath + it).c_str() ) ) result.push_back(it);
     }
     return result;
+}
+
+bool
+is_file_in_directory (
+        const std::string& path,
+        std::vector <std::string>& files
+        ) {
+    std::string spath = path;
+    spath += path_separator();
+
+    std::vector <std::string> items;
+    if (is_item_in_directory (spath, items) == false) {
+        return false;
+    }
+
+    for (const auto& item : items) {
+        std::string path = spath + item;
+        if (is_file (path.c_str()))
+            files.push_back (item);
+    }
+    return true;
 }
 
 bool mkdir_if_needed(const char *path, mode_t mode, bool create_parent ) {
