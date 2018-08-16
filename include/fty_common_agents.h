@@ -43,6 +43,7 @@ extern "C" {
 
 #define AGENT_FTY_METRIC_COMPUTE    "fty-metric-compute"
 #define AGENT_FTY_METRIC_STORE      "fty-metric-store"
+// FIXME: tpower_server actors uses "agent-tpower"!
 #define AGENT_FTY_METRIC_TPOWER     "fty-metric-tpower"
 #define AGENT_FTY_NUT               "fty-nut"
 #define AGENT_FTY_OUTAGE            "fty-outage"
