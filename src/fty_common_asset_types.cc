@@ -27,6 +27,12 @@
 */
 
 #include "fty_common_asset_types.h"
+#include <string.h>
+
+// t_bios_asset_ext_attributes.keytag
+#define MAX_KEYTAG_LENGTH       40
+// t_bios_asset_ext_attributes.value
+#define MAX_VALUE_LENGTH        255
 
 namespace persist {
 
@@ -279,4 +285,67 @@ is_container (std::string asset_type)
 
     return false;
 }
+
+bool
+is_ok_element_type (uint16_t element_type_id)
+{
+    switch(element_type_id) {
+        case persist::asset_type::DATACENTER:
+        case persist::asset_type::ROOM:
+        case persist::asset_type::ROW:
+        case persist::asset_type::RACK:
+        case persist::asset_type::GROUP:
+        case persist::asset_type::DEVICE:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool
+is_ok_name (const char* name)
+{
+    size_t length = strlen (name);
+    if ( length == 0)
+        return false;
+
+    // Bad characters _ % @
+    if (strchr (name, '_') != NULL ||
+        strchr (name, '%') != NULL ||
+        strchr (name, '@') != NULL)
+       return false;
+
+    return true;
+}
+
+bool
+is_ok_keytag (const char *keytag)
+{
+    auto length = strlen(keytag);
+    if ( ( length > 0 ) && ( length <= MAX_KEYTAG_LENGTH ) )
+        return true;
+    else
+        return false;
+}
+
+bool
+is_ok_value (const char *value)
+{
+    auto length = strlen(value);
+    if ( ( length > 0 ) && ( length <= MAX_VALUE_LENGTH ) )
+        return true;
+    else
+        return false;
+}
+
+bool
+is_ok_link_type (uint8_t link_type_id)
+{
+    // TODO: manage link types
+    if ( link_type_id > 0 )
+        return true;
+    else
+        return false;
+}
+
 } // namespace end
