@@ -108,6 +108,21 @@ namespace persist {
 
     bool
     is_container (std::string asset_type);
+
+    bool
+    is_ok_element_type (uint16_t element_type_id);
+
+    bool
+    is_ok_name (const char* name);
+
+    bool
+    is_ok_keytag (const char* keytag);
+
+    bool
+    is_ok_value (const char* value);
+
+    bool
+    is_ok_link_type (uint8_t link_type_id);
 } //namespace persist
 
 #endif
