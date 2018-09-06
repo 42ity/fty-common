@@ -28,15 +28,6 @@
 
 #ifdef __cplusplus
 
-// bios malamute endpoint
-extern const char* MLM_ENDPOINT;
-
-// names of malamute clients (== bios agents)
-extern const char* BIOS_AGENT_NAME_COMPUTATION;
-extern const char* BIOS_AGENT_NAME_DB_INVENTORY;
-extern const char* BIOS_AGENT_NAME_ALERT_AGENT;
-extern const char* FTY_ALERT_LIST;
-
 #define AVG_STEPS_SIZE 7
 extern const char* AVG_STEPS[AVG_STEPS_SIZE];
 #define AVG_TYPES_SIZE 3
@@ -60,4 +51,3 @@ extern const char* EV_DB_INITIALIZED_DIR; // directory holding database ready fi
 #endif // __cplusplus
 
 #endif // FTY_COMMON_COMMON_STR_DEFS_H__
-
