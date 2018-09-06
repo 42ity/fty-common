@@ -27,14 +27,6 @@
 #include "fty_common_str_defs.h"
 
 /* Implement variables declared in str_defs.h */
-
-const char* MLM_ENDPOINT = "ipc://@/malamute";
-
-const char *BIOS_AGENT_NAME_COMPUTATION = "fty-metric-compute";
-const char *BIOS_AGENT_NAME_DB_INVENTORY = "persistence.inventory";
-const char* BIOS_AGENT_NAME_ALERT_AGENT = "fty-alert-engine";
-const char* FTY_ALERT_LIST = "fty-alert-list";
-
 const char *AVG_STEPS[AVG_STEPS_SIZE] = {
     "15m",
     "30m",
