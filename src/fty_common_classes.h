@@ -72,7 +72,7 @@ safe_malloc (size_t size, const char *file, unsigned line)
 #else
 #   define zmalloc(size) safe_malloc((size), __FILE__, __LINE__)
 #endif
-#endif
+#endif // __CZMQ_PRELUDE_H_INCLUDED__
 
 
 

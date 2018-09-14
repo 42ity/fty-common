@@ -44,5 +44,6 @@
     <class name = "fty_common_str_defs" selftest = "0" />
     <class name = "fty_common_filesystem" selftest = "0" />
     <header name = "fty_common_agents" stable = "1" >Common definitions for agents</header>
+    <header name = "fty_common_macros" stable = "1" >System-wide preprocessor macros</header>
 
 </project>
