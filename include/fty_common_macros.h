@@ -26,7 +26,11 @@
 extern "C" {
 #endif
 
+// macro for strings we want to process by xgettext
 #define TRANSLATE_ME(...) __VA_ARGS__
+
+// macro for strings we want to turn into JSON, but not translate in BE
+#define JSONIFY(...) __VA_ARGS__
 
 #ifdef __cplusplus
 }
