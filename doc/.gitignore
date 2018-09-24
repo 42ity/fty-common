@@ -19,6 +19,8 @@ fty_common_str_defs.txt
 fty_common_str_defs.doc
 fty_common_filesystem.txt
 fty_common_filesystem.doc
+fty_common_utf8.txt
+fty_common_utf8.doc
 
 # Make sure to track the manually maintained project description
 !*.adoc
