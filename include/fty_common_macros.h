@@ -32,6 +32,9 @@ extern "C" {
 // macro for strings we want to turn into JSON, but not translate in BE
 #define JSONIFY(...) __VA_ARGS__
 
+// macro for lua alert rules for dynamically processed templates, not really intended to be used C
+#define TRANSLATE_LUA(...) __VA_ARGS__
+
 #ifdef __cplusplus
 }
 #endif
