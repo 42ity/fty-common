@@ -42,6 +42,7 @@ all_tests [] = {
 #ifdef FTY_COMMON_BUILD_DRAFT_API
 // Tests for draft public classes:
     { "fty_common_base", fty_common_base_test, false, true, NULL },
+    { "fty_common_utf8", fty_common_utf8_test, false, true, NULL },
 #endif // FTY_COMMON_BUILD_DRAFT_API
     {NULL, NULL, 0, 0, NULL}          //  Sentinel
 };
