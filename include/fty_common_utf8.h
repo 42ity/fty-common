@@ -38,6 +38,13 @@ int8_t utf8_octets (const char *c);
 int utf8_to_codepoint(const char *uchar, char **codepoint);
 
 int utf8eq(const char *s1, const char *s2);
+
+// Convenient wrapper for escape"("const char *string")"
+std::string escape(const char *string);
+
+//  Escape string for json output
+// Returns escaped json on success, "(null_ptr)" string on null argument
+std::string escape(const std::string &before);
 }
 
 #ifdef __cplusplus

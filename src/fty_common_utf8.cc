@@ -167,13 +167,13 @@ utf8_octets(const char *c) {
     assert(c);
     if ((*c & 0x80) == 0) // lead bit is zero, must be a single ascii
         return 1;
-    else 
+    else
         if ((*c & 0xE0) == 0xC0) // 110x xxxx (2 octets)
         return 2;
     else
         if ((*c & 0xF0) == 0xE0) // 1110 xxxx (3 octets)
         return 3;
-    else 
+    else
         if ((*c & 0xF8) == 0xF0) // 1111 0xxx (4 octets)
         return 4;
     else
@@ -233,6 +233,82 @@ utf8eq(const char *s1, const char *s2) {
     }
     return 1;
 }
+
+std::string
+escape (const char *string) {
+    if (!string)
+        return "(null_ptr)";
+
+    std::string after;
+    std::string::size_type length = strlen (string);
+    after.reserve (length * 2);
+
+/*
+    Quote from http://www.json.org/
+    -------------------------------
+    Char
+    any-Unicode-character-except-"-or-\-or-control-character:
+        \"
+        \\
+        \/
+        \b
+        \f
+        \n
+        \r
+        \t
+        \u four-hex-digits
+    ------------------------------
+*/
+    std::string::size_type i = 0;
+    while (i < length) {
+        char c = string[i];
+        int8_t width = UTF8::utf8_octets (string + i);
+        if (c == '"') {
+            after.append ("\\\"");
+        }
+        else if (c =='\b') {
+            after.append ("\\\\b");
+        }
+        else if (c =='\f') {
+            after.append ("\\\\f");
+        }
+        else if (c == '\n') {
+            after.append ("\\\\n");
+        }
+        else if (c == '\r') {
+            after.append ("\\\\r");
+        }
+        else if (c == '\t') {
+            after.append ("\\\\t");
+        }
+        else if (c == '\\') {
+            after.append ("\\\\");
+        }
+        // escape UTF-8 chars which have more than 1 byte
+        else if (width > 1) {
+            // allocate memory for "\u" + 4 hex digits + terminator
+            // allocating 8 bytes just for performance doesn't make sense
+            char *codepoint = (char *) calloc (7, sizeof (char));
+            // calloc() takes care of zero termination, which utf8_to_codepoint() doesn't do
+            UTF8::utf8_to_codepoint (string + i, &codepoint);
+
+            std::string codepoint_str (codepoint);
+            zstr_free (&codepoint);
+            after.append (codepoint_str);
+        }
+        else {
+            after += c;
+        }
+        i += width;
+    }
+    return after;
+}
+
+std::string
+escape (const std::string& before) {
+    return escape (before.c_str ());
+}
+
 }
 //  --------------------------------------------------------------------------
 //  Self test of this class
