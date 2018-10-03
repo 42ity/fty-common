@@ -309,7 +309,15 @@ std::string
 escape (const std::string& before) {
     return escape (before.c_str ());
 }
+} // namespace UTF8
 
+char *
+utf8_escape (const char *string) {
+    std::string escaped_str = UTF8::escape (string);
+    size_t length = escaped_str.length ();
+    char *escaped = (char *) zmalloc (length + 1);
+    strcpy (escaped, escaped_str.c_str ());
+    return escaped;
 }
 //  --------------------------------------------------------------------------
 //  Self test of this class
@@ -414,6 +422,19 @@ fty_common_utf8_test (bool verbose)
         for (auto const& item : tests) {
             escaped = UTF8::escape (item.first);
             assert ( escaped.compare (item.second) == 0);
+        }
+        printf ("OK\n");
+    }
+
+    {
+        log_debug ("fty-common-utf8:escape: Test #2");
+        log_debug ("Manual comparison - C wrapper");
+
+        char *escaped;
+        for (auto const& item : tests) {
+            escaped = utf8_escape (item.first.c_str ());
+            assert (streq (escaped, item.second.c_str ()));
+            free (escaped);
         }
         printf ("OK\n");
     }
