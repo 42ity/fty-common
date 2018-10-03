@@ -293,7 +293,8 @@ escape (const char *string) {
             UTF8::utf8_to_codepoint (string + i, &codepoint);
 
             std::string codepoint_str (codepoint);
-            zstr_free (&codepoint);
+            free (codepoint);
+            codepoint = NULL;
             after.append (codepoint_str);
         }
         else {
@@ -332,13 +333,88 @@ fty_common_utf8_test (bool verbose)
     printf (" * fty_common_utf8: ");
 
     //  @selftest
-    //  Simple create/destroy test
+    //  utf8eq test
     //  @end
-    assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "\u017dlu\u0165ou\u010dk\xc3\xbd K\u016f\xc5\x88") == 1);
-    assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň") == 1);
-    assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň ") == 0);
-    assert(UTF8::utf8eq("Ka\xcc\x81rol", "K\xc3\xa1rol") == 0);
-    assert(UTF8::utf8eq("супер test", "\u0441\u0443\u043f\u0435\u0440 Test") == 1);
-    assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "ŽlUťOUčKý kůn") == 0);
-    log_debug("utf8eq: OK");
+    {
+        assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "\u017dlu\u0165ou\u010dk\xc3\xbd K\u016f\xc5\x88") == 1);
+        assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň") == 1);
+        assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň ") == 0);
+        assert(UTF8::utf8eq("Ka\xcc\x81rol", "K\xc3\xa1rol") == 0);
+        assert(UTF8::utf8eq("супер test", "\u0441\u0443\u043f\u0435\u0440 Test") == 1);
+        assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "ŽlUťOUčKý kůn") == 0);
+        log_debug("utf8eq: OK");
+    }
+
+    // utils::json::escape (<first>) should equal <second>
+    std::vector <std::pair <std::string, std::string>> tests {
+        {"'jednoduche ' uvozovky'",                                     "'jednoduche ' uvozovky'"},
+        {"'jednoduche '' uvozovky'",                                    "'jednoduche '' uvozovky'"},
+        {"dvojite \" uvozovky",                                         R"(dvojite \" uvozovky)"},
+        {"dvojite \\\" uvozovky",                                       R"(dvojite \\\" uvozovky)"},
+        {"dvojite \\\\\" uvozovky",                                     R"(dvojite \\\\\" uvozovky)"},
+        {"dvojite \\\\\\\" uvozovky",                                   R"(dvojite \\\\\\\" uvozovky)"},
+        {"dvojite \\\\\\\\\" uvozovky",                                 R"(dvojite \\\\\\\\\" uvozovky)"},
+        {"'",                                                           R"(')"},
+        {"\"",                                                          R"(\")"},
+        {"'\"",                                                         R"('\")"},
+        {"\"\"",                                                        R"(\"\")"},
+        {"\"\"\"",                                                      R"(\"\"\")"},
+        {"\\\"\"\"",                                                    R"(\\\"\"\")"},
+        {"\"\\\"\"",                                                    R"(\"\\\"\")"},
+        {"\"\"\\\"",                                                    R"(\"\"\\\")"},
+        {"\\\"\\\"\\\"",                                                R"(\\\"\\\"\\\")"},
+        {"\" dvojite \\\\\" uvozovky \"",                               R"(\" dvojite \\\\\" uvozovky \")"},
+        {"dvojite \"\\\"\" uvozovky",                                   R"(dvojite \"\\\"\" uvozovky)"},
+        {"dvojite \\\\\"\\\\\"\\\\\" uvozovky",                         R"(dvojite \\\\\"\\\\\"\\\\\" uvozovky)"},
+
+        {"\b",                                                          R"(\\b)"},
+        {"\\b",                                                         R"(\\b)"},
+        {"\\\b",                                                        R"(\\\\b)"},
+        {"\\\\b",                                                       R"(\\\\b)"},
+        {"\\\\\b",                                                      R"(\\\\\\b)"},
+        {"\\\\\\b",                                                     R"(\\\\\\b)"},
+        {"\\\\\\\b",                                                    R"(\\\\\\\\b)"},
+        {"\\\\\\\\b",                                                   R"(\\\\\\\\b)"},
+        {"\\\\\\\\\b",                                                  R"(\\\\\\\\\\b)"},
+
+        {"\\",                                                          R"(\\)"},
+        {"\\\\",                                                        R"(\\\\)"},
+        {"\\\\\\",                                                      R"(\\\\\\)"},
+        {"\\\\\\\\",                                                    R"(\\\\\\\\)"},
+        {"\\\\\\\\\\",                                                  R"(\\\\\\\\\\)"},
+        // tests for version which does not escape UTF-8
+        //{"\uA66A",                                                    "\uA66A"},
+        //{"Ꙫ",                                                         "Ꙫ"},
+        //{"\uA66A Ꙫ",                                                  "\uA66A Ꙫ"},
+
+        {"\\uA66A",                                                     R"(\\uA66A)"},
+        {"Ꙫ",                                                           R"(\ua66a)"},
+        {"\\Ꙫ",                                                         R"(\\\ua66a)"},
+        {"\u040A Њ",                                                    R"(\u040a \u040a)"},
+        // do not escape control chars yet
+        //{"\u0002\u0005\u0018\u001B",                                  R"(\u0002\u0005\u0018\u001b)"},
+
+        {"\\\uA66A",                                                    R"(\\\ua66a)"},
+        {"\\\\uA66A",                                                   R"(\\\\uA66A)"},
+        {"\\\\\uA66A",                                                  R"(\\\\\ua66a)"},
+
+        {"\\\\Ꙫ",                                                       R"(\\\\\ua66a)"},
+        {"\\\\\\Ꙫ",                                                     R"(\\\\\\\ua66a)"},
+
+        {"first second \n third\n\n \\n \\\\\n fourth",                 R"(first second \\n third\\n\\n \\n \\\\\\n fourth)"},
+        // do not escape control chars yet
+        //{"first second \n third\n\"\n \\n \\\\\"\f\\\t\\u\u0007\\\n fourth", R"(first second \\n third\\n\"\\n \\n \\\\\"\\f\\\\t\\u\u0007\\\\n fourth)"}
+    };
+
+    {
+        log_debug ("fty-common-utf8:escape: Test #1");
+        log_debug ("Manual comparison");
+
+        std::string escaped;
+        for (auto const& item : tests) {
+            escaped = UTF8::escape (item.first);
+            assert ( escaped.compare (item.second) == 0);
+        }
+        printf ("OK\n");
+    }
 }

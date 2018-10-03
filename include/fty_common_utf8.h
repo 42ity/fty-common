@@ -31,6 +31,10 @@ extern "C" {
 //  Self test of this class
 void fty_common_utf8_test (bool verbose);
 
+#ifdef __cplusplus
+}
+#endif
+
 namespace UTF8 {
 
 int8_t utf8_octets (const char *c);
@@ -46,9 +50,5 @@ std::string escape(const char *string);
 // Returns escaped json on success, "(null_ptr)" string on null argument
 std::string escape(const std::string &before);
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
