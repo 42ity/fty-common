@@ -167,13 +167,13 @@ utf8_octets(const char *c) {
     assert(c);
     if ((*c & 0x80) == 0) // lead bit is zero, must be a single ascii
         return 1;
-    else 
+    else
         if ((*c & 0xE0) == 0xC0) // 110x xxxx (2 octets)
         return 2;
     else
         if ((*c & 0xF0) == 0xE0) // 1110 xxxx (3 octets)
         return 3;
-    else 
+    else
         if ((*c & 0xF8) == 0xF0) // 1111 0xxx (4 octets)
         return 4;
     else
@@ -233,6 +233,91 @@ utf8eq(const char *s1, const char *s2) {
     }
     return 1;
 }
+
+std::string
+escape (const char *string) {
+    if (!string)
+        return "(null_ptr)";
+
+    std::string after;
+    std::string::size_type length = strlen (string);
+    after.reserve (length * 2);
+
+/*
+    Quote from http://www.json.org/
+    -------------------------------
+    Char
+    any-Unicode-character-except-"-or-\-or-control-character:
+        \"
+        \\
+        \/
+        \b
+        \f
+        \n
+        \r
+        \t
+        \u four-hex-digits
+    ------------------------------
+*/
+    std::string::size_type i = 0;
+    while (i < length) {
+        char c = string[i];
+        int8_t width = UTF8::utf8_octets (string + i);
+        if (c == '"') {
+            after.append ("\\\"");
+        }
+        else if (c =='\b') {
+            after.append ("\\\\b");
+        }
+        else if (c =='\f') {
+            after.append ("\\\\f");
+        }
+        else if (c == '\n') {
+            after.append ("\\\\n");
+        }
+        else if (c == '\r') {
+            after.append ("\\\\r");
+        }
+        else if (c == '\t') {
+            after.append ("\\\\t");
+        }
+        else if (c == '\\') {
+            after.append ("\\\\");
+        }
+        // escape UTF-8 chars which have more than 1 byte
+        else if (width > 1) {
+            // allocate memory for "\u" + 4 hex digits + terminator
+            // allocating 8 bytes just for performance doesn't make sense
+            char *codepoint = (char *) calloc (7, sizeof (char));
+            // calloc() takes care of zero termination, which utf8_to_codepoint() doesn't do
+            UTF8::utf8_to_codepoint (string + i, &codepoint);
+
+            std::string codepoint_str (codepoint);
+            free (codepoint);
+            codepoint = NULL;
+            after.append (codepoint_str);
+        }
+        else {
+            after += c;
+        }
+        i += width;
+    }
+    return after;
+}
+
+std::string
+escape (const std::string& before) {
+    return escape (before.c_str ());
+}
+} // namespace UTF8
+
+char *
+utf8_escape (const char *string) {
+    std::string escaped_str = UTF8::escape (string);
+    size_t length = escaped_str.length ();
+    char *escaped = (char *) zmalloc (length + 1);
+    strcpy (escaped, escaped_str.c_str ());
+    return escaped;
 }
 //  --------------------------------------------------------------------------
 //  Self test of this class
@@ -256,13 +341,101 @@ fty_common_utf8_test (bool verbose)
     printf (" * fty_common_utf8: ");
 
     //  @selftest
-    //  Simple create/destroy test
+    //  utf8eq test
     //  @end
-    assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "\u017dlu\u0165ou\u010dk\xc3\xbd K\u016f\xc5\x88") == 1);
-    assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň") == 1);
-    assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň ") == 0);
-    assert(UTF8::utf8eq("Ka\xcc\x81rol", "K\xc3\xa1rol") == 0);
-    assert(UTF8::utf8eq("супер test", "\u0441\u0443\u043f\u0435\u0440 Test") == 1);
-    assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "ŽlUťOUčKý kůn") == 0);
-    log_debug("utf8eq: OK");
+    {
+        assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "\u017dlu\u0165ou\u010dk\xc3\xbd K\u016f\xc5\x88") == 1);
+        assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň") == 1);
+        assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň ") == 0);
+        assert(UTF8::utf8eq("Ka\xcc\x81rol", "K\xc3\xa1rol") == 0);
+        assert(UTF8::utf8eq("супер test", "\u0441\u0443\u043f\u0435\u0440 Test") == 1);
+        assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "ŽlUťOUčKý kůn") == 0);
+        log_debug("utf8eq: OK");
+    }
+
+    // utils::json::escape (<first>) should equal <second>
+    std::vector <std::pair <std::string, std::string>> tests {
+        {"'jednoduche ' uvozovky'",                                     "'jednoduche ' uvozovky'"},
+        {"'jednoduche '' uvozovky'",                                    "'jednoduche '' uvozovky'"},
+        {"dvojite \" uvozovky",                                         R"(dvojite \" uvozovky)"},
+        {"dvojite \\\" uvozovky",                                       R"(dvojite \\\" uvozovky)"},
+        {"dvojite \\\\\" uvozovky",                                     R"(dvojite \\\\\" uvozovky)"},
+        {"dvojite \\\\\\\" uvozovky",                                   R"(dvojite \\\\\\\" uvozovky)"},
+        {"dvojite \\\\\\\\\" uvozovky",                                 R"(dvojite \\\\\\\\\" uvozovky)"},
+        {"'",                                                           R"(')"},
+        {"\"",                                                          R"(\")"},
+        {"'\"",                                                         R"('\")"},
+        {"\"\"",                                                        R"(\"\")"},
+        {"\"\"\"",                                                      R"(\"\"\")"},
+        {"\\\"\"\"",                                                    R"(\\\"\"\")"},
+        {"\"\\\"\"",                                                    R"(\"\\\"\")"},
+        {"\"\"\\\"",                                                    R"(\"\"\\\")"},
+        {"\\\"\\\"\\\"",                                                R"(\\\"\\\"\\\")"},
+        {"\" dvojite \\\\\" uvozovky \"",                               R"(\" dvojite \\\\\" uvozovky \")"},
+        {"dvojite \"\\\"\" uvozovky",                                   R"(dvojite \"\\\"\" uvozovky)"},
+        {"dvojite \\\\\"\\\\\"\\\\\" uvozovky",                         R"(dvojite \\\\\"\\\\\"\\\\\" uvozovky)"},
+
+        {"\b",                                                          R"(\\b)"},
+        {"\\b",                                                         R"(\\b)"},
+        {"\\\b",                                                        R"(\\\\b)"},
+        {"\\\\b",                                                       R"(\\\\b)"},
+        {"\\\\\b",                                                      R"(\\\\\\b)"},
+        {"\\\\\\b",                                                     R"(\\\\\\b)"},
+        {"\\\\\\\b",                                                    R"(\\\\\\\\b)"},
+        {"\\\\\\\\b",                                                   R"(\\\\\\\\b)"},
+        {"\\\\\\\\\b",                                                  R"(\\\\\\\\\\b)"},
+
+        {"\\",                                                          R"(\\)"},
+        {"\\\\",                                                        R"(\\\\)"},
+        {"\\\\\\",                                                      R"(\\\\\\)"},
+        {"\\\\\\\\",                                                    R"(\\\\\\\\)"},
+        {"\\\\\\\\\\",                                                  R"(\\\\\\\\\\)"},
+        // tests for version which does not escape UTF-8
+        //{"\uA66A",                                                    "\uA66A"},
+        //{"Ꙫ",                                                         "Ꙫ"},
+        //{"\uA66A Ꙫ",                                                  "\uA66A Ꙫ"},
+
+        {"\\uA66A",                                                     R"(\\uA66A)"},
+        {"Ꙫ",                                                           R"(\ua66a)"},
+        {"\\Ꙫ",                                                         R"(\\\ua66a)"},
+        {"\u040A Њ",                                                    R"(\u040a \u040a)"},
+        // do not escape control chars yet
+        //{"\u0002\u0005\u0018\u001B",                                  R"(\u0002\u0005\u0018\u001b)"},
+
+        {"\\\uA66A",                                                    R"(\\\ua66a)"},
+        {"\\\\uA66A",                                                   R"(\\\\uA66A)"},
+        {"\\\\\uA66A",                                                  R"(\\\\\ua66a)"},
+
+        {"\\\\Ꙫ",                                                       R"(\\\\\ua66a)"},
+        {"\\\\\\Ꙫ",                                                     R"(\\\\\\\ua66a)"},
+
+        {"first second \n third\n\n \\n \\\\\n fourth",                 R"(first second \\n third\\n\\n \\n \\\\\\n fourth)"},
+        // do not escape control chars yet
+        //{"first second \n third\n\"\n \\n \\\\\"\f\\\t\\u\u0007\\\n fourth", R"(first second \\n third\\n\"\\n \\n \\\\\"\\f\\\\t\\u\u0007\\\\n fourth)"}
+    };
+
+    {
+        log_debug ("fty-common-utf8:escape: Test #1");
+        log_debug ("Manual comparison");
+
+        std::string escaped;
+        for (auto const& item : tests) {
+            escaped = UTF8::escape (item.first);
+            assert ( escaped.compare (item.second) == 0);
+        }
+        printf ("OK\n");
+    }
+
+    {
+        log_debug ("fty-common-utf8:escape: Test #2");
+        log_debug ("Manual comparison - C wrapper");
+
+        char *escaped;
+        for (auto const& item : tests) {
+            escaped = utf8_escape (item.first.c_str ());
+            assert (streq (escaped, item.second.c_str ()));
+            free (escaped);
+        }
+        printf ("OK\n");
+    }
 }

@@ -24,13 +24,21 @@
 
 #include <cstdint>
 
+//  Self test of this class
+void fty_common_utf8_test (bool verbose);
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//  Self test of this class
-void fty_common_utf8_test (bool verbose);
+// C wrapper for UTF8::escape
+char* utf8_escape(const char *string);
 
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
 namespace UTF8 {
 
 int8_t utf8_octets (const char *c);
@@ -38,10 +46,15 @@ int8_t utf8_octets (const char *c);
 int utf8_to_codepoint(const char *uchar, char **codepoint);
 
 int utf8eq(const char *s1, const char *s2);
-}
 
-#ifdef __cplusplus
-}
+// Convenient wrapper for escape"("const char *string")"
+std::string escape(const char *string);
+
+//  Escape string for json output
+// Returns escaped json on success, "(null_ptr)" string on null argument
+std::string escape(const std::string &before);
+
 #endif
+}
 
 #endif
