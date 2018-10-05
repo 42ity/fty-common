@@ -27,6 +27,7 @@
 */
 
 #include "fty_common_classes.h"
+#include <stdarg.h>
 
 namespace UTF8 {
 
@@ -309,16 +310,136 @@ std::string
 escape (const std::string& before) {
     return escape (before.c_str ());
 }
+
+// This function converts string expressed as ("Text used as a key with %s and %d", var1, var2, ...) into JSON format:
+// {
+//  "key" : "Text used as a key with $var1$ and $var2$",
+//  "variables" : {
+//      "var1" : "foo";
+//      "var2" : 5
+//  }
+//}
+//
+// It makes the following assumptions:
+// * we are not using a 'space' flag in formatting directives
+// * every conversion is a sequence of non-space characters started with % and ended with a space
+
+std::string
+s_jsonify_translation_string (const char *key, va_list args)
+{
+    log_trace ("called");
+
+    int pos = 0;
+    int va_index = 1;
+    va_list args2, args3;
+    va_copy (args2, args);
+    va_copy (args3, args);
+
+    // make std::string copy so we can use insert/append
+    std::string key_replaced;
+    key_replaced.reserve (strlen (key));
+    std::string json_format;
+    std::string var_entry;
+
+    while (*key != '\0') {
+        // start of formatting directive
+        if (*key == '%') {
+            std::string var_str = "var" + std::to_string (va_index);
+            std::string var_str_ref = "$" + var_str + "$";
+            std::string format;
+            // copy the formatting directive
+            while (*key != ' ' && *key != '\0') {
+                format.append (key, 1);
+                key++;
+            }
+            var_entry = " \"" + var_str + "\": \"" + format + "\",";
+            // update the key_replaced with variable string reference
+            key_replaced.append (var_str_ref);
+
+            // append JSON format entry for this variable
+            // TODO: build objects for some variables (like dates)
+            json_format.append (var_entry);
+            va_index++;
+
+            format.clear ();
+            var_entry.clear ();
+            // update the position in key_replaced to correspond to key
+            pos += var_str_ref.size ();
+        }
+        else {
+            key_replaced.insert (pos, key, 1);
+            key++; pos++;
+        }
+    }
+
+    if (json_format.empty ()) {
+        // no formatting directives, finish up the JSON and return
+        return "{ \"key\": \"" + key_replaced + "\" }";
+    }
+
+    // finish up the JSON with formatting directives:
+    json_format = "{ \"key\": \"" + key_replaced + "\", \"variables\": {" + json_format;
+    // remove the trailing comma
+    json_format.pop_back ();
+    json_format.append (" } }");
+
+    // replace formatting directives with real content
+    char *json_attempt = (char *) zmalloc (json_format.length ());
+    size_t missing = vsnprintf (json_attempt, json_format.length (), json_format.c_str (), args2);
+    va_end (args2);
+    if (missing >= json_format.length ()) {
+        log_trace ("JSON buffer too small, we have to reallocate");
+        char *json = (char *) realloc ((void *) json_attempt, missing + 1);
+        if (json != NULL && json != json_attempt) {
+            json_attempt = json;
+        }
+        vsnprintf (json_attempt, missing + 1, json_format.c_str (), args3);
+        va_end (args3);
+    }
+    else
+        log_trace ("JSON buffer was sufficient");
+
+    std::string json_str (json_attempt);
+    free (json_attempt);
+
+    key_replaced.clear ();
+    return json_str;
+}
+
+std::string
+jsonify_translation_string (const char *key, ...)
+{
+    va_list args;
+    va_start (args, key);
+    std::string jsonified_str = UTF8::s_jsonify_translation_string (key, args);
+    va_end (args);
+    return jsonified_str;
+}
 } // namespace UTF8
 
 char *
-utf8_escape (const char *string) {
+utf8_escape (const char *string)
+{
     std::string escaped_str = UTF8::escape (string);
     size_t length = escaped_str.length ();
     char *escaped = (char *) zmalloc (length + 1);
     strcpy (escaped, escaped_str.c_str ());
     return escaped;
 }
+
+char *
+utf8_jsonify_translation_string (const char *key, ...)
+{
+    va_list args;
+    va_start (args, key);
+    std::string jsonified_str = UTF8::s_jsonify_translation_string (key, args);
+    va_end (args);
+    size_t length = jsonified_str.length ();
+    char *jsonified = (char *) zmalloc (length + 1);
+    strcpy (jsonified, jsonified_str.c_str ());
+    return jsonified;
+}
+
 //  --------------------------------------------------------------------------
 //  Self test of this class
 
@@ -436,6 +557,58 @@ fty_common_utf8_test (bool verbose)
             assert (streq (escaped, item.second.c_str ()));
             free (escaped);
         }
+        printf ("OK\n");
+    }
+
+    const char *translation_string1 = "Text used as a key with %s and %d";
+    const char *translation_string2 = "Text used as a key with %'.2f and %lld";
+    const char *translation_string3 = "Text used as a key";
+
+    std::string output1 ("{ \"key\": \"Text used as a key with $var1$ and $var2$\", \"variables\": { \"var1\": \"foo\", \"var2\": \"5\" } }");
+    std::string output2 ("{ \"key\": \"Text used as a key with $var1$ and $var2$\", \"variables\": { \"var1\": \"10.25\", \"var2\": \"256\" } }");
+    std::string output3 ("{ \"key\": \"Text used as a key with $var1$\", \"variables\": { \"var1\": \"5\" } }");
+    std::string output4 ("{ \"key\": \"Text used as a key\" }");
+
+    {
+        log_debug ("fty-common-utf8:jsonify_translation_string: Test #1");
+        log_debug ("Manual comparison");
+        std::string json;
+        json = UTF8::jsonify_translation_string (translation_string1, "foo", 5);
+        assert (json == output1);
+
+        int64_t val = 256;
+        json = UTF8::jsonify_translation_string (translation_string2, 10.25, val);
+        assert (json == output2);
+
+        json = UTF8::jsonify_translation_string ("Text used as a key with %" PRIu32, 5);
+        assert (json == output3);
+
+        json = UTF8::jsonify_translation_string (translation_string3);
+        assert (json == output4);
+        printf ("OK\n");
+    }
+
+    {
+        log_debug ("fty-common-utf8:jsonify_translation_string: Test #2");
+        log_debug ("Manual comparison - C wrapper");
+
+        char *json;
+        json = utf8_jsonify_translation_string (translation_string1, "foo", 5);
+        assert (streq (json, output1.c_str ()));
+        free (json);
+
+        int64_t val = 256;
+        json = utf8_jsonify_translation_string (translation_string2, 10.25, val);
+        assert (streq (json, output2.c_str ()));
+        free (json);
+
+        json = utf8_jsonify_translation_string ("Text used as a key with %" PRIu32, 5);
+        assert (streq (json, output3.c_str ()));
+        free (json);
+
+        json = utf8_jsonify_translation_string (translation_string3);
+        assert (streq (json, output4.c_str ()));
+        free (json);
         printf ("OK\n");
     }
 }
