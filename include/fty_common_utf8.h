@@ -23,6 +23,7 @@
 #define FTY_COMMON_UTF8_H_INCLUDED
 
 #include <cstdint>
+#include <string>
 
 //  Self test of this class
 void fty_common_utf8_test (bool verbose);
