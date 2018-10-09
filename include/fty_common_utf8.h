@@ -35,11 +35,16 @@ extern "C" {
 // C wrapper for UTF8::escape
 char* utf8_escape(const char *string);
 
+// C wrapper for UTF8::jsonify_translation_string
+char *
+utf8_jsonify_translation_string (const char *key, ...);
+    
 #ifdef __cplusplus
 }
 #endif
 
 #ifdef __cplusplus
+
 namespace UTF8 {
 
 int8_t utf8_octets (const char *c);
@@ -55,6 +60,10 @@ std::string escape(const char *string);
 // Returns escaped json on success, "(null_ptr)" string on null argument
 std::string escape(const std::string &before);
 
+// Convert translation string into JSON
+std::string
+jsonify_translation_string (const char *key, ...);
+    
 #endif
 }
 
