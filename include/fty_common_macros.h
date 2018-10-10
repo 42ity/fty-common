@@ -28,7 +28,7 @@
 #define TRANSLATE_ME(...) utf8_jsonify_translation_string (__VA_ARGS__)
 
 // macro for strings we want to turn into JSON, but not translate in BE
-#define JSONIFY(...) __VA_ARGS__
+#define JSONIFY(...) TRANSLATE_ME(__VA_ARGS__)
 
 // macro for lua alert rules for dynamically processed templates, not really intended to be used C
 #define TRANSLATE_LUA(...) __VA_ARGS__
