@@ -22,21 +22,15 @@
 #ifndef FTY_COMMON_MACROS_H_INCLUDED
 #define FTY_COMMON_MACROS_H_INCLUDED
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <fty_common_utf8.h>
 
 // macro for strings we want to process by xgettext
-#define TRANSLATE_ME(...) __VA_ARGS__
+#define TRANSLATE_ME(...) utf8_jsonify_translation_string (__VA_ARGS__)
 
 // macro for strings we want to turn into JSON, but not translate in BE
 #define JSONIFY(...) __VA_ARGS__
 
 // macro for lua alert rules for dynamically processed templates, not really intended to be used C
 #define TRANSLATE_LUA(...) __VA_ARGS__
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
