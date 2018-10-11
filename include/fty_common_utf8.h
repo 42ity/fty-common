@@ -22,8 +22,16 @@
 #ifndef FTY_COMMON_UTF8_H_INCLUDED
 #define FTY_COMMON_UTF8_H_INCLUDED
 
+#ifdef __cplusplus
+
 #include <cstdint>
 #include <string>
+
+#else
+
+#include <stdint.h>
+
+#endif
 
 //  Self test of this class
 void fty_common_utf8_test (bool verbose);
@@ -38,7 +46,7 @@ char* utf8_escape(const char *string);
 // C wrapper for UTF8::jsonify_translation_string
 char *
 utf8_jsonify_translation_string (const char *key, ...);
-    
+
 #ifdef __cplusplus
 }
 #endif
@@ -63,8 +71,9 @@ std::string escape(const std::string &before);
 // Convert translation string into JSON
 std::string
 jsonify_translation_string (const char *key, ...);
-    
-#endif
+
 }
+
+#endif
 
 #endif
