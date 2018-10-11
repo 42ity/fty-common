@@ -322,7 +322,7 @@ escape (const std::string& before) {
 //
 // It makes the following assumptions:
 // * we are not using a 'space' flag in formatting directives
-// * every conversion is a sequence of non-space characters started with % and ended with a space
+// * every conversion is either %s, or a sequence of non-space characters started with % and ended with a space
 
 std::string
 s_jsonify_translation_string (const char *key, va_list args)
@@ -351,7 +351,10 @@ s_jsonify_translation_string (const char *key, va_list args)
             while (*key != ' ' && *key != '\0') {
                 format.append (key, 1);
                 key++;
+                if (format == "%s")
+                    break;
             }
+
             var_entry = " \"" + var_str + "\": \"" + format + "\",";
             // update the key_replaced with variable string reference
             key_replaced.append (var_str_ref);
@@ -563,12 +566,13 @@ fty_common_utf8_test (bool verbose)
     const char *translation_string1 = "Text used as a key with %s and %d";
     const char *translation_string2 = "Text used as a key with %'.2f and %lld";
     const char *translation_string3 = "Text used as a key";
+    const char *translation_string4 = "Text used as a key,%s and (%s)";
 
     std::string output1 ("{ \"key\": \"Text used as a key with $var1$ and $var2$\", \"variables\": { \"var1\": \"foo\", \"var2\": \"5\" } }");
     std::string output2 ("{ \"key\": \"Text used as a key with $var1$ and $var2$\", \"variables\": { \"var1\": \"10.25\", \"var2\": \"256\" } }");
     std::string output3 ("{ \"key\": \"Text used as a key with $var1$\", \"variables\": { \"var1\": \"5\" } }");
     std::string output4 ("{ \"key\": \"Text used as a key\" }");
-
+    std::string output5 ("{ \"key\": \"Text used as a key,$var1$ and ($var2$)\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
     {
         log_debug ("fty-common-utf8:jsonify_translation_string: Test #1");
         log_debug ("Manual comparison");
@@ -585,6 +589,9 @@ fty_common_utf8_test (bool verbose)
 
         json = UTF8::jsonify_translation_string (translation_string3);
         assert (json == output4);
+
+        json = UTF8::jsonify_translation_string (translation_string4, "foo", "bar");
+        assert (json == output5);
         printf ("OK\n");
     }
 
@@ -608,6 +615,10 @@ fty_common_utf8_test (bool verbose)
 
         json = utf8_jsonify_translation_string (translation_string3);
         assert (streq (json, output4.c_str ()));
+        free (json);
+
+        json = utf8_jsonify_translation_string (translation_string4, "foo", "bar");
+        assert (streq (json, output5.c_str ()));
         free (json);
         printf ("OK\n");
     }
