@@ -22,8 +22,10 @@
 #ifndef FTY_COMMON_UTF8_H_INCLUDED
 #define FTY_COMMON_UTF8_H_INCLUDED
 
+#ifdef __cplusplus
 #include <cstdint>
 #include <string>
+#endif
 
 //  Self test of this class
 void fty_common_utf8_test (bool verbose);
