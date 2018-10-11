@@ -345,7 +345,7 @@ s_jsonify_translation_string (const char *key, va_list args)
         // start of formatting directive
         if (*key == '%') {
             std::string var_str = "var" + std::to_string (va_index);
-            std::string var_str_ref = "$" + var_str + "$";
+            std::string var_str_ref = "{{" + var_str + "}}";
             std::string format;
             // copy the formatting directive
             while (*key != ' ' && *key != '\0') {
@@ -568,11 +568,11 @@ fty_common_utf8_test (bool verbose)
     const char *translation_string3 = "Text used as a key";
     const char *translation_string4 = "Text used as a key,%s and (%s)";
 
-    std::string output1 ("{ \"key\": \"Text used as a key with $var1$ and $var2$\", \"variables\": { \"var1\": \"foo\", \"var2\": \"5\" } }");
-    std::string output2 ("{ \"key\": \"Text used as a key with $var1$ and $var2$\", \"variables\": { \"var1\": \"10.25\", \"var2\": \"256\" } }");
-    std::string output3 ("{ \"key\": \"Text used as a key with $var1$\", \"variables\": { \"var1\": \"5\" } }");
+    std::string output1 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"foo\", \"var2\": \"5\" } }");
+    std::string output2 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"10.25\", \"var2\": \"256\" } }");
+    std::string output3 ("{ \"key\": \"Text used as a key with {{var1}}\", \"variables\": { \"var1\": \"5\" } }");
     std::string output4 ("{ \"key\": \"Text used as a key\" }");
-    std::string output5 ("{ \"key\": \"Text used as a key,$var1$ and ($var2$)\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
+    std::string output5 ("{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
     {
         log_debug ("fty-common-utf8:jsonify_translation_string: Test #1");
         log_debug ("Manual comparison");
