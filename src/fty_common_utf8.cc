@@ -418,6 +418,13 @@ jsonify_translation_string (const char *key, ...)
     va_end (args);
     return jsonified_str;
 }
+
+std::string
+vajsonify_translation_string (const char *key, va_list args)
+{
+    std::string jsonified_str = UTF8::s_jsonify_translation_string (key, args);
+    return jsonified_str;
+}
 } // namespace UTF8
 
 char *
