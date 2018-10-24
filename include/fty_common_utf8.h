@@ -33,6 +33,8 @@
 
 #endif
 
+#include <stdarg.h>
+
 //  Self test of this class
 void fty_common_utf8_test (bool verbose);
 
@@ -68,9 +70,13 @@ std::string escape(const char *string);
 // Returns escaped json on success, "(null_ptr)" string on null argument
 std::string escape(const std::string &before);
 
-// Convert translation string into JSON
+// Convert translation string + variable number of args into JSON
 std::string
 jsonify_translation_string (const char *key, ...);
+
+// Convert translation string + va_list into JSON
+std::string
+vajsonify_translation_string (const char *key, va_list args);
 
 }
 
