@@ -329,6 +329,14 @@ s_jsonify_translation_string (const char *key, va_list args)
 {
     log_trace ("called");
 
+    // check if 'key' is already in JSON format
+    // since we may start/end with {{vari}} and we don't want to go through the whole string,
+    // check just first two and last two characters
+    size_t length = strlen (key);
+    if (length >= 2 && key[0] == '{' && key[1] != '{' && key[length-2] != '}' && key[length-1] == '}') {
+        return std::string (key);
+    }
+
     int pos = 0;
     int va_index = 1;
     va_list args2, args3;
@@ -337,7 +345,7 @@ s_jsonify_translation_string (const char *key, va_list args)
 
     // make std::string copy so we can use insert/append
     std::string key_replaced;
-    key_replaced.reserve (strlen (key));
+    key_replaced.reserve (length);
     std::string json_format;
     std::string var_entry;
 
@@ -574,12 +582,16 @@ fty_common_utf8_test (bool verbose)
     const char *translation_string2 = "Text used as a key with %'.2f and %lld";
     const char *translation_string3 = "Text used as a key";
     const char *translation_string4 = "Text used as a key,%s and (%s)";
+    const char *translation_string5 = "{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }";
+    const char *translation_string6 = "%s. Text used as a key: %s";
 
     std::string output1 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"foo\", \"var2\": \"5\" } }");
     std::string output2 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"10.25\", \"var2\": \"256\" } }");
-    std::string output3 ("{ \"key\": \"Text used as a key with {{var1}}\", \"variables\": { \"var1\": \"5\" } }");
-    std::string output4 ("{ \"key\": \"Text used as a key\" }");
+    std::string output_arch ("{ \"key\": \"Text used as a key with {{var1}}\", \"variables\": { \"var1\": \"5\" } }");
+    std::string output3 ("{ \"key\": \"Text used as a key\" }");
+    std::string output4 ("{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
     std::string output5 ("{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
+    std::string output6 ("{ \"key\": \"{{var1}}. Text used as a key: {{var2}}\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
     {
         log_debug ("fty-common-utf8:jsonify_translation_string: Test #1");
         log_debug ("Manual comparison");
@@ -592,13 +604,19 @@ fty_common_utf8_test (bool verbose)
         assert (json == output2);
 
         json = UTF8::jsonify_translation_string ("Text used as a key with %" PRIu32, 5);
-        assert (json == output3);
+        assert (json == output_arch);
 
         json = UTF8::jsonify_translation_string (translation_string3);
-        assert (json == output4);
+        assert (json == output3);
 
         json = UTF8::jsonify_translation_string (translation_string4, "foo", "bar");
+        assert (json == output4);
+
+        json = UTF8::jsonify_translation_string (translation_string5, "foo", "bar");
         assert (json == output5);
+
+        json = UTF8::jsonify_translation_string (translation_string6, "foo", "bar");
+        assert (json == output6);
         printf ("OK\n");
     }
 
@@ -617,15 +635,23 @@ fty_common_utf8_test (bool verbose)
         free (json);
 
         json = utf8_jsonify_translation_string ("Text used as a key with %" PRIu32, 5);
-        assert (streq (json, output3.c_str ()));
+        assert (streq (json, output_arch.c_str ()));
         free (json);
 
         json = utf8_jsonify_translation_string (translation_string3);
-        assert (streq (json, output4.c_str ()));
+        assert (streq (json, output3.c_str ()));
         free (json);
 
         json = utf8_jsonify_translation_string (translation_string4, "foo", "bar");
+        assert (streq (json, output4.c_str ()));
+        free (json);
+
+        json = utf8_jsonify_translation_string (translation_string5, "foo", "bar");
         assert (streq (json, output5.c_str ()));
+        free (json);
+
+        json = utf8_jsonify_translation_string (translation_string6, "foo", "bar");
+        assert (streq (json, output6.c_str ()));
         free (json);
         printf ("OK\n");
     }
