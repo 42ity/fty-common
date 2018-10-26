@@ -333,7 +333,7 @@ s_jsonify_translation_string (const char *key, va_list args)
     // since we may start/end with {{vari}} and we don't want to go through the whole string,
     // check just first two and last two characters
     size_t length = strlen (key);
-    if (key[0] == '{' && key[1] != '{' && key[length-2] != '}' && key[length-1] == '}') {
+    if (length >= 2 && key[0] == '{' && key[1] != '{' && key[length-2] != '}' && key[length-1] == '}') {
         return std::string (key);
     }
 
