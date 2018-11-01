@@ -11,7 +11,13 @@
 
     <target name = "debian" />
     <target name = "redhat" />
-    <target name = "travis" />
+    <target name = "travis">
+        <!-- option name = "clangformat_implem" value = "autotools" / -->
+        <option name = "use_cmake" value = "0" />
+        <!-- option name = "clangformat_require_good" value = "1" / -->
+        <option name = "clangformat_allow_failures" value = "1" />
+        <option name = "use_pkg_deps_prereqs_source" value = "0" />
+    </target>
     <target name = "jenkins" >
         <option name = "agent_label" value = "devel-image &amp;&amp; x86_64" />
         <option name = "triggers_pollSCM" value = "H/2 * * * *" />
@@ -43,6 +49,7 @@
     <class name = "fty_common_asset_types" selftest = "0"> Definitions of asset types and subtypes</class>
     <class name = "fty_common_str_defs" selftest = "0" />
     <class name = "fty_common_filesystem" selftest = "0" />
+    <class name = "fty_common_json" selftest = "0">Functions for parsing JSON strings</class>
     <class name = "fty_common_utf8">Functions for handling UTF-8 encoded strings</class>
     <header name = "fty_common_agents" stable = "1" >Common definitions for agents</header>
     <header name = "fty_common_macros" stable = "1" >System-wide preprocessor macros</header>
