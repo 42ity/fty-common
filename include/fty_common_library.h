@@ -106,6 +106,8 @@ typedef struct _fty_common_str_defs_t fty_common_str_defs_t;
 #define FTY_COMMON_STR_DEFS_T_DEFINED
 typedef struct _fty_common_filesystem_t fty_common_filesystem_t;
 #define FTY_COMMON_FILESYSTEM_T_DEFINED
+typedef struct _fty_common_json_t fty_common_json_t;
+#define FTY_COMMON_JSON_T_DEFINED
 typedef struct _fty_common_utf8_t fty_common_utf8_t;
 #define FTY_COMMON_UTF8_T_DEFINED
 #endif // FTY_COMMON_BUILD_DRAFT_API
@@ -119,6 +121,7 @@ typedef struct _fty_common_utf8_t fty_common_utf8_t;
 #include "fty_common_asset_types.h"
 #include "fty_common_str_defs.h"
 #include "fty_common_filesystem.h"
+#include "fty_common_json.h"
 #include "fty_common_utf8.h"
 #endif // FTY_COMMON_BUILD_DRAFT_API
 

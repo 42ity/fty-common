@@ -413,6 +413,24 @@ s_jsonify_translation_string (const char *key, va_list args)
     std::string json_str (json_attempt);
     free (json_attempt);
 
+    // drop quotes enclosing inserted variables which are already in JSON format
+    // - one from the previous call, second from this one
+    // (backslashes were escaped, so we need to drop them as well):
+    size_t insert_start = json_str.find ("\"\\\"{");
+    while (insert_start != std::string::npos) {
+        size_t object_start = 0, object_end;
+        std::string res = JSON::readObject (json_str.substr (insert_start), object_start, object_end);
+        size_t insert_end = json_str.find ("}\\\"\"");
+        if (insert_end == insert_start + object_end) {
+            json_str.replace (insert_start, 4, "   {");
+            json_str.replace (insert_end, 4, "}   ");
+        }
+        insert_start = json_str.find ("\"\\\"{");
+    }
+    // in json_str, find \"{
+    // call function which finds the end of the object
+    // end of the object should be }\"
+    // if everything succeeds, replace both \" with spaces
     key_replaced.clear ();
     return json_str;
 }
@@ -584,6 +602,8 @@ fty_common_utf8_test (bool verbose)
     const char *translation_string4 = "Text used as a key,%s and (%s)";
     const char *translation_string5 = "{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }";
     const char *translation_string6 = "%s. Text used as a key: %s";
+    const char *translation_string7 = "Internal Server Error. %s";
+    const char *translation_string8 = "Internal Server Error. %s %s";
 
     std::string output1 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"foo\", \"var2\": \"5\" } }");
     std::string output2 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"10.25\", \"var2\": \"256\" } }");
@@ -592,6 +612,8 @@ fty_common_utf8_test (bool verbose)
     std::string output4 ("{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
     std::string output5 ("{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
     std::string output6 ("{ \"key\": \"{{var1}}. Text used as a key: {{var2}}\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
+    std::string output7 ("{ \"key\": \"Internal Server Error. {{var1}}\", \"variables\": { \"var1\":    { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }    } }");
+    std::string output8 ("{ \"key\": \"Internal Server Error. {{var1}} {{var2}}\", \"variables\": { \"var1\":    { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }   , \"var2\":    { \"key\": \"Unexpected param\" }    } }");
     {
         log_debug ("fty-common-utf8:jsonify_translation_string: Test #1");
         log_debug ("Manual comparison");
@@ -617,6 +639,14 @@ fty_common_utf8_test (bool verbose)
 
         json = UTF8::jsonify_translation_string (translation_string6, "foo", "bar");
         assert (json == output6);
+
+        const char *param1 = "\\\"{ \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }\\\"";
+        json = UTF8::jsonify_translation_string (translation_string7, param1);
+        assert (json == output7);
+
+        const char *param2 = "\\\"{ \"key\": \"Unexpected param\" }\\\"";
+        json = UTF8::jsonify_translation_string (translation_string8, param1, param2);
+        assert (json == output8);
         printf ("OK\n");
     }
 
@@ -652,6 +682,16 @@ fty_common_utf8_test (bool verbose)
 
         json = utf8_jsonify_translation_string (translation_string6, "foo", "bar");
         assert (streq (json, output6.c_str ()));
+        free (json);
+
+        const char *param1 = "\\\"{ \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }\\\"";
+        json = utf8_jsonify_translation_string (translation_string7, param1);
+        assert (streq (json, output7.c_str ()));
+        free (json);
+
+        const char *param2 = "\\\"{ \"key\": \"Unexpected param\" }\\\"";
+        json = utf8_jsonify_translation_string (translation_string8, param1, param2);
+        assert (streq (json, output8.c_str ()));
         free (json);
         printf ("OK\n");
     }

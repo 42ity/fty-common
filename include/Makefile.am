@@ -14,6 +14,7 @@ nobase_include_HEADERS += \
     fty_common_asset_types.h \
     fty_common_str_defs.h \
     fty_common_filesystem.h \
+    fty_common_json.h \
     fty_common_utf8.h
 
 endif
