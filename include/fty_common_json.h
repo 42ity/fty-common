@@ -79,9 +79,9 @@ namespace JSON {
      */
     std::string readObject (const std::string &line, size_t &start_pos, size_t &end_pos);
     /// exception that should be used when something is not found
-    class NotFoundException {};
+    class NotFoundException : public ::IPMException { };
     /// exception that should be used when input line is corrupted somehow
-    class CorruptedLineException {};
+    class CorruptedLineException : public ::IPMException { };
 }
 #endif
 //  @end
