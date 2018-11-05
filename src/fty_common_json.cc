@@ -59,7 +59,7 @@ std::string readObject (const std::string &line, size_t &start_pos, size_t &end_
         throw NotFoundException ();
     }
     int count = 1;
-    temp = start_pos + 1;
+    temp = start_pos; // searching at temp+1, so no need to add 1 here
     while (end_pos == 0) {
         temp = line.find_first_of ("{}", temp + 1); // always searching at pos > 0
         if (std::string::npos == temp) {
@@ -97,3 +97,61 @@ std::string readString (const std::string &line, size_t &start_pos, size_t &end_
     return line.substr (start_pos + 1, end_pos - start_pos - 1);
 }
 } // namespace JSON
+
+//  --------------------------------------------------------------------------
+//  Self test of this class
+
+// If your selftest reads SCMed fixture data, please keep it in
+// src/selftest-ro; if your test creates filesystem objects, please
+// do so under src/selftest-rw.
+// The following pattern is suggested for C selftest code:
+//    char *filename = NULL;
+//    filename = zsys_sprintf ("%s/%s", SELFTEST_DIR_RO, "mytemplate.file");
+//    assert (filename);
+//    ... use the "filename" for I/O ...
+//    zstr_free (&filename);
+// This way the same "filename" variable can be reused for many subtests.
+#define SELFTEST_DIR_RO "src/selftest-ro"
+#define SELFTEST_DIR_RW "src/selftest-rw"
+
+void
+fty_common_json_test (bool verbose)
+{
+    //                   0123456
+    std::string input = "{{{{{{test}}}}}";
+    std::string exp1 = "{{{{{test}}}}}";
+    std::string exp2 = "{{{{test}}}}";
+    std::string exp3 = "{test}";
+    // at 0 invalid object is located
+    size_t i = 1, j;
+    assert (JSON::readObject (input, i, j) == exp1);
+    assert (i == 1);
+    assert (j == exp1.length () - 1 + 1);
+    i = 2;
+    assert (JSON::readObject (input, i, j) == exp2);
+    assert (i == 2);
+    assert (j == exp2.length () - 1 + 2);
+    i = 5;
+    assert (JSON::readObject (input, i, j) == exp3);
+    assert (i == 5);
+    assert (j == exp3.length () - 1 + 5);
+    i = 6;
+    try {
+        JSON::readObject (input, i, j);
+        assert (std::string ("Exception should have been raised first") == std::string ("Code should never get here"));
+    } catch (JSON::NotFoundException &e) {
+        // this is only valid case
+    } catch (...) {
+        assert (std::string ("Specific exception expected") == std::string ("Code should never get here"));
+    }
+    i = 0;
+    try {
+        JSON::readObject (input, i, j);
+        assert (std::string ("Exception should have been raised first") == std::string ("Code should never get here"));
+    } catch (JSON::CorruptedLineException &e) {
+        // this is only valid case
+    } catch (...) {
+        assert (std::string ("Specific exception expected") == std::string ("Code should never get here"));
+    }
+}
+
