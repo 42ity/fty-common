@@ -138,20 +138,20 @@ fty_common_json_test (bool verbose)
     i = 6;
     try {
         JSON::readObject (input, i, j);
-        assert ("Exception should have been raised first" == "Code should never get here");
+        assert (std::string ("Exception should have been raised first") == std::string ("Code should never get here"));
     } catch (JSON::NotFoundException &e) {
         // this is only valid case
     } catch (...) {
-        assert ("Specific exception expected" == "Code should never get here");
+        assert (std::string ("Specific exception expected") == std::string ("Code should never get here"));
     }
     i = 0;
     try {
         JSON::readObject (input, i, j);
-        assert ("Exception should have been raised first" == "Code should never get here");
+        assert (std::string ("Exception should have been raised first") == std::string ("Code should never get here"));
     } catch (JSON::CorruptedLineException &e) {
         // this is only valid case
     } catch (...) {
-        assert ("Specific exception expected" == "Code should never get here");
+        assert (std::string ("Specific exception expected") == std::string ("Code should never get here"));
     }
 }
 
