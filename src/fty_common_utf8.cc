@@ -415,22 +415,27 @@ s_jsonify_translation_string (const char *key, va_list args)
 
     // drop quotes enclosing inserted variables which are already in JSON format
     // - one from the previous call, second from this one
-    // (backslashes were escaped, so we need to drop them as well):
-    size_t insert_start = json_str.find ("\"\\\"{");
+    size_t insert_start = json_str.find ("\"{");
+    size_t object_start = insert_start, object_end;
     while (insert_start != std::string::npos) {
-        size_t object_start = 0, object_end;
-        std::string res = JSON::readObject (json_str.substr (insert_start), object_start, object_end);
-        size_t insert_end = json_str.find ("}\\\"\"");
-        if (insert_end == insert_start + object_end) {
-            json_str.replace (insert_start, 4, "   {");
-            json_str.replace (insert_end, 4, "}   ");
+        try {
+            std::string res = JSON::readObject (json_str, object_start, object_end);
+            log_trace ("JSON object = %s\n", res.c_str ());
+        } catch (JSON::NotFoundException &e) {
+            log_error ("JSON object not found in %s", json_str.substr (insert_start).c_str ());
+        } catch (JSON::CorruptedLineException &e) {
+            log_error ("Corrupted line %s", json_str.substr (insert_start).c_str ());
         }
-        insert_start = json_str.find ("\"\\\"{");
+        size_t insert_end = json_str.find ("}\"", insert_start);
+        if (insert_end == object_end) {
+            json_str.replace (insert_start, 2, " {");
+            json_str.replace (insert_end, 2, "} ");
+        }
+        // move in case match was not replacable
+        insert_start++;
+        insert_start = json_str.find ("\"{", insert_start);
+        object_start = insert_start;
     }
-    // in json_str, find \"{
-    // call function which finds the end of the object
-    // end of the object should be }\"
-    // if everything succeeds, replace both \" with spaces
     key_replaced.clear ();
     return json_str;
 }
@@ -612,8 +617,9 @@ fty_common_utf8_test (bool verbose)
     std::string output4 ("{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
     std::string output5 ("{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
     std::string output6 ("{ \"key\": \"{{var1}}. Text used as a key: {{var2}}\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
-    std::string output7 ("{ \"key\": \"Internal Server Error. {{var1}}\", \"variables\": { \"var1\":    { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }    } }");
-    std::string output8 ("{ \"key\": \"Internal Server Error. {{var1}} {{var2}}\", \"variables\": { \"var1\":    { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }   , \"var2\":    { \"key\": \"Unexpected param\" }    } }");
+    std::string output7 ("{ \"key\": \"Internal Server Error. {{var1}}\", \"variables\": { \"var1\":  { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }  } }");
+    std::string output8 ("{ \"key\": \"Internal Server Error. {{var1}} {{var2}}\", \"variables\": { \"var1\":  { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } } , \"var2\":  { \"key\": \"Unexpected param\" }  } }");
+    std::string output9 ("{ \"key\": \"Internal Server Error. {{var1}}\", \"variables\": { \"var1\":  { \"key\": \"Timed out waiting for message.\" }  } }");
     {
         log_debug ("fty-common-utf8:jsonify_translation_string: Test #1");
         log_debug ("Manual comparison");
@@ -640,13 +646,16 @@ fty_common_utf8_test (bool verbose)
         json = UTF8::jsonify_translation_string (translation_string6, "foo", "bar");
         assert (json == output6);
 
-        const char *param1 = "\\\"{ \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }\\\"";
+        const char *param1 = "{ \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }";
         json = UTF8::jsonify_translation_string (translation_string7, param1);
         assert (json == output7);
 
-        const char *param2 = "\\\"{ \"key\": \"Unexpected param\" }\\\"";
+        const char *param2 = "{ \"key\": \"Unexpected param\" }";
         json = UTF8::jsonify_translation_string (translation_string8, param1, param2);
         assert (json == output8);
+
+        json = UTF8::jsonify_translation_string (translation_string7, "{ \"key\": \"Timed out waiting for message.\" }");
+        assert (json == output9);
         printf ("OK\n");
     }
 
@@ -684,14 +693,18 @@ fty_common_utf8_test (bool verbose)
         assert (streq (json, output6.c_str ()));
         free (json);
 
-        const char *param1 = "\\\"{ \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }\\\"";
+        const char *param1 = "{ \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }";
         json = utf8_jsonify_translation_string (translation_string7, param1);
         assert (streq (json, output7.c_str ()));
         free (json);
 
-        const char *param2 = "\\\"{ \"key\": \"Unexpected param\" }\\\"";
+        const char *param2 = "{ \"key\": \"Unexpected param\" }";
         json = utf8_jsonify_translation_string (translation_string8, param1, param2);
         assert (streq (json, output8.c_str ()));
+        free (json);
+
+        json = utf8_jsonify_translation_string (translation_string7, "{ \"key\": \"Timed out waiting for message.\" }");
+        assert (streq (json, output9.c_str ()));
         free (json);
         printf ("OK\n");
     }
