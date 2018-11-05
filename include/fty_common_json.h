@@ -86,5 +86,7 @@ namespace JSON {
 #endif
 //  @end
 
+//  Self test of this class
+void fty_common_json_test (bool verbose);
 
 #endif
