@@ -422,9 +422,11 @@ s_jsonify_translation_string (const char *key, va_list args)
             std::string res = JSON::readObject (json_str, object_start, object_end);
             log_trace ("JSON object = %s\n", res.c_str ());
         } catch (JSON::NotFoundException &e) {
-            log_error ("JSON object not found in %s", json_str.substr (insert_start).c_str ());
+            log_trace ("JSON object not found in %s", json_str.substr (insert_start).c_str ());
+            object_end = std::string::npos;
         } catch (JSON::CorruptedLineException &e) {
-            log_error ("Corrupted line %s", json_str.substr (insert_start).c_str ());
+            log_trace ("Corrupted line %s", json_str.substr (insert_start).c_str ());
+            object_end = std::string::npos;
         }
         size_t insert_end = json_str.find ("}\"", insert_start);
         if (insert_end == object_end) {
