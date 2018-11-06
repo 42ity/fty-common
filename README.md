@@ -18,18 +18,20 @@ In the main .h file add #include \<fty_common.h\>
 In the main .h file add #include \<fty_common_base.h\>
 
 ## List of Available Headers
-* fty_common_agents.h -  defines for agent names
-* fty_common_asset_types.h -  asset types, subtypes and related functions
-* fty_common_base.h - streq, STR definitions
-* fty_common_filesystem.h - functions for creating directory, checking content of dir, ...
-* fty_common.h - collection of all headers
-* fty_common_macros.h - contains shared macros
-* fty_common_str_defs.h - definition of strings constants
+* fty\_common\_agents.h -  defines for agent names
+* fty\_common\_asset\_types.h -  asset types, subtypes and related functions
+* fty\_common\_base.h - streq, STR definitions
+* fty\_common\_filesystem.h - functions for creating directory, checking content of dir, ...
+* fty\_common.h - collection of all headers
+* fty\_common\_json.h - basic JSON parser
+* fty\_common\_macros.h - contains shared macros
+* fty\_common\_str\_defs.h - definition of strings constants
+* fty\_commom\_utf8.h - functions for UTF-8 and multiple languages support
 
-## How compile using fty-common
+## How to compile using fty-common
 
 ### project.xml
-Add this bloc in the project.xml file :
+Add this block in the project.xml file :
 
 ````
 <use project = "fty-common" libname = "libfty_common" header="fty_common.h"
@@ -51,4 +53,3 @@ Add this bloc in the project.xml file :
 ````
 
 The header value must be change from fty_common.h to fty_common_base.h for C project.
-In this use section, remove the dependecy already needed byt the agent/library.
