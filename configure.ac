@@ -173,7 +173,6 @@ AS_IF([test x"${search_log4cplus}" = xyes], [
     PRE_SEARCH_LIBS="${LIBS}"
 
     found_pkgconfig=""
-    found_linkname=""
     PKG_CHECK_MODULES([log4cplus], [log4cplus >= 0.0.0],
     [
         PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE $log4cplus_LIBS"
@@ -203,7 +202,6 @@ AS_IF([test x"${search_log4cplus}" = xyes], [
             [
                 was_log4cplus_check_lib_detected=yes
                 PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE -llog4cplus"
-                found_linkname="log4cplus"
             ],
             [AC_MSG_ERROR([cannot link with -llog4cplus, install log4cplus])])
     ])
@@ -211,12 +209,12 @@ AS_IF([test x"${search_log4cplus}" = xyes], [
 dnl END of PKG_CHECK_MODULES and/or direct tests for log4cplus
     AS_CASE(["x${was_log4cplus_check_lib_detected}"],
         [xpkgcfg], [
-                AC_SUBST([pkgconfig_name_log4cplus],[${found_pkgconfig}])
+                AC_SUBST([pkgconfig_name_log4cplus],["${found_pkgconfig}"])
                 CFLAGS="${log4cplus_CFLAGS} ${CFLAGS}"
                 LIBS="${log4cplus_LIBS} ${LIBS}"
             ],
         [xyes], [
-                AC_SUBST([pkgconfig_name_log4cplus],[${found_linkname}])
+                AC_SUBST([pkgconfig_name_log4cplus],[""])
                 CFLAGS="${log4cplus_synthetic_cflags} ${CFLAGS}"
                 LDFLAGS="${log4cplus_synthetic_libs} ${LDFLAGS}"
                 LIBS="${log4cplus_synthetic_libs} ${LIBS}"
@@ -225,7 +223,7 @@ dnl END of PKG_CHECK_MODULES and/or direct tests for log4cplus
                 AC_SUBST([log4cplus_LIBS],[${log4cplus_synthetic_libs}])
             ],
         [xno], [
-                AC_SUBST([pkgconfig_name_log4cplus],[log4cplus])
+                AC_SUBST([pkgconfig_name_log4cplus],[""])
             AC_MSG_ERROR([Cannot find pkg-config metadata for log4cplus 0.0.0 or higher])
     ])
 ])
@@ -262,7 +260,6 @@ AS_IF([test x"${search_libfty_common_logging}" = xyes], [
     PRE_SEARCH_LIBS="${LIBS}"
 
     found_pkgconfig=""
-    found_linkname=""
     PKG_CHECK_MODULES([fty_common_logging], [libfty_common_logging >= 0.0.0],
     [
         PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE $fty_common_logging_LIBS"
@@ -292,7 +289,6 @@ AS_IF([test x"${search_libfty_common_logging}" = xyes], [
             [
                 was_fty_common_logging_check_lib_detected=yes
                 PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE -lfty-common-logging"
-                found_linkname="fty-common-logging"
             ],
             [AC_MSG_ERROR([cannot link with -lfty-common-logging, install libfty_common_logging])])
     ])
@@ -300,12 +296,12 @@ AS_IF([test x"${search_libfty_common_logging}" = xyes], [
 dnl END of PKG_CHECK_MODULES and/or direct tests for libfty_common_logging
     AS_CASE(["x${was_fty_common_logging_check_lib_detected}"],
         [xpkgcfg], [
-                AC_SUBST([pkgconfig_name_libfty_common_logging],[${found_pkgconfig}])
+                AC_SUBST([pkgconfig_name_libfty_common_logging],["${found_pkgconfig}"])
                 CFLAGS="${fty_common_logging_CFLAGS} ${CFLAGS}"
                 LIBS="${fty_common_logging_LIBS} ${LIBS}"
             ],
         [xyes], [
-                AC_SUBST([pkgconfig_name_libfty_common_logging],[${found_linkname}])
+                AC_SUBST([pkgconfig_name_libfty_common_logging],[""])
                 CFLAGS="${fty_common_logging_synthetic_cflags} ${CFLAGS}"
                 LDFLAGS="${fty_common_logging_synthetic_libs} ${LDFLAGS}"
                 LIBS="${fty_common_logging_synthetic_libs} ${LIBS}"
@@ -314,7 +310,7 @@ dnl END of PKG_CHECK_MODULES and/or direct tests for libfty_common_logging
                 AC_SUBST([fty_common_logging_LIBS],[${fty_common_logging_synthetic_libs}])
             ],
         [xno], [
-                AC_SUBST([pkgconfig_name_libfty_common_logging],[libfty_common_logging])
+                AC_SUBST([pkgconfig_name_libfty_common_logging],[""])
             AC_MSG_ERROR([Cannot find pkg-config metadata for libfty_common_logging 0.0.0 or higher])
     ])
 ])
