@@ -32,7 +32,7 @@
 namespace UTF8 {
 
 int
-codepoint_size(const char *uchar) {
+codepoint_size (const char *uchar) {
     //ASCII
     if ((((unsigned char) uchar[0]) & 0x80) == 0)
         return 0;
@@ -45,7 +45,7 @@ codepoint_size(const char *uchar) {
 }
 
 size_t
-utf8_len(const char *s) {
+utf8_len (const char *s) {
     size_t len = 0;
     for (; *s; ++s) if ((*s & 0xC0) != 0x80) ++len;
     return len;
@@ -54,7 +54,7 @@ utf8_len(const char *s) {
 //returns a pointer to the beginning of the pos'th utf8 codepoint
 
 const char
-*utf8_index(const char *s, size_t pos) {
+*utf8_index (const char *s, size_t pos) {
     ++pos;
     for (; *s; ++s) {
         if ((*s & 0xC0) != 0x80) --pos;
@@ -64,9 +64,9 @@ const char
 }
 
 int
-utf8_to_codepoint(const char *uchar, char **codepoint) {
+utf8_to_codepoint (const char *uchar, char **codepoint) {
     //codepoint is NOT null-terminated because it makes comparison too cumbersome
-    assert(codepoint);
+    assert (codepoint);
 
     const unsigned char *uuchar = (unsigned char *) uchar;
     static const char hex[] = "0123456789abcdef";
@@ -130,31 +130,31 @@ utf8_to_codepoint(const char *uchar, char **codepoint) {
 }
 
 int
-compare_utf8_codepoint(const char *str_utf8, const char *str_codepoint) {
-    assert(str_utf8);
-    assert(str_codepoint);
-    size_t len = utf8_len(str_utf8);
+compare_utf8_codepoint (const char *str_utf8, const char *str_codepoint) {
+    assert (str_utf8);
+    assert (str_codepoint);
+    size_t len = utf8_len (str_utf8);
 
     int j = 0;
     for (size_t i = 0; i < len; i++) {
-        const char *pos = utf8_index(str_utf8, i);
-        if (codepoint_size(pos) == 0) {
-            log_debug("Comparing '%c' with '%c'\n", *pos, str_codepoint[j]);
+        const char *pos = utf8_index (str_utf8, i);
+        if (codepoint_size (pos) == 0) {
+            log_debug ("Comparing '%c' with '%c'\n", *pos, str_codepoint[j]);
             if (*pos != str_codepoint[j])
                 return 0;
             j++;
         } else {
-            char *codepoint = (char *) malloc(codepoint_size(pos) * sizeof (char));
-            int rv = utf8_to_codepoint(pos, &codepoint);
+            char *codepoint = (char *) malloc (codepoint_size (pos) * sizeof (char));
+            int rv = utf8_to_codepoint (pos, &codepoint);
             if (rv == -1)
-                log_error("Error while converting alert name '%s' for comparison with alert name '%s'\n", str_utf8, str_codepoint);
-            for (int k = 0; k < codepoint_size(pos); k++) {
-                log_debug("codepoint : Comparing '%c' with '%c'\n", codepoint[k], str_codepoint[j]);
-                if (tolower(codepoint[k]) != tolower(str_codepoint[j]))
+                log_error ("Error while converting alert name '%s' for comparison with alert name '%s'\n", str_utf8, str_codepoint);
+            for (int k = 0; k < codepoint_size (pos); k++) {
+                log_debug ("codepoint : Comparing '%c' with '%c'\n", codepoint[k], str_codepoint[j]);
+                if (tolower (codepoint[k]) != tolower (str_codepoint[j]))
                     return 0;
                 j++;
             }
-            free(codepoint);
+            free (codepoint);
         }
     }
     return 1;
@@ -164,8 +164,8 @@ compare_utf8_codepoint(const char *str_utf8, const char *str_codepoint) {
 // -1 - error
 
 int8_t
-utf8_octets(const char *c) {
-    assert(c);
+utf8_octets (const char *c) {
+    assert (c);
     if ((*c & 0x80) == 0) // lead bit is zero, must be a single ascii
         return 1;
     else
@@ -178,7 +178,7 @@ utf8_octets(const char *c) {
         if ((*c & 0xF8) == 0xF0) // 1111 0xxx (4 octets)
         return 4;
     else
-        log_error("Unrecognized utf8 lead byte '%x' in string '%s'", *c, c);
+        log_error ("Unrecognized utf8 lead byte '%x' in string '%s'", *c, c);
     return -1;
 }
 
@@ -187,15 +187,15 @@ utf8_octets(const char *c) {
 // 1 - different
 
 static int
-utf8_compare_octets(const char *s1, const char *s2, size_t pos, size_t length, uint8_t count) {
-    assert(count >= 1 && count <= 4);
-    assert(pos + count <= length);
+utf8_compare_octets (const char *s1, const char *s2, size_t pos, size_t length, uint8_t count) {
+    assert (count >= 1 && count <= 4);
+    assert (pos + count <= length);
 
     for (int i = 0; i < count; i++) {
         const char c1 = s1[pos + i];
         const char c2 = s2[pos + i];
 
-        if ((count == 1 && tolower(c1) != tolower(c2)) ||
+        if ((count == 1 && tolower (c1) != tolower (c2)) ||
                 (count > 1 && c1 != c2))
             return 1;
     }
@@ -206,20 +206,20 @@ utf8_compare_octets(const char *s1, const char *s2, size_t pos, size_t length, u
 // ignore case on ascii (i.e on 1 byte chars)
 
 int
-utf8eq(const char *s1, const char *s2) {
-    assert(s1);
-    assert(s2);
+utf8eq (const char *s1, const char *s2) {
+    assert (s1);
+    assert (s2);
 
-    if (strlen(s1) != strlen(s2))
+    if (strlen (s1) != strlen (s2))
         return 0;
 
     size_t pos = 0;
-    size_t length = strlen(s1);
+    size_t length = strlen (s1);
 
 
     while (pos < length) {
-        uint8_t s1_octets = utf8_octets(s1 + pos);
-        uint8_t s2_octets = utf8_octets(s2 + pos);
+        uint8_t s1_octets = utf8_octets (s1 + pos);
+        uint8_t s2_octets = utf8_octets (s2 + pos);
 
         if (s1_octets == -1 || s2_octets == -1)
             return -1;
@@ -227,7 +227,7 @@ utf8eq(const char *s1, const char *s2) {
         if (s1_octets != s2_octets)
             return 0;
 
-        if (utf8_compare_octets(s1, s2, pos, length, s1_octets) == 1)
+        if (utf8_compare_octets (s1, s2, pos, length, s1_octets) == 1)
             return 0;
 
         pos = pos + s1_octets;
@@ -290,7 +290,7 @@ escape (const char *string) {
             // allocate memory for "\u" + 4 hex digits + terminator
             // allocating 8 bytes just for performance doesn't make sense
             char *codepoint = (char *) calloc (7, sizeof (char));
-            // calloc() takes care of zero termination, which utf8_to_codepoint() doesn't do
+            // calloc () takes care of zero termination, which utf8_to_codepoint () doesn't do
             UTF8::utf8_to_codepoint (string + i, &codepoint);
 
             std::string codepoint_str (codepoint);
@@ -356,11 +356,30 @@ s_jsonify_translation_string (const char *key, va_list args)
             std::string var_str_ref = "{{" + var_str + "}}";
             std::string format;
             // copy the formatting directive
-            while (*key != ' ' && *key != '\0') {
-                format.append (key, 1);
-                key++;
-                if (format == "%s")
-                    break;
+            bool loop_control = true;
+            while (loop_control) {
+                switch (*key) {
+                    case ' ':
+                    case '\0':
+                    case '"':
+                    case '(':
+                    case ')':
+                    case '[':
+                    case ']':
+                        loop_control = false;
+                        break;
+                    case '\'':
+                        if (*(key - 1) != '%') {
+                            loop_control = false;
+                            break;
+                        }
+                    default:
+                        format.append (key, 1);
+                        key++;
+                        if (format == "%s")
+                            loop_control = false;
+                        break;
+                }
             }
 
             var_entry = " \"" + var_str + "\": \"" + format + "\",";
@@ -508,13 +527,13 @@ fty_common_utf8_test (bool verbose)
     //  utf8eq test
     //  @end
     {
-        assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "\u017dlu\u0165ou\u010dk\xc3\xbd K\u016f\xc5\x88") == 1);
-        assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň") == 1);
-        assert(UTF8::utf8eq("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň ") == 0);
-        assert(UTF8::utf8eq("Ka\xcc\x81rol", "K\xc3\xa1rol") == 0);
-        assert(UTF8::utf8eq("супер test", "\u0441\u0443\u043f\u0435\u0440 Test") == 1);
-        assert(UTF8::utf8eq("ŽlUťOUčKý kůň", "ŽlUťOUčKý kůn") == 0);
-        log_debug("utf8eq: OK");
+        assert (UTF8::utf8eq ("ŽlUťOUčKý kůň", "\u017dlu\u0165ou\u010dk\xc3\xbd K\u016f\xc5\x88") == 1);
+        assert (UTF8::utf8eq ("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň") == 1);
+        assert (UTF8::utf8eq ("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň ") == 0);
+        assert (UTF8::utf8eq ("Ka\xcc\x81rol", "K\xc3\xa1rol") == 0);
+        assert (UTF8::utf8eq ("супер test", "\u0441\u0443\u043f\u0435\u0440 Test") == 1);
+        assert (UTF8::utf8eq ("ŽlUťOUčKý kůň", "ŽlUťOUčKý kůn") == 0);
+        log_debug ("utf8eq: OK");
     }
 
     // utils::json::escape (<first>) should equal <second>
