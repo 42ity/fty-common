@@ -17,6 +17,7 @@
         <!-- option name = "clangformat_require_good" value = "1" / -->
         <option name = "clangformat_allow_failures" value = "1" />
         <option name = "use_pkg_deps_prereqs_source" value = "0" />
+        <option name = "require_gitignore" value = "1" />
     </target>
     <target name = "jenkins" >
         <option name = "agent_label" value = "devel-image &amp;&amp; x86_64" />
@@ -24,14 +25,19 @@
         <option name = "test_cppcheck" value = "1" />
         <option name = "build_docs" value = "1" />
         <option name = "dist_docs" value = "1" />
+
+        <!-- Try to avoid avalanche rebuilds of same code on our CI -->
+        <option name = "use_earlymilestone" value = "1" />
+        <option name = "use_build_nonconcurrent" value = "1" />
+        <option name = "use_checkout_explicit" value = "1" />
     </target>
+
+    <classfilename use-cxx = "true" source-extension = "cc" header-extension = "h"
+        pretty-print = "no" keep-tree = "true" />
 
     <include filename = "license.xml" />
     <version major = "1" minor = "0" patch = "0" />
     <abi current = "1" revision = "0" age = "0" />
-
-    <classfilename use-cxx = "true" source-extension = "cc" header-extension = "h"
-        pretty-print = "no" keep-tree = "true" />
 
     <use project = "fty-common-logging" libname = "libfty_common_logging" header = "fty_log.h"
         repository = "https://github.com/42ity/fty-common-logging.git"
