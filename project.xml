@@ -11,7 +11,7 @@
 
     <target name = "debian" />
     <target name = "redhat" />
-    <target name = "travis">
+    <target name = "travis" >
         <!-- option name = "clangformat_implem" value = "autotools" / -->
         <option name = "use_cmake" value = "0" />
         <!-- option name = "clangformat_require_good" value = "1" / -->
@@ -33,7 +33,7 @@
     <classfilename use-cxx = "true" source-extension = "cc" header-extension = "h"
         pretty-print = "no" keep-tree = "true" />
 
-    <use project = "fty-common-logging" libname = "libfty_common_logging" header="fty_log.h"
+    <use project = "fty-common-logging" libname = "libfty_common_logging" header = "fty_log.h"
         repository = "https://github.com/42ity/fty-common-logging.git"
         release = "master"
         test = "fty_common_logging_selftest" >
