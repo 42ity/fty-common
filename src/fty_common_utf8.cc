@@ -448,6 +448,9 @@ s_jsonify_translation_string (const char *key, va_list args)
             object_end = std::string::npos;
         }
         size_t insert_end = json_str.find ("}\"", insert_start);
+        while (insert_end != std::string::npos && insert_end != object_end) {
+            insert_end = json_str.find ("}\"", insert_end + 1);
+        }
         if (insert_end == object_end) {
             json_str.replace (insert_start, 2, " {");
             json_str.replace (insert_end, 2, "} ");
@@ -630,6 +633,7 @@ fty_common_utf8_test (bool verbose)
     const char *translation_string6 = "%s. Text used as a key: %s";
     const char *translation_string7 = "Internal Server Error. %s";
     const char *translation_string8 = "Internal Server Error. %s %s";
+    const char *translation_string_badval = "Parameter %s has bad value. Received %s. Expected %s";
 
     std::string output1 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"foo\", \"var2\": \"5\" } }");
     std::string output2 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"10.25\", \"var2\": \"256\" } }");
@@ -641,6 +645,8 @@ fty_common_utf8_test (bool verbose)
     std::string output7 ("{ \"key\": \"Internal Server Error. {{var1}}\", \"variables\": { \"var1\":  { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }  } }");
     std::string output8 ("{ \"key\": \"Internal Server Error. {{var1}} {{var2}}\", \"variables\": { \"var1\":  { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } } , \"var2\":  { \"key\": \"Unexpected param\" }  } }");
     std::string output9 ("{ \"key\": \"Internal Server Error. {{var1}}\", \"variables\": { \"var1\":  { \"key\": \"Timed out waiting for message.\" }  } }");
+    std::string output_badval ("{ \"key\": \"Parameter {{var1}} has bad value. Received {{var2}}. Expected {{var3}}\", \"variables\": { \"var1\": \"state\", \"var2\":  { \"key\": \"value '{{var1}}'\", \"variables\": { \"var1\": \"XYZ\" } } , \"var3\":  { \"key\": \"one of the following values {{var1}}\", \"variables\": { \"var1\": \"[ ALL | ALL-ACTIVE | ACTIVE | ACK-WIP | ACK-IGNORE | ACK-PAUSE | ACK-SILENCE | RESOLVED ]\" } }  } }");
+
     {
         log_debug ("fty-common-utf8:jsonify_translation_string: Test #1");
         log_debug ("Manual comparison");
@@ -677,6 +683,9 @@ fty_common_utf8_test (bool verbose)
 
         json = UTF8::jsonify_translation_string (translation_string7, "{ \"key\": \"Timed out waiting for message.\" }");
         assert (json == output9);
+
+        json = UTF8::jsonify_translation_string (translation_string_badval, "state", "{ \"key\": \"value '{{var1}}'\", \"variables\": { \"var1\": \"XYZ\" } }", "{ \"key\": \"one of the following values {{var1}}\", \"variables\": { \"var1\": \"[ ALL | ALL-ACTIVE | ACTIVE | ACK-WIP | ACK-IGNORE | ACK-PAUSE | ACK-SILENCE | RESOLVED ]\" } }");
+        assert (json == output_badval);
         printf ("OK\n");
     }
 
@@ -726,6 +735,10 @@ fty_common_utf8_test (bool verbose)
 
         json = utf8_jsonify_translation_string (translation_string7, "{ \"key\": \"Timed out waiting for message.\" }");
         assert (streq (json, output9.c_str ()));
+        free (json);
+
+        json = utf8_jsonify_translation_string (translation_string_badval, "state", "{ \"key\": \"value '{{var1}}'\", \"variables\": { \"var1\": \"XYZ\" } }", "{ \"key\": \"one of the following values {{var1}}\", \"variables\": { \"var1\": \"[ ALL | ALL-ACTIVE | ACTIVE | ACK-WIP | ACK-IGNORE | ACK-PAUSE | ACK-SILENCE | RESOLVED ]\" } }");
+        assert ( streq (json, output_badval.c_str ()));
         free (json);
         printf ("OK\n");
     }
