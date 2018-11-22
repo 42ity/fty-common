@@ -26,6 +26,9 @@ Build-Depends: debhelper (>= 9),
     pkg-config,
     liblog4cplus-dev,
     libfty-common-logging-dev,
+    libsodium-dev,
+    libzmq3-dev,
+    libczmq-dev,
     asciidoc-base | asciidoc, xmlto,
     dh-autoreconf
 
@@ -43,6 +46,9 @@ Depends:
     ${misc:Depends},
     liblog4cplus-dev,
     libfty-common-logging-dev,
+    libsodium-dev,
+    libzmq3-dev,
+    libczmq-dev,
     libfty-common1 (= ${binary:Version})
 Description: fty-common development tools
  This package contains development files for fty-common:

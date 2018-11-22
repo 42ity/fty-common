@@ -34,6 +34,7 @@
 extern "C"
 {
 #endif
+    int fty_get_polling_interval();
 
 
 #ifdef __cplusplus

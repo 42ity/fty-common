@@ -30,6 +30,14 @@
 #include <stdio.h>
 
 
+int fty_get_polling_interval()
+{
+    zconfig_t *config = zconfig_load("/etc/fty-nut/fty-nut.cfg");
+    int val = strtol(zconfig_get(config, "nut/polling_interval", "30"), NULL, 10);
+    zconfig_destroy(&config);
+    return val;
+}
+
 void
 fty_common_base_test (bool verbose)
 {

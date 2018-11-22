@@ -49,6 +49,9 @@ BuildRequires:  xmlto
 BuildRequires:  gcc-c++
 BuildRequires:  log4cplus-devel
 BuildRequires:  fty-common-logging-devel
+BuildRequires:  libsodium-devel
+BuildRequires:  zeromq-devel
+BuildRequires:  czmq-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
@@ -74,6 +77,9 @@ Group:          System/Libraries
 Requires:       libfty_common1 = %{version}
 Requires:       log4cplus-devel
 Requires:       fty-common-logging-devel
+Requires:       libsodium-devel
+Requires:       zeromq-devel
+Requires:       czmq-devel
 
 %description devel
 provides common tools for agents development tools

@@ -8,6 +8,9 @@ Build-Depends: debhelper (>= 9),
     pkg-config,
     liblog4cplus-dev,
     libfty-common-logging-dev,
+    libsodium-dev,
+    libzmq3-dev,
+    libczmq-dev,
     asciidoc-base | asciidoc, xmlto,
     dh-autoreconf
 
