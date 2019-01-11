@@ -311,6 +311,26 @@ escape (const std::string& before) {
     return escape (before.c_str ());
 }
 
+std::string
+bash_escape (std::string& param)
+{
+    std::string escape_chars (" \t!\"#$&'()*,;<=>?[\\]^`{|}~");
+    std::string escaped;
+    int start = 0;
+    while (true) {
+        int end = param.find_first_of (escape_chars, start);
+        if (end == std::string::npos) {
+            escaped += param.substr (start);
+            break;
+        }
+        int length = end - start;
+        escaped += param.substr (start, length) + "\\" + param[end];
+        start = end + 1;
+    }
+
+    return escaped;
+}
+
 // This function converts string expressed as ("Text used as a key with %s and %d", var1, var2, ...) into JSON format:
 // {
 //  "key" : "Text used as a key with $var1$ and $var2$",
@@ -486,6 +506,17 @@ char *
 utf8_escape (const char *string)
 {
     std::string escaped_str = UTF8::escape (string);
+    size_t length = escaped_str.length ();
+    char *escaped = (char *) zmalloc (length + 1);
+    strcpy (escaped, escaped_str.c_str ());
+    return escaped;
+}
+
+char *
+utf8_bash_escape (const char *string)
+{
+    std::string string_str (string);
+    std::string escaped_str = UTF8::bash_escape (string_str);
     size_t length = escaped_str.length ();
     char *escaped = (char *) zmalloc (length + 1);
     strcpy (escaped, escaped_str.c_str ());
