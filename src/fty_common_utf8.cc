@@ -316,14 +316,14 @@ bash_escape (std::string& param)
 {
     std::string escape_chars (" \t!\"#$&'()*,;<=>?[\\]^`{|}~");
     std::string escaped;
-    int start = 0;
+    size_t start = 0;
     while (true) {
-        int end = param.find_first_of (escape_chars, start);
+        size_t end = param.find_first_of (escape_chars, start);
         if (end == std::string::npos) {
             escaped += param.substr (start);
             break;
         }
-        int length = end - start;
+        size_t length = end - start;
         escaped += param.substr (start, length) + "\\" + param[end];
         start = end + 1;
     }
