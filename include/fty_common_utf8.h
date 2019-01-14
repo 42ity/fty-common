@@ -45,6 +45,9 @@ extern "C" {
 // C wrapper for UTF8::escape
 char* utf8_escape(const char *string);
 
+// C wrapper for UTF8::escape
+char* utf8_bash_escape(const char *string);
+
 // C wrapper for UTF8::jsonify_translation_string
 char *
 utf8_jsonify_translation_string (const char *key, ...);
@@ -77,6 +80,10 @@ jsonify_translation_string (const char *key, ...);
 // Convert translation string + va_list into JSON
 std::string
 vajsonify_translation_string (const char *key, va_list args);
+
+// escape string for use as a bash command parameter
+std::string
+bash_escape (std::string& param);
 
 }
 
