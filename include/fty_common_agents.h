@@ -28,6 +28,7 @@ extern "C" {
 
 #define AGENT_FTY_ALERT_ENGINE              "fty-alert-engine-server" // FIXME: to be renamed
 #define AGENT_FTY_ALERT_FLEXIBLE            "fty-alert-flexible"
+#define AGENT_FTY_ALERT_ACTIONS             "fty-alert-actions"
 #define AGENT_FTY_ALERT_LIST                "fty-alert-list"
 #define AGENT_FTY_ASSET                     "asset-agent"        // FIXME: to be renamed
 #define AGENT_FTY_DISCOVERY                 "fty-discovery"
