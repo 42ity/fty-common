@@ -12,8 +12,7 @@ Name: libfty_common
 Description: Provides common tools for agents
 Version: @VERSION@
 
-Requires:@pkgconfig_name_log4cplus@ @pkgconfig_name_libfty_common_logging@
-
+Requires.private: @pkg_config_names_private@
 Libs: -L${libdir} -lfty_common
 Cflags: -I${includedir} @pkg_config_defines@
 Libs.private: @pkg_config_libs_private@
