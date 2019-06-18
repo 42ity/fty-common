@@ -22,7 +22,7 @@
         <option name = "require_gitignore" value = "1" />
     </target>
     <target name = "jenkins" >
-        <option name = "agent_label" value = "devel-image &amp;&amp; x86_64" />
+        <option name = "agent_label" value = "devel-image-ipm_2.0.0 &amp;&amp; x86_64" />
         <option name = "triggers_pollSCM" value = "H/2 * * * *" />
         <option name = "test_cppcheck" value = "1" />
         <option name = "build_docs" value = "1" />
@@ -46,7 +46,7 @@
     <use project = "fty-common-logging" libname = "libfty_common_logging"
         header = "fty_log.h"
         repository = "https://github.com/42ity/fty-common-logging.git"
-        release = "master"
+        release = "release/IPM-2.0.0"
         test = "fty_common_logging_selftest" >
 
         <!-- Note: pure C projects should use clogger.h, C++ use logger.h -->
@@ -54,7 +54,7 @@
             header = "log4cplus/logger.h"
             test = "appender_test"
             repository = "https://github.com/42ity/log4cplus.git"
-            release = "1.1.2-FTY-master"
+            release = "release/IPM-2.0.0"
             />
     </use>
 
