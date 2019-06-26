@@ -74,7 +74,7 @@ typeid_to_type (uint16_t type_id)
         case asset_type::DEVICE:
             return "device";
         default:
-            return "unknown";
+            return "N_A";
     }
 }
 
@@ -149,6 +149,9 @@ subtype_to_subtypeid (const std::string &subtype)
     else if(st == "n_a") {
         return asset_subtype::N_A;
     }
+    else if(st == "N_A") {
+        return asset_subtype::N_A;
+    }
     else if(st == "") {
         return asset_subtype::N_A;
     }
@@ -201,7 +204,7 @@ subtypeid_to_subtype (uint16_t subtype_id)
         case asset_subtype::N_A:
             return "N_A";
         default:
-            return "unknown";
+            return "N_A";
     }
 }
 
