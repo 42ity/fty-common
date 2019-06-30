@@ -1,7 +1,9 @@
 /*  =========================================================================
     fty_common_asset_types - Definitions of asset types and subtypes
 
-    Copyright (C) 2014 - 2018 Eaton
+    Copyright (C)
+        2014 - 2018 Eaton
+        2019        Arnaud Quette <arnaud.quette@free.fr>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -60,7 +62,8 @@ namespace persist {
         PATCHPANEL,
         OTHER,
         SENSORGPIO,
-        GPO
+        GPO,
+        POWERMETER
     };
 
     enum asset_operation
@@ -105,6 +108,9 @@ namespace persist {
 
     bool
     is_ups(int x);
+
+    bool
+    is_power_meter(int x);
 
     bool
     is_container (std::string asset_type);

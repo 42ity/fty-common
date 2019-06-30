@@ -1,7 +1,9 @@
 /*  =========================================================================
     fty_common_asset_types - Definitions of asset types and subtypes
 
-    Copyright (C) 2014 - 2018 Eaton
+    Copyright (C)
+        2014 - 2018 Eaton
+        2019        Arnaud Quette <arnaud.quette@free.fr>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -104,6 +106,9 @@ subtype_to_subtypeid (const std::string &subtype)
     else if(st == "sts") {
         return asset_subtype::STS;
     }
+    else if(st == "power-meter") {
+        return asset_subtype::POWERMETER;
+    }
     else if(st == "switch") {
         return asset_subtype::SWITCH;
     }
@@ -174,6 +179,8 @@ subtypeid_to_subtype (uint16_t subtype_id)
             return "epdu";
         case asset_subtype::PDU:
             return "pdu";
+        case asset_subtype::POWERMETER:
+            return "power-meter";
         case asset_subtype::SERVER:
             return "server";
         case asset_subtype::SWITCH:
@@ -270,6 +277,11 @@ is_dc(int x) {
 bool
 is_ups(int x) {
     return x == asset_subtype::UPS;
+}
+
+bool
+is_power_meter(int x) {
+    return x == asset_subtype::POWERMETER;
 }
 
 
