@@ -106,7 +106,7 @@ subtype_to_subtypeid (const std::string &subtype)
     else if(st == "sts") {
         return asset_subtype::STS;
     }
-    else if(st == "power-meter") {
+    else if(st == "powermeter") {
         return asset_subtype::POWERMETER;
     }
     else if(st == "switch") {
@@ -180,7 +180,7 @@ subtypeid_to_subtype (uint16_t subtype_id)
         case asset_subtype::PDU:
             return "pdu";
         case asset_subtype::POWERMETER:
-            return "power-meter";
+            return "powermeter";
         case asset_subtype::SERVER:
             return "server";
         case asset_subtype::SWITCH:
