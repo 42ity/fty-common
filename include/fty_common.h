@@ -22,6 +22,13 @@
 #ifndef FTY_COMMON_H_H_INCLUDED
 #define FTY_COMMON_H_H_INCLUDED
 
+// Afwul hack, but I need exceptions to be valid for whole content
+#ifdef __cplusplus
+#include <exception>
+/// general IPM exception
+class IPMException : public std::exception { };
+#endif // __cplusplus
+
 //  Include the project library file
 #include "fty_common_library.h"
 

@@ -1,9 +1,12 @@
 # fty-common
-Library providing :
+
+This is a library providing :
 * Mutual methods and functions that can be used by any fty-agent
 
 ## How to build
-To build fty-common project run:
+
+To build the `fty-common` project run:
+
 ```bash
 ./autogen.sh [clean]
 ./configure
@@ -12,31 +15,40 @@ make check # to run self-test
 ```
 ## How to use Common functions
 ### For agent coded with C++ :
-In the main .h file add #include \<fty_common.h\>
+In the main `.h` file add
+````
+#include \<fty_common.h\>
+````
 
 ### For agents coded with C :
-In the main .h file add #include \<fty_common_base.h\>
+In the main `.h` file add
+````
+#include \<fty_common_base.h\>
+````
 
 ## List of Available Headers
-* fty_common_agents.h -  defines for agent names
-* fty_common_asset_types.h -  asset types, subtypes and related functions
-* fty_common_base.h - streq, STR definitions
-* fty_common_filesystem.h - functions for creating directory, checking content of dir, ...
-* fty_common.h - collection of all headers
-* fty_common_macros.h - contains shared macros
-* fty_common_str_defs.h - definition of strings constants
+* fty\_common\_agents.h -  defines for agent names
+* fty\_common\_asset\_types.h -  asset types, subtypes and related functions
+* fty\_common\_base.h - streq, STR definitions
+* fty\_common\_filesystem.h - functions for creating directory, checking content of dir, ...
+* fty\_common.h - collection of all headers
+* fty\_common\_json.h - basic JSON parser
+* fty\_common\_macros.h - contains shared macros
+* fty\_common\_str\_defs.h - definition of strings constants
+* fty\_commom\_utf8.h - functions for UTF-8 and multiple languages support
 
-## How compile using fty-common
+## How to compile and test projects using fty-common by 42ITy standards
 
 ### project.xml
-Add this bloc in the project.xml file :
+Add this block in the `project.xml` file :
 
 ````
-<use project = "fty-common" libname = "libfty_common" header="fty_common.h"
+<use project = "fty-common" libname = "libfty_common" header = "fty_common.h"
     repository = "https://github.com/42ity/fty-common.git"
-    release = "master" >
+    release = "master"
+    test = "fty_commmon_selftest" >
 
-    <use project = "fty-common-logging" libname = "libfty_common_logging" header="fty_log.h"
+    <use project = "fty-common-logging" libname = "libfty_common_logging" header = "fty_log.h"
         repository = "https://github.com/42ity/fty-common-logging.git"
         release = "master"
         test = "fty_common_logging_selftest" >
@@ -46,9 +58,8 @@ Add this bloc in the project.xml file :
             release = "1.1.2-FTY-master"
             />
     </use>
-
 </use>
 ````
 
-The header value must be change from fty_common.h to fty_common_base.h for C project.
-In this use section, remove the dependecy already needed byt the agent/library.
+NOTE: The header value must be changed from `fty_common.h` to
+`fty_common_base.h` for a C project.

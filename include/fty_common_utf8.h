@@ -23,9 +23,17 @@
 #define FTY_COMMON_UTF8_H_INCLUDED
 
 #ifdef __cplusplus
+
 #include <cstdint>
 #include <string>
+
+#else
+
+#include <stdint.h>
+
 #endif
+
+#include <stdarg.h>
 
 //  Self test of this class
 void fty_common_utf8_test (bool verbose);
@@ -37,10 +45,13 @@ extern "C" {
 // C wrapper for UTF8::escape
 char* utf8_escape(const char *string);
 
+// C wrapper for UTF8::escape
+char* utf8_bash_escape(const char *string);
+
 // C wrapper for UTF8::jsonify_translation_string
 char *
 utf8_jsonify_translation_string (const char *key, ...);
-    
+
 #ifdef __cplusplus
 }
 #endif
@@ -62,11 +73,20 @@ std::string escape(const char *string);
 // Returns escaped json on success, "(null_ptr)" string on null argument
 std::string escape(const std::string &before);
 
-// Convert translation string into JSON
+// Convert translation string + variable number of args into JSON
 std::string
 jsonify_translation_string (const char *key, ...);
-    
-#endif
+
+// Convert translation string + va_list into JSON
+std::string
+vajsonify_translation_string (const char *key, va_list args);
+
+// escape string for use as a bash command parameter
+std::string
+bash_escape (std::string& param);
+
 }
+
+#endif
 
 #endif
