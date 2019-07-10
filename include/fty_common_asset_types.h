@@ -63,7 +63,7 @@ namespace persist {
         OTHER,
         SENSORGPIO,
         GPO,
-        POWERMETER
+        POWERMETER=55   // FIXME: get rid of this, load from the DB!!!
     };
 
     enum asset_operation
