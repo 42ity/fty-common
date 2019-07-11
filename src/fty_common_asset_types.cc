@@ -280,7 +280,7 @@ is_ups(int x) {
 }
 
 bool
-is_power_meter(int x) {
+is_powermeter(int x) {
     return x == asset_subtype::POWERMETER;
 }
 

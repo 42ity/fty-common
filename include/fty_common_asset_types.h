@@ -110,7 +110,7 @@ namespace persist {
     is_ups(int x);
 
     bool
-    is_power_meter(int x);
+    is_powermeter(int x);
 
     bool
     is_container (std::string asset_type);
