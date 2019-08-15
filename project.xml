@@ -67,5 +67,7 @@
     <class name = "fty_common_utf8">Functions for handling UTF-8 encoded strings</class>
     <header name = "fty_common_agents" stable = "1" >Common definitions for agents</header>
     <header name = "fty_common_macros" stable = "1" >System-wide preprocessor macros</header>
+    
+    <header name = "fty_common_client" stable = "1" >Interfaces for server clients</header>
 
 </project>
