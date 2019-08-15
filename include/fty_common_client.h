@@ -44,8 +44,8 @@ namespace fty
     class StreamSubscriber
     {
     public:
-        virtual void subscrib( std::function<void(const std::vector<std::string> &)> callback) = 0;
-        virtual void unsubscrib(uint32_t subId) = 0;
+        virtual void subscribe( std::function<void(const std::vector<std::string> &)> callback) = 0;
+        virtual void unsubscribe(uint32_t subId) = 0;
     };
     
 }; //namespace fty
