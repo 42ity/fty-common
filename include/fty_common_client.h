@@ -48,6 +48,6 @@ namespace fty
         virtual void unsubscribe(uint32_t subId) = 0;
     };
     
-}; //namespace fty
+} //namespace fty
 
 #endif
