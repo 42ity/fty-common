@@ -50,6 +50,9 @@ extern "C" {
 #define AGENT_FTY_SENSOR_GPIO               "fty-sensor-gpio"
 #define AGENT_FTY_WARRANTY                  "warranty-metric"    // FIXME: to be renamed
 
+#define AGENT_FTY_SECURITY_WALLET           "security-wallet"
+#define AGENT_FTY_CREDENTIAL_ASSET_MAPPING  "credential-asset-mapping"
+
 #ifdef __cplusplus
 }
 #endif
