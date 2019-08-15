@@ -28,7 +28,8 @@
 
 namespace fty
 {
-    
+    using Callback = std::function<void(const std::vector<std::string> &)>;
+     
     class SyncClient
     {
     public:
@@ -44,7 +45,7 @@ namespace fty
     class StreamSubscriber
     {
     public:
-        virtual void subscribe( std::function<void(const std::vector<std::string> &)> callback) = 0;
+        virtual uint32_t subscribe( Callback callback) = 0;
         virtual void unsubscribe(uint32_t subId) = 0;
     };
     
