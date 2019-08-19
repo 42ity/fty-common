@@ -117,6 +117,7 @@ typedef struct _fty_common_utf8_t fty_common_utf8_t;
 #include "fty_common_agents.h"
 #include "fty_common_macros.h"
 #include "fty_common_client.h"
+#include "fty_common_sync_server.h"
 #ifdef FTY_COMMON_BUILD_DRAFT_API
 #include "fty_common_base.h"
 #include "fty_common_asset_types.h"
