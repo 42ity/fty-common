@@ -40,13 +40,10 @@ typedef struct {
 static test_item_t
 all_tests [] = {
 // Tests for stable public classes:
+    { "fty_common_base", fty_common_base_test, true, true, NULL },
+    { "fty_common_json", fty_common_json_test, true, true, NULL },
+    { "fty_common_utf8", fty_common_utf8_test, true, true, NULL },
     { "fty_common_unit_tests", fty_common_unit_tests_test, true, true, NULL },
-#ifdef FTY_COMMON_BUILD_DRAFT_API
-// Tests for draft public classes:
-    { "fty_common_base", fty_common_base_test, false, true, NULL },
-    { "fty_common_json", fty_common_json_test, false, true, NULL },
-    { "fty_common_utf8", fty_common_utf8_test, false, true, NULL },
-#endif // FTY_COMMON_BUILD_DRAFT_API
     {NULL, NULL, 0, 0, NULL}          //  Sentinel
 };
 
