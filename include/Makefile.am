@@ -7,6 +7,8 @@ nobase_include_HEADERS = \
     fty_common_agents.h \
     fty_common_macros.h \
     fty_common_client.h \
+    fty_common_sync_server.h \
+    fty_common_unit_tests.h \
     fty_common_library.h
 
 if ENABLE_DRAFTS
