@@ -58,13 +58,13 @@
             />
     </use>
 
-    <class name = "fty_common_base" >Singleton object and common functions</class>
+    <class name = "fty_common_base" stable = "1" >Singleton object and common functions</class>
 
-    <class name = "fty_common_asset_types" selftest = "0"> Definitions of asset types and subtypes</class>
-    <class name = "fty_common_str_defs" selftest = "0" />
-    <class name = "fty_common_filesystem" selftest = "0" />
-    <class name = "fty_common_json" selftest = "1">Functions for parsing JSON strings</class>
-    <class name = "fty_common_utf8">Functions for handling UTF-8 encoded strings</class>
+    <class name = "fty_common_asset_types" selftest = "0" stable = "1" > Definitions of asset types and subtypes</class>
+    <class name = "fty_common_str_defs" selftest = "0" stable = "1" />
+    <class name = "fty_common_filesystem" selftest = "0" stable = "1" />
+    <class name = "fty_common_json" selftest = "1"stable = "1" >Functions for parsing JSON strings</class>
+    <class name = "fty_common_utf8" stable = "1" >Functions for handling UTF-8 encoded strings</class>
     <header name = "fty_common_agents" stable = "1" >Common definitions for agents</header>
     <header name = "fty_common_macros" stable = "1" >System-wide preprocessor macros</header>
     

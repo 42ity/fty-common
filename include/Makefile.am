@@ -8,19 +8,15 @@ nobase_include_HEADERS = \
     fty_common_macros.h \
     fty_common_client.h \
     fty_common_sync_server.h \
-    fty_common_unit_tests.h \
-    fty_common_library.h
-
-if ENABLE_DRAFTS
-nobase_include_HEADERS += \
     fty_common_base.h \
     fty_common_asset_types.h \
     fty_common_str_defs.h \
     fty_common_filesystem.h \
     fty_common_json.h \
-    fty_common_utf8.h
+    fty_common_utf8.h \
+    fty_common_unit_tests.h \
+    fty_common_library.h
 
-endif
 
 
 ################################################################################

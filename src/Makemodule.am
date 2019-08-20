@@ -13,19 +13,14 @@ lib_LTLIBRARIES += src/libfty_common.la
 pkgconfig_DATA = src/libfty_common.pc
 
 src_libfty_common_la_SOURCES = \
-    src/fty_common_unit_tests.cc \
-    src/platform.h
-
-if ENABLE_DRAFTS
-src_libfty_common_la_SOURCES += \
     src/fty_common_base.cc \
     src/fty_common_asset_types.cc \
     src/fty_common_str_defs.cc \
     src/fty_common_filesystem.cc \
     src/fty_common_json.cc \
-    src/fty_common_utf8.cc
-
-endif
+    src/fty_common_utf8.cc \
+    src/fty_common_unit_tests.cc \
+    src/platform.h
 
 if ENABLE_DRAFTS
 src_libfty_common_la_SOURCES += \
