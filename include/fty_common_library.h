@@ -90,12 +90,10 @@
 #   endif
 #endif
 
-//  Project has no stable classes, so we build the draft API
-#undef  FTY_COMMON_BUILD_DRAFT_API
-#define FTY_COMMON_BUILD_DRAFT_API
-
 //  Opaque class structures to allow forward references
 //  These classes are stable or legacy and built in all releases
+typedef struct _fty_common_unit_tests_t fty_common_unit_tests_t;
+#define FTY_COMMON_UNIT_TESTS_T_DEFINED
 //  Draft classes are by default not built in stable releases
 #ifdef FTY_COMMON_BUILD_DRAFT_API
 typedef struct _fty_common_base_t fty_common_base_t;
@@ -118,6 +116,7 @@ typedef struct _fty_common_utf8_t fty_common_utf8_t;
 #include "fty_common_macros.h"
 #include "fty_common_client.h"
 #include "fty_common_sync_server.h"
+#include "fty_common_unit_tests.h"
 #ifdef FTY_COMMON_BUILD_DRAFT_API
 #include "fty_common_base.h"
 #include "fty_common_asset_types.h"

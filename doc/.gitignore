@@ -23,6 +23,8 @@ fty_common_json.txt
 fty_common_json.doc
 fty_common_utf8.txt
 fty_common_utf8.doc
+fty_common_unit_tests.txt
+fty_common_unit_tests.doc
 
 # Make sure to track the manually maintained project description
 !*.adoc

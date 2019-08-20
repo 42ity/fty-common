@@ -13,6 +13,7 @@ lib_LTLIBRARIES += src/libfty_common.la
 pkgconfig_DATA = src/libfty_common.pc
 
 src_libfty_common_la_SOURCES = \
+    src/fty_common_unit_tests.cc \
     src/platform.h
 
 if ENABLE_DRAFTS

@@ -70,4 +70,6 @@
     
     <header name = "fty_common_client" stable = "1" >Interfaces for server clients</header>
     <header name = "fty_common_sync_server" stable = "1" >Interface for basic synchromous server</header>
+    
+    <class name = "fty_common_unit_tests" stable = "1" >Implementation of interface useful for unit test</class>
 </project>
