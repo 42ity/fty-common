@@ -25,6 +25,9 @@
 #include "fty_common_sync_server.h"
 #include "fty_common_client.h"
 
+#include <thread>
+#include <mutex>
+
 namespace fty
 {
     /**
@@ -35,7 +38,6 @@ namespace fty
     class EchoServer final : public SyncServer
     {
     public:
-        explicit EchoServer();
         Payload handleRequest(const Sender & sender, const Payload & payload) override;
     };
     
@@ -63,12 +65,15 @@ namespace fty
     class StreamClientTest final : public StreamPublisher, public StreamSubscriber
     {
     public:
+        ~StreamClientTest();
         virtual void publish(const Payload & payload) override;
         virtual uint32_t subscribe( Callback callback) override;
         virtual void unsubscribe(uint32_t subId) override;
         
     private:
         Callback m_callback;
+        Payload m_lastPayload;
+        std::thread m_listernerThread;
     };
 } // namespace fty
 

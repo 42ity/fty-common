@@ -27,11 +27,10 @@
 */
 
 #include "fty_common_classes.h"
+#include <thread>
 
 namespace fty
 {
-    EchoServer::EchoServer(){}
-
     Payload EchoServer::handleRequest(const Sender & /*sender*/, const Payload & payload)
     {
         return payload;
@@ -49,23 +48,47 @@ namespace fty
     }
     
 /*---------------------------------------------------------------*/
-    
+    StreamClientTest::~StreamClientTest()
+    {
+        if(m_listernerThread.joinable())
+        {
+            m_listernerThread.join();
+        }
+    }
+        
     void StreamClientTest::publish(const Payload & payload)
     {
         if(m_callback)
         {
-            m_callback(payload);
+            if(m_listernerThread.joinable())
+            {
+                m_listernerThread.join();
+            }
+            
+            m_lastPayload = payload;
+            
+            m_listernerThread = std::thread(m_callback, m_lastPayload);
         }
     }
 
     uint32_t StreamClientTest::subscribe( Callback callback)
     {
+        if(m_listernerThread.joinable())
+        {
+            m_listernerThread.join();
+        }
+        
         m_callback = callback;
         return 0;
     }
 
     void StreamClientTest::unsubscribe(uint32_t subId)
     {
+        if(m_listernerThread.joinable())
+        {
+            m_listernerThread.join();
+        }
+                
         m_callback = nullptr;
     }
 
@@ -86,14 +109,22 @@ namespace fty
 //    ... use the "filename" for I/O ...
 //    zstr_free (&filename);
 // This way the same "filename" variable can be reused for many subtests.
+#include <chrono>
+#include <condition_variable>
+
 #define SELFTEST_DIR_RO "src/selftest-ro"
 #define SELFTEST_DIR_RW "src/selftest-rw"
 
 fty::Payload g_payload;
 
+std::mutex g_lock;
+std::condition_variable g_condvar;
+
 static void callback(const fty::Payload & payload)
 {
+    std::unique_lock<std::mutex> lock(g_lock);
     g_payload = payload;
+    g_condvar.notify_all();
 }
 
 void
@@ -136,17 +167,38 @@ fty_common_unit_tests_test (bool verbose)
         fty::Payload expectedPayload = {"This", "is", "a", "test"};
         g_payload = {};
         
-        uint32_t registrationId = client.subscribe(callback);
-        client.publish(expectedPayload);
+        {
+            uint32_t registrationId = client.subscribe(callback);
+
+            std::unique_lock<std::mutex> lock(g_lock);
+
+            client.publish(expectedPayload);
+
+            if (g_condvar.wait_for(lock, std::chrono::seconds(5)) == std::cv_status::timeout)
+            {
+                assert(false);
+            }
+
+            assert (expectedPayload == g_payload);
+            
+            client.unsubscribe(registrationId);
+        }
         
-        assert (expectedPayload == g_payload);
+        {
+            g_payload = {};
+            
+            std::unique_lock<std::mutex> lock(g_lock);
+            
+            client.publish(expectedPayload);
+            
+            if (g_condvar.wait_for(lock, std::chrono::seconds(5)) != std::cv_status::timeout)
+            {
+                assert(false);
+            }
+
+            assert (g_payload.empty());
+        }
         
-        client.unsubscribe(registrationId);
-        
-        g_payload = {};
-        client.publish(expectedPayload);
-                
-        assert (g_payload.empty());
         printf ("OK\n");
     }
     //  @end
