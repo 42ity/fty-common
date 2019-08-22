@@ -115,10 +115,10 @@ namespace fty
 #define SELFTEST_DIR_RO "src/selftest-ro"
 #define SELFTEST_DIR_RW "src/selftest-rw"
 
-fty::Payload g_payload;
+static fty::Payload g_payload;
 
-std::mutex g_lock;
-std::condition_variable g_condvar;
+static std::mutex g_lock;
+static std::condition_variable g_condvar;
 
 static void callback(const fty::Payload & payload)
 {
