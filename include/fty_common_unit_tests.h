@@ -39,6 +39,10 @@ namespace fty
     {
     public:
         Payload handleRequest(const Sender & sender, const Payload & payload) override;
+        const Sender & getLastSender() const;
+        
+    private:
+        Sender m_lastSender;
     };
     
     /**

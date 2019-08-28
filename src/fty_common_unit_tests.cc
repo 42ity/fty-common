@@ -31,9 +31,15 @@
 
 namespace fty
 {
-    Payload EchoServer::handleRequest(const Sender & /*sender*/, const Payload & payload)
+    Payload EchoServer::handleRequest(const Sender & sender, const Payload & payload)
     {
+        m_lastSender = sender;
         return payload;
+    }
+    
+    const Sender & EchoServer::getLastSender() const
+    {
+        return m_lastSender;
     }
     
 /*---------------------------------------------------------------*/
@@ -141,6 +147,7 @@ fty_common_unit_tests_test (bool verbose)
         fty::Payload receivedPayload = server.handleRequest("test", expectedPayload);
 
         assert (expectedPayload == receivedPayload);
+        assert (server.getLastSender() == "test");
         printf ("OK\n");
     }
     //  @end
@@ -155,6 +162,7 @@ fty_common_unit_tests_test (bool verbose)
         fty::Payload receivedPayload = client.syncRequestWithReply(expectedPayload);
 
         assert (expectedPayload == receivedPayload);
+        assert (server.getLastSender() == "test");
         printf ("OK\n");
     }
     //  @end
