@@ -347,7 +347,7 @@ bash_escape (std::string& param)
 std::string
 s_jsonify_translation_string (const char *key, va_list args)
 {
-    log_trace ("called");
+    //log_trace ("called");
 
     // check if 'key' is already in JSON format
     // since we may start/end with {{vari}} and we don't want to go through the whole string,
@@ -446,8 +446,9 @@ s_jsonify_translation_string (const char *key, va_list args)
         vsnprintf (json_attempt, missing + 1, json_format.c_str (), args3);
         va_end (args3);
     }
-    else
-        log_trace ("JSON buffer was sufficient");
+    else {
+        //log_trace ("JSON buffer was sufficient");
+    }
 
     std::string json_str (json_attempt);
     free (json_attempt);
