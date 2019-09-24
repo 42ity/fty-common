@@ -42,6 +42,13 @@
     <version major = "1" minor = "0" patch = "0" />
     <abi current = "1" revision = "0" age = "0" />
 
+    <use project = "cxxtools"
+        test = "cxxtools::Utf8Codec::Utf8Codec"
+        header = "cxxtools/allocator.h"
+        repository = "https://github.com/42ity/cxxtools.git"
+        release = "2.2-FTY-master"
+        />
+
     <!-- Note: pure C projects should use fty-log/fty_logger.h, C++ use fty_log.h -->
     <use project = "fty-common-logging" libname = "libfty_common_logging"
         header = "fty_log.h"
@@ -67,9 +74,9 @@
     <class name = "fty_common_utf8" stable = "1" >Functions for handling UTF-8 encoded strings</class>
     <header name = "fty_common_agents" stable = "1" >Common definitions for agents</header>
     <header name = "fty_common_macros" stable = "1" >System-wide preprocessor macros</header>
-    
+
     <header name = "fty_common_client" stable = "1" >Interfaces for server clients</header>
     <header name = "fty_common_sync_server" stable = "1" >Interface for basic synchromous server</header>
-    
+
     <class name = "fty_common_unit_tests" stable = "1" >Implementation of interface useful for unit test</class>
 </project>

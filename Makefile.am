@@ -11,10 +11,11 @@ AM_CXXFLAGS = \
 AM_CPPFLAGS = \
     ${log4cplus_CFLAGS} \
     ${fty_common_logging_CFLAGS} \
+    ${cxxtools_CFLAGS} \
     -D__STDC_FORMAT_MACROS \
     -I$(srcdir)/include
 
-project_libs = ${log4cplus_LIBS} ${fty_common_logging_LIBS}
+project_libs = ${log4cplus_LIBS} ${fty_common_logging_LIBS} ${cxxtools_LIBS}
 
 SUBDIRS = doc
 SUBDIRS += include
@@ -37,6 +38,7 @@ if ENABLE_DIST_CMAKEFILES
 EXTRA_DIST += \
     Findlog4cplus.cmake \
     Findfty_common_logging.cmake \
+    Findcxxtools.cmake \
     builds/cmake/Modules/ClangFormat.cmake \
     builds/cmake/clang-format-check.sh.in \
     builds/cmake/Config.cmake.in \

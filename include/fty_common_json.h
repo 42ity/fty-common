@@ -28,6 +28,13 @@
 #include <limits.h>
 #endif
 
+#ifdef __cplusplus
+#include <iostream>
+#include <fstream>
+#include <cxxtools/jsonserializer.h>
+#include <cxxtools/jsondeserializer.h>
+#endif
+
 typedef enum {
     JT_Invalid = INT_MIN,
     JT_None,
@@ -82,6 +89,44 @@ namespace JSON {
     class NotFoundException : public ::IPMException { };
     /// exception that should be used when input line is corrupted somehow
     class CorruptedLineException : public ::IPMException { };
+
+    //
+    // cxxtools SerializationInfo interface
+    //
+
+    /**
+     * \brief Read/set a SerializationInfo object from a JSON file.
+     * \param[in]   path_name - the path to JSON file
+     * \param[out]  si - cxxtools::SerializationInfo object
+     * \return  void
+     * \throw generic exceptions
+     */
+    void readFromFile (const std::string path_name, cxxtools::SerializationInfo& si);
+    /**
+     * \brief Set a SerializationInfo object from a JSON string.
+     * \param[in]   buffer - the JSON string
+     * \param[out]  si - cxxtools::SerializationInfo object
+     * \return  void
+     * \throw generic exceptions
+     */
+    void readFromString (const std::string buffer, cxxtools::SerializationInfo& si);
+
+    /**
+     * \brief Write a SerializationInfo object into a JSON file.
+     * \param[in]   path_name - the path to JSON file
+     * \param[in]  si - cxxtools::SerializationInfo object
+     * \return  void
+     * \throw generic exceptions
+     */
+    void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si);
+    /**
+     * \brief Write a SerializationInfo object from a JSON file.
+     * \param[out]  si - cxxtools::SerializationInfo object
+     * \return  the result string
+     * \throw generic exceptions
+     */
+    std::string writeToString (cxxtools::SerializationInfo& si);
+
 }
 #endif
 //  @end
