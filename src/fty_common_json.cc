@@ -131,7 +131,6 @@ void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si)
         serializer.serialize(si);
         serializer.finish();
         output.close();
-        return;
     }
     catch (const std::ofstream::failure& e) {
         log_error("Exception reached '%s' (%s)", path_name.c_str(), e.what());
@@ -144,16 +143,15 @@ void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si)
 }
 
 // set SI from JSON string
-void readFromString (const std::string buffer, cxxtools::SerializationInfo& si)
+void readFromString (const std::string string, cxxtools::SerializationInfo& si)
 {
     try {
-        // deserialize buffer to si
-        std::istringstream input(buffer);
+        std::istringstream input(string);
         cxxtools::JsonDeserializer deserializer(input);
         deserializer.deserialize(si);
     }
     catch (std::istringstream::failure e) {
-        log_error("Exception reading buffer (%s)", e.what());
+        log_error("Exception reading string (%s)", e.what());
         throw;
     }
     catch (const std::exception& e) {

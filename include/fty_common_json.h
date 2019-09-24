@@ -96,20 +96,23 @@ namespace JSON {
 
     /**
      * \brief Read/set a SerializationInfo object from a JSON file.
-     * \param[in]   path_name - the path to JSON file
+     * \param[in]   path_name - the path to the JSON file
      * \param[out]  si - cxxtools::SerializationInfo object
      * \return  void
      * \throw generic exceptions
      */
     void readFromFile (const std::string path_name, cxxtools::SerializationInfo& si);
+
+
     /**
-     * \brief Set a SerializationInfo object from a JSON string.
-     * \param[in]   buffer - the JSON string
+     * \brief Read/set a SerializationInfo object from a JSON string.
+     * \param[in]   string - the JSON string
      * \param[out]  si - cxxtools::SerializationInfo object
      * \return  void
      * \throw generic exceptions
      */
-    void readFromString (const std::string buffer, cxxtools::SerializationInfo& si);
+    void readFromString (const std::string string, cxxtools::SerializationInfo& si);
+
 
     /**
      * \brief Write a SerializationInfo object into a JSON file.
@@ -119,9 +122,11 @@ namespace JSON {
      * \throw generic exceptions
      */
     void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si);
+
+
     /**
-     * \brief Write a SerializationInfo object from a JSON file.
-     * \param[out]  si - cxxtools::SerializationInfo object
+     * \brief Write a SerializationInfo object into a JSON string.
+     * \param[int]  si - cxxtools::SerializationInfo object
      * \return  the result string
      * \throw generic exceptions
      */
