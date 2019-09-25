@@ -97,88 +97,52 @@ std::string readString (const std::string &line, size_t &start_pos, size_t &end_
 }
 
 //
-// cxxtools SerializationInfo interface
+// cxxtools SerializationInfo simple interface
 //
 
 // write SI to JSON string
-std::string writeToString (cxxtools::SerializationInfo& si)
+std::string writeToString (cxxtools::SerializationInfo& si, bool beautify)
 {
-    try {
-        std::ostringstream output;
-        cxxtools::JsonSerializer serializer;
-        serializer.beautify(true);
-        serializer.begin(output);
-        serializer.serialize(si);
-        serializer.finish();
-        return output.str();
-    }
-    catch (const std::exception& e) {
-        log_error("Exception reached (%s)", e.what());
-        throw;
-    }
+    std::ostringstream output;
+    cxxtools::JsonSerializer serializer;
+    serializer.beautify(beautify);
+    serializer.begin(output);
+    serializer.serialize(si);
+    serializer.finish();
+    return output.str();
 }
 
 // write SI to JSON file
-void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si)
+void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si, bool beautify)
 {
-    try {
-        std::ofstream output;
-        output.exceptions(std::ofstream::failbit | std::ofstream::badbit);
-        output.open(path_name);
-        cxxtools::JsonSerializer serializer;
-        serializer.beautify(true);
-        serializer.begin(output);
-        serializer.serialize(si);
-        serializer.finish();
-        output.close();
-    }
-    catch (const std::ofstream::failure& e) {
-        log_error("Exception reached '%s' (%s)", path_name.c_str(), e.what());
-        throw;
-    }
-    catch (const std::exception& e) {
-        log_error("Exception reached (%s)", e.what());
-        throw;
-    }
+    std::ofstream output;
+    output.exceptions(std::ofstream::failbit | std::ofstream::badbit);
+    output.open(path_name);
+    cxxtools::JsonSerializer serializer;
+    serializer.beautify(beautify);
+    serializer.begin(output);
+    serializer.serialize(si);
+    serializer.finish();
+    output.close();
 }
 
-// set SI from JSON string
+// read/set SI from JSON string
 void readFromString (const std::string string, cxxtools::SerializationInfo& si)
 {
-    try {
-        std::istringstream input(string);
-        cxxtools::JsonDeserializer deserializer(input);
-        deserializer.deserialize(si);
-    }
-    catch (std::istringstream::failure e) {
-        log_error("Exception reading string (%s)", e.what());
-        throw;
-    }
-    catch (const std::exception& e) {
-        log_error("Exception reached (%s)", e.what());
-        throw;
-    }
+    std::istringstream input(string);
+    cxxtools::JsonDeserializer deserializer(input);
+    deserializer.deserialize(si);
 }
 
 // read/set SI from JSON file
 void readFromFile (const std::string path_name, cxxtools::SerializationInfo& si)
 {
-    try {
-        std::ifstream input;
-        input.open(path_name);
-        input.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-        cxxtools::JsonDeserializer deserializer(input);
-        deserializer.deserialize(si);
-        input.close();
-    }
-    catch (const std::ifstream::failure& e) {
-        log_error("Exception reading '%s' (%s)", path_name.c_str(), e.what());
-        throw;
-    }
-    catch (const std::exception& e) {
-        log_error("Exception reached (%s)", e.what());
-        throw;
-    }
+    std::ifstream input;
+    input.open(path_name);
+    input.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    cxxtools::JsonDeserializer deserializer(input);
+    deserializer.deserialize(si);
+    input.close();
 }
 
 } // namespace JSON
@@ -247,38 +211,57 @@ fty_common_json_test (bool verbose)
         cxxtools::SerializationInfo si;
         bool failed;
 
-        // empty buffer
+        // empty buffer (invalid JSON)
         failed = false;
         try {
             buffer = "";
             JSON::readFromString(buffer, si);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("readFromString \"%s\": %s", buffer.c_str(), (failed ? "FAILED" : "success"));
         assert(failed);
 
-        // empty JSON buffer
+        // empty valid JSON buffer
         failed = false;
         try {
             buffer = "{}";
             JSON::readFromString(buffer, si);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("readFromString \"%s\": %s", buffer.c_str(), (failed ? "FAILED" : "success"));
         assert(!failed);
 
-        // empty JSON buffer
+        // valid JSON buffer
         failed = false;
         try {
             buffer = "{\"member1\": \"value1\", \"member2\": 42, \"array\": [{\"x\": 12}, {\"x\": 13}]}";
             JSON::readFromString(buffer, si);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("readFromString \"%s\": %s", buffer.c_str(), (failed ? "FAILED" : "success"));
         assert(!failed);
+
+        // invalid JSON buffer
+        failed = false;
+        try {
+            buffer = "{\"member1\": \"value1\", \"member2\": 42, \"array\": [{\"x: 12}, {\"x\": 13}]}";
+            JSON::readFromString(buffer, si);
+        }
+        catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
+            failed = true;
+        }
+        log_info("readFromString \"%s\": %s", buffer.c_str(), (failed ? "FAILED" : "success"));
+        assert(failed);
     }
 
     // readFromFile
@@ -294,19 +277,23 @@ fty_common_json_test (bool verbose)
             JSON::readFromFile(path_name, si);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("readFromFile \"%s\": %s", path_name.c_str(), (failed ? "FAILED" : "success"));
         assert(failed);
 
-        // file_path unknown
+        // fanc file_pathy
         failed = false;
         try {
-            path_name = SELFTEST_DIR_RO "/unkonwn.json";
+            path_name = SELFTEST_DIR_RO "/unknown.json";
             JSON::readFromFile(path_name, si);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("readFromFile \"%s\": %s", path_name.c_str(), (failed ? "FAILED" : "success"));
         assert(failed);
 
         // file_path exist
@@ -316,8 +303,10 @@ fty_common_json_test (bool verbose)
             JSON::readFromFile(path_name, si);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("readFromFile \"%s\": %s", path_name.c_str(), (failed ? "FAILED" : "success"));
         assert(!failed);
     }
 
@@ -334,8 +323,10 @@ fty_common_json_test (bool verbose)
             buffer = JSON::writeToString(si);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("writeToString %s\nbuffer: \"%s\"", (failed ? "FAILED" : "succeeded"), buffer.c_str());
         assert(!failed);
         assert(buffer == "null\n");
 
@@ -348,13 +339,15 @@ fty_common_json_test (bool verbose)
             buffer = JSON::writeToString(si);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("writeToString %s\nbuffer: \"%s\"", (failed ? "FAILED" : "succeeded"), buffer.c_str());
         assert(!failed);
         assert(!buffer.empty());
     }
 
-    // writeToFile
+    // readFromFile, writeToFile
     {
         cxxtools::SerializationInfo si;
         bool failed;
@@ -369,8 +362,10 @@ fty_common_json_test (bool verbose)
             JSON::writeToFile(out_file, si);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("readFromFile/writeToFile %s", (failed ? "FAILED" : "succeeded"));
         assert(!failed);
     }
 
@@ -390,8 +385,11 @@ fty_common_json_test (bool verbose)
             buffer2 = JSON::writeToString(si2);
         }
         catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
             failed = true;
         }
+        log_info("readFromFile/writeToString %s\nbuffer1: %s\nbuffer2: %s", (failed ? "FAILED" : "succeeded"),
+            buffer1.c_str(), buffer2.c_str());
         assert(!failed);
         assert(buffer1 == buffer2);
     }

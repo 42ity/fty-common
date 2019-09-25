@@ -91,7 +91,7 @@ namespace JSON {
     class CorruptedLineException : public ::IPMException { };
 
     //
-    // cxxtools SerializationInfo interface
+    // cxxtools SerializationInfo simple interface
     //
 
     /**
@@ -118,19 +118,21 @@ namespace JSON {
      * \brief Write a SerializationInfo object into a JSON file.
      * \param[in]   path_name - the path to JSON file
      * \param[in]  si - cxxtools::SerializationInfo object
+     * \param[in]  beautify - beautify'er
      * \return  void
      * \throw generic exceptions
      */
-    void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si);
+    void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si, bool beautify = true);
 
 
     /**
      * \brief Write a SerializationInfo object into a JSON string.
      * \param[int]  si - cxxtools::SerializationInfo object
+     * \param[in]  beautify - beautify'er
      * \return  the result string
      * \throw generic exceptions
      */
-    std::string writeToString (cxxtools::SerializationInfo& si);
+    std::string writeToString (cxxtools::SerializationInfo& si, bool beautify = true);
 
 }
 #endif
