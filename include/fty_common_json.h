@@ -103,7 +103,6 @@ namespace JSON {
      */
     void readFromFile (const std::string path_name, cxxtools::SerializationInfo& si);
 
-
     /**
      * \brief Read/set a SerializationInfo object from a JSON string.
      * \param[in]   string - the JSON string
@@ -113,6 +112,14 @@ namespace JSON {
      */
     void readFromString (const std::string string, cxxtools::SerializationInfo& si);
 
+    /**
+     * \brief Read/set a SerializationInfo object from a JSON istringstream.
+     * \param[in]   input - the stream
+     * \param[out]  si - cxxtools::SerializationInfo object
+     * \return void
+     * \throw generic exceptions
+     */
+    void readFromStream (std::istringstream& input, cxxtools::SerializationInfo& si);
 
     /**
      * \brief Write a SerializationInfo object into a JSON file.
@@ -124,7 +131,6 @@ namespace JSON {
      */
     void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si, bool beautify = true);
 
-
     /**
      * \brief Write a SerializationInfo object into a JSON string.
      * \param[in]  si - cxxtools::SerializationInfo object
@@ -133,6 +139,16 @@ namespace JSON {
      * \throw generic exceptions
      */
     std::string writeToString (cxxtools::SerializationInfo& si, bool beautify = true);
+
+    /**
+     * \brief Write a SerializationInfo object into a JSON ostringstream.
+     * \param[out] output - the stream
+     * \param[in]  si - cxxtools::SerializationInfo object
+     * \param[in]  beautify - beautify'er
+     * \return void
+     * \throw generic exceptions
+     */
+    void writeToStream (std::ostringstream& output, cxxtools::SerializationInfo& si, bool beautify = true);
 
 }
 #endif

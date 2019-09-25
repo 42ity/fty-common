@@ -100,15 +100,21 @@ std::string readString (const std::string &line, size_t &start_pos, size_t &end_
 // cxxtools SerializationInfo simple interface
 //
 
-// write SI to JSON string
-std::string writeToString (cxxtools::SerializationInfo& si, bool beautify)
+// write SI to JSON ostringstream
+void writeToStream (std::ostringstream& output, cxxtools::SerializationInfo& si, bool beautify)
 {
-    std::ostringstream output;
     cxxtools::JsonSerializer serializer;
     serializer.beautify(beautify);
     serializer.begin(output);
     serializer.serialize(si);
     serializer.finish();
+}
+
+// write SI to JSON string
+std::string writeToString (cxxtools::SerializationInfo& si, bool beautify)
+{
+    std::ostringstream output;
+    writeToStream(output, si, beautify);
     return output.str();
 }
 
@@ -126,12 +132,18 @@ void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si, 
     output.close();
 }
 
+// read/set SI from JSON istringstream
+void readFromStream (std::istringstream& input, cxxtools::SerializationInfo& si)
+{
+    cxxtools::JsonDeserializer deserializer(input);
+    deserializer.deserialize(si);
+}
+
 // read/set SI from JSON string
 void readFromString (const std::string string, cxxtools::SerializationInfo& si)
 {
     std::istringstream input(string);
-    cxxtools::JsonDeserializer deserializer(input);
-    deserializer.deserialize(si);
+    readFromStream(input, si);
 }
 
 // read/set SI from JSON file
@@ -203,6 +215,51 @@ fty_common_json_test (bool verbose)
         // this is only valid case
     } catch (...) {
         assert (std::string ("Specific exception expected") == std::string ("Code should never get here"));
+    }
+
+    // writeToStream
+    {
+        std::ostringstream output;
+        cxxtools::SerializationInfo si;
+        bool failed;
+
+        // simple SI
+        si.addMember("member").setValue("value");
+
+        failed = false;
+        try {
+            JSON::writeToStream(output, si, false); // no beautyfication
+        }
+        catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
+            failed = true;
+        }
+        log_info("writeToStream \"%s\": %s", output.str().c_str(), (failed ? "FAILED" : "success"));
+        assert(!failed);
+        assert(output.str() == "{\"member\":\"value\"}");
+    }
+
+    // readFromStream, writeToString
+    {
+        std::istringstream input;
+        cxxtools::SerializationInfo si;
+        std::string result;
+        bool failed;
+
+        input.str("{\"member\":\"value\"}"); // simple paylaod
+
+        failed = false;
+        try {
+            JSON::readFromStream(input, si);
+            result = JSON::writeToString(si, false); // no beautyfication
+        }
+        catch (const std::exception& e) {
+            log_error("Exception reached (%s)", e.what());
+            failed = true;
+        }
+        log_info("readFromStream: %s", (failed ? "FAILED" : "success"));
+        assert(!failed);
+        assert(result == "{\"member\":\"value\"}");
     }
 
     // readFromString
