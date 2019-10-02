@@ -31,6 +31,7 @@
 
 //  External dependencies
 #include <fty_log.h>
+#include <cxxtools/allocator.h>
 
 //  FTY_COMMON version macros for compile-time API detection
 #define FTY_COMMON_VERSION_MAJOR 1

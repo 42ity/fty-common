@@ -1,0 +1,14 @@
+{
+    "uuid": "96439811-4b4a-53e1-a309-8caa65745726",
+    "vendor": "Eaton",
+    "manufacturer": "Eaton",
+    "product": "Gigabit Network Card",
+    "serialNumber": "G312H16012",
+    "name": "",
+    "physicalName": "Eaton Gigabit Network Card",
+    "path": "/etn/v1/comm/identification",
+    "type": "",
+    "location": "",
+    "contact": "",
+    "macAddress": "00:20:85:E6:C5:1B"
+}

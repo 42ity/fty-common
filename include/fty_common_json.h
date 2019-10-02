@@ -28,6 +28,13 @@
 #include <limits.h>
 #endif
 
+#ifdef __cplusplus
+#include <iostream>
+#include <fstream>
+#include <cxxtools/jsonserializer.h>
+#include <cxxtools/jsondeserializer.h>
+#endif
+
 typedef enum {
     JT_Invalid = INT_MIN,
     JT_None,
@@ -82,6 +89,67 @@ namespace JSON {
     class NotFoundException : public ::IPMException { };
     /// exception that should be used when input line is corrupted somehow
     class CorruptedLineException : public ::IPMException { };
+
+    //
+    // cxxtools SerializationInfo simple interface
+    //
+
+    /**
+     * \brief Read/set a SerializationInfo object from a JSON file.
+     * \param[in]   path_name - the path to the JSON file
+     * \param[out]  si - cxxtools::SerializationInfo object
+     * \return void
+     * \throw std::ifstream::failbit | std::ifstream::badbit | generic exceptions
+     */
+    void readFromFile (const std::string path_name, cxxtools::SerializationInfo& si);
+
+    /**
+     * \brief Read/set a SerializationInfo object from a JSON string.
+     * \param[in]   string - the JSON string
+     * \param[out]  si - cxxtools::SerializationInfo object
+     * \return void
+     * \throw generic exceptions
+     */
+    void readFromString (const std::string string, cxxtools::SerializationInfo& si);
+
+    /**
+     * \brief Read/set a SerializationInfo object from a JSON istringstream.
+     * \param[in]   input - the stream
+     * \param[out]  si - cxxtools::SerializationInfo object
+     * \return void
+     * \throw generic exceptions
+     */
+    void readFromStream (std::istringstream& input, cxxtools::SerializationInfo& si);
+
+    /**
+     * \brief Write a SerializationInfo object into a JSON file.
+     * \param[in]  path_name - the path to JSON file
+     * \param[in]  si - cxxtools::SerializationInfo object
+     * \param[in]  beautify - beautify'er
+     * \return void
+     * \throw std::ofstream::failbit | std::ofstream::badbit | generic exceptions
+     */
+    void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si, bool beautify = true);
+
+    /**
+     * \brief Write a SerializationInfo object into a JSON string.
+     * \param[in]  si - cxxtools::SerializationInfo object
+     * \param[in]  beautify - beautify'er
+     * \return the result string
+     * \throw generic exceptions
+     */
+    std::string writeToString (cxxtools::SerializationInfo& si, bool beautify = true);
+
+    /**
+     * \brief Write a SerializationInfo object into a JSON ostringstream.
+     * \param[out] output - the stream
+     * \param[in]  si - cxxtools::SerializationInfo object
+     * \param[in]  beautify - beautify'er
+     * \return void
+     * \throw generic exceptions
+     */
+    void writeToStream (std::ostringstream& output, cxxtools::SerializationInfo& si, bool beautify = true);
+
 }
 #endif
 //  @end
