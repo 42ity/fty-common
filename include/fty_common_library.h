@@ -30,8 +30,8 @@
 //  Set up environment for the application
 
 //  External dependencies
-#include <fty_log.h>
 #include <cxxtools/allocator.h>
+#include <fty_log.h>
 
 //  FTY_COMMON version macros for compile-time API detection
 #define FTY_COMMON_VERSION_MAJOR 1

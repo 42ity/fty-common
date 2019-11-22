@@ -24,9 +24,8 @@ Maintainer:     fty-common Developers <eatonipcopensource@eaton.com>
 Standards-Version: 4.0.1.0
 Build-Depends: debhelper (>= 9),
     pkg-config,
-    liblog4cplus-dev,
-    libfty-common-logging-dev,
     libcxxtools-dev,
+    libfty-common-logging-dev,
     asciidoc-base | asciidoc, xmlto,
     dh-autoreconf
 
@@ -42,9 +41,8 @@ Architecture: any
 Section: libdevel
 Depends:
     ${misc:Depends},
-    liblog4cplus-dev,
-    libfty-common-logging-dev,
     libcxxtools-dev,
+    libfty-common-logging-dev,
     libfty-common1 (= ${binary:Version})
 Description: fty-common development tools
  This package contains development files for fty-common:
