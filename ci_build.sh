@@ -183,7 +183,7 @@ default|default-Werror|default-with-docs|valgrind|clang-format-check)
     fi
 
     DEFAULT_BRANCH="`git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`"
-    if [ "x$PROPAGATED_BRANCH" = "x$PROPAGATED_BRANCH" ]; then
+    if [ "x$PROPAGATED_BRANCH" = "x$DEFAULT_BRANCH" ]; then
         [ -z "$CI_TIME" ] || echo "`date`: Starting build of dependencies (if any) using ./ci_dependencies.sh..."
         (source ./ci_dependencies.sh)
     else
