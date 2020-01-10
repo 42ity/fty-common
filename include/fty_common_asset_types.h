@@ -29,18 +29,33 @@
 namespace persist {
 
     enum asset_type {
-        TUNKNOWN     = 0,
-        GROUP       = 1,
-        DATACENTER  = 2,
-        ROOM        = 3,
-        ROW         = 4,
-        RACK        = 5,
-        DEVICE      = 6
+        TUNKNOWN                        = 0,
+
+        GROUP                           = 1,
+        DATACENTER,
+        ROOM,
+        ROW,
+        RACK,
+        DEVICE,
+        INFRA_SERVICE,
+        CLUSTER,
+        HYPERVISOR,
+
+        VIRTUAL_MACHINE,
+        STORAGE_SERVICE,
+        VAPP,
+        CONNECTOR,
+        TSERVER                          = 15,
+        PLANNER,
+        PLAN,
+
+        NB_ASSET_TYPES
     };
 
     enum asset_subtype {
-        SUNKNOWN = 0,
-        UPS = 1,
+        SUNKNOWN                        = 0,
+
+        UPS                             = 1,
         GENSET,
         EPDU,
         PDU,
@@ -50,8 +65,9 @@ namespace persist {
         SWITCH,
         STORAGE,
         VIRTUAL,
-        N_A = 11,
-        /* ATTENTION: don't change N_A id. It is used as default value in initdb.sql for types, that don't have N_A */
+
+        VM,
+        N_A                             = 11, /* ATTENTION: don't change N_A id. It is used as default value in initdb.sql for types, that don't have N_A */
         ROUTER,
         RACKCONTROLLER,
         SENSOR,
@@ -60,7 +76,54 @@ namespace persist {
         PATCHPANEL,
         OTHER,
         SENSORGPIO,
-        GPO
+
+        GPO,
+        NETAPP_ONTAP_NODE,
+        IPMINFRA_SERVER,
+        IPMINFRA_SERVICE,
+        VMWARE_VCENTER,
+        CITRIX_POOL,
+        VMWARE_CLUSTER,
+        VMWARE_ESXI,
+        MICROSOFT_HYPERV,
+        VMWARE_VM,
+
+        MICROSOFT_VM,
+        CITRIX_VM,
+        NETAPP_NODE,
+        VMWARE_STANDALONE_ESXI,
+        VMWARE_TASK,
+        VMWARE_VAPP,
+        CITRIX_XENSERVER,
+        CITRIX_VAPP,
+        CITRIX_TASK,
+        MICROSOFT_VIRTUALIZATION_MACHINE,
+
+        MICROSOFT_TASK,
+        MICROSOFT_SERVER_CONNECTOR,
+        MICROSOFT_SERVER,
+        MICROSOFT_CLUSTER,
+        HP_ONEVIEW_CONNECTOR,
+        HP_ONEVIEW,
+        HP_IT_SERVER,
+        HP_IT_RACK,
+        NETAPP_SERVER,
+        NETAPP_ONTAP_CONNECTOR,
+
+        NETAPP_ONTAP_CLUSTER,
+        NUTANIX_VM,
+        NUTANIX_PRISM_GATEWAY,
+        NUTANIX_NODE,
+        NUTANIX_CLUSTER,
+        NUTANIX_PRISM_CONNECTOR,
+
+        VMWARE_VCENTER_CONNECTOR = 60,
+        VMWARE_STANDALONE_ESXI_CONNECTOR,
+        NETAPP_ONTAP,
+        VMWARE_SRM = 65,
+        VMWARE_SRM_PLAN,
+
+        NB_ASSET_SUBTYPES
     };
 
     enum asset_operation

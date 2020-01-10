@@ -27,6 +27,8 @@
 */
 
 #include "fty_common_asset_types.h"
+#include <array>
+#include <map>
 #include <string.h>
 
 // t_bios_asset_ext_attributes.keytag
@@ -36,46 +38,136 @@
 
 namespace persist {
 
+/**
+ * FIXME: THIS IS REDUNDANT WITH THE DATABASE, REPLACE WITH DATABASE QUERIES!
+ */
+const static std::array<std::string, NB_ASSET_TYPES> type_names {
+    "unknown",
+
+    "group",
+    "datacenter",
+    "room",
+    "row",
+    "rack",
+    "device",
+    "infra-service",
+    "cluster",
+    "hypervisor",
+
+    "virtual-machine",
+    "storage-service",
+    "vapp",
+    "connector",
+    "",
+    "server",
+    "planner",
+    "plan"
+};
+
+/**
+ * FIXME: THIS IS REDUNDANT WITH THE DATABASE, REPLACE WITH DATABASE QUERIES!
+ */
+const static std::array<std::string, NB_ASSET_SUBTYPES> subtype_names {
+    "unknown",
+
+    "ups",
+    "genset",
+    "epdu",
+    "pdu",
+    "server",
+    "feed",
+    "sts",
+    "switch",
+    "storage",
+
+    "vm",
+    "N_A",
+    "router",
+    "rack controller",
+    "sensor",
+    "appliance",
+    "chassis",
+    "patch panel",
+    "other",
+    "sensorgpio",
+
+    "gpo",
+    "netapp.ontap.node",
+    "ipminfra.server",
+    "ipminfra.service",
+    "vmware.vcenter",
+    "citrix.pool",
+    "vmware.cluster",
+    "vmware.esxi",
+    "microsoft.hyperv",
+    "vmware.vm",
+
+    "microsoft.vm",
+    "citrix.vm",
+    "netapp.node",
+    "vmware.standalone.esxi",
+    "vmware.task",
+    "vmware.vapp",
+    "citrix.xenserver",
+    "citrix.vapp",
+    "citrix.task",
+    "microsoft.virtualization.machine",
+
+    "microsoft.task",
+    "microsoft.server.connector",
+    "microsoft.server",
+    "microsoft.cluster",
+    "hp.oneview.connector",
+    "hp.oneview",
+    "hp.it.server",
+    "hp.it.rack",
+    "netapp.server",
+    "netapp.ontap.connector",
+
+    "netapp.ontap.cluster",
+    "nutanix.vm",
+    "nutanix.prism.gateway",
+    "nutanix.node",
+    "nutanix.cluster",
+    "nutanix.prism.connector",
+    "",
+    "",
+    "",
+    "",
+
+    "vmware.vcenter.connector",
+    "vmware.standalone.esxi.connector",
+    "netapp.ontap",
+    "",
+    "",
+    "vmware.srm",
+    "vmware.srm.plan"
+};
+
+const static std::map<std::string, std::string> subtype_equivs {
+    { "rackcontroller", "rack controller" },
+    { "patchpanel", "patch panel" },
+    { "", "N_A" }
+} ;
+
 uint16_t
-type_to_typeid (const std::string &type)
+type_to_typeid (const std::string& type)
 {
     std::string t (type);
     std::transform(t.begin(), t.end(), t.begin(), ::tolower);
-    if(t == "datacenter") {
-        return asset_type::DATACENTER;
-    } else if(t == "room") {
-        return asset_type::ROOM;
-    } else if(t == "row") {
-        return asset_type::ROW;
-    } else if(t == "rack") {
-        return asset_type::RACK;
-    } else if(t == "group") {
-        return asset_type::GROUP;
-    } else if(t == "device") {
-        return asset_type::DEVICE;
-    } else
-        return asset_type::TUNKNOWN;
+
+    auto r = std::find(type_names.begin(), type_names.end(), t);
+    if (r == type_names.end() || *r == "") {
+        return TUNKNOWN;
+    }
+
+    return static_cast<asset_type>(std::distance(type_names.begin(), r));
 }
 
 std::string
 typeid_to_type (uint16_t type_id)
 {
-    switch(type_id) {
-        case asset_type::DATACENTER:
-            return "datacenter";
-        case asset_type::ROOM:
-            return "room";
-        case asset_type::ROW:
-            return "row";
-        case asset_type::RACK:
-            return "rack";
-        case asset_type::GROUP:
-            return "group";
-        case asset_type::DEVICE:
-            return "device";
-        default:
-            return "unknown";
-    }
+    return type_names[type_id < type_names.size() ? type_id : TUNKNOWN];
 }
 
 uint16_t
@@ -83,126 +175,24 @@ subtype_to_subtypeid (const std::string &subtype)
 {
     std::string st(subtype);
     std::transform(st.begin(), st.end(), st.begin(), ::tolower);
-    if(st == "ups") {
-        return asset_subtype::UPS;
+
+    auto itEquiv = subtype_equivs.find(st);
+    if (itEquiv != subtype_equivs.end()) {
+        st = itEquiv->second;
     }
-    else if(st == "genset") {
-        return asset_subtype::GENSET;
+
+    auto r = std::find(subtype_names.begin(), subtype_names.end(), st);
+    if (r == subtype_names.end()) {
+        return SUNKNOWN;
     }
-    else if(st == "epdu") {
-        return asset_subtype::EPDU;
-    }
-    else if(st == "server") {
-        return asset_subtype::SERVER;
-    }
-    else if(st == "pdu") {
-        return asset_subtype::PDU;
-    }
-    else if(st == "feed") {
-        return asset_subtype::FEED;
-    }
-    else if(st == "sts") {
-        return asset_subtype::STS;
-    }
-    else if(st == "switch") {
-        return asset_subtype::SWITCH;
-    }
-    else if(st == "storage") {
-        return asset_subtype::STORAGE;
-    }
-    else if (st == "vm") {
-        return asset_subtype::VIRTUAL;
-    }
-    else if (st == "router") {
-        return asset_subtype::ROUTER;
-    }
-    else if (st == "rack controller") {
-        return asset_subtype::RACKCONTROLLER;
-    }
-    else if (st == "rackcontroller") {
-        return asset_subtype::RACKCONTROLLER;
-    }
-    else if (st == "sensor") {
-        return asset_subtype::SENSOR;
-    }
-    else if (st == "sensorgpio") {
-        return asset_subtype::SENSORGPIO;
-    }
-    else if (st == "gpo") {
-        return asset_subtype::GPO;
-    }
-    else if (st == "appliance") {
-        return asset_subtype::APPLIANCE;
-    }
-    else if (st == "chassis") {
-        return asset_subtype::CHASSIS;
-    }
-    else if (st == "patch panel") {
-        return asset_subtype::PATCHPANEL;
-    }
-    else if (st == "patchpanel") {
-        return asset_subtype::PATCHPANEL;
-    }
-    else if (st == "other") {
-        return asset_subtype::OTHER;
-    }
-    else if(st == "n_a") {
-        return asset_subtype::N_A;
-    }
-    else if(st == "") {
-        return asset_subtype::N_A;
-    }
-    else
-        return asset_subtype::SUNKNOWN;
+
+    return static_cast<asset_subtype>(std::distance(subtype_names.begin(), r));
 }
 
 std::string
 subtypeid_to_subtype (uint16_t subtype_id)
 {
-    switch(subtype_id) {
-        case asset_subtype::UPS:
-            return "ups";
-        case asset_subtype::GENSET:
-            return "genset";
-        case asset_subtype::STORAGE:
-            return "storage";
-        case asset_subtype::STS:
-            return "sts";
-        case asset_subtype::FEED:
-            return "feed";
-        case asset_subtype::EPDU:
-            return "epdu";
-        case asset_subtype::PDU:
-            return "pdu";
-        case asset_subtype::SERVER:
-            return "server";
-        case asset_subtype::SWITCH:
-            return "switch";
-        case asset_subtype::ROUTER:
-            return "router";
-        case asset_subtype::RACKCONTROLLER:
-            return "rackcontroller";
-        case asset_subtype::SENSOR:
-            return "sensor";
-        case asset_subtype::SENSORGPIO:
-            return "sensorgpio";
-        case asset_subtype::GPO:
-            return "gpo";
-        case asset_subtype::APPLIANCE:
-            return "appliance";
-        case asset_subtype::CHASSIS:
-            return "chassis";
-        case asset_subtype::PATCHPANEL:
-            return "patchpanel";
-        case asset_subtype::OTHER:
-            return "other";
-        case asset_subtype::VIRTUAL:
-            return "vm";
-        case asset_subtype::N_A:
-            return "N_A";
-        default:
-            return "unknown";
-    }
+    return subtype_names[subtype_id < subtype_names.size() ? subtype_id : SUNKNOWN];
 }
 
 std::string
@@ -289,17 +279,7 @@ is_container (std::string asset_type)
 bool
 is_ok_element_type (uint16_t element_type_id)
 {
-    switch(element_type_id) {
-        case persist::asset_type::DATACENTER:
-        case persist::asset_type::ROOM:
-        case persist::asset_type::ROW:
-        case persist::asset_type::RACK:
-        case persist::asset_type::GROUP:
-        case persist::asset_type::DEVICE:
-            return true;
-        default:
-            return false;
-    }
+    return typeid_to_type(element_type_id) != "unknown";
 }
 
 bool
