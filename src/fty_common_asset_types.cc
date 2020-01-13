@@ -28,6 +28,7 @@
 
 #include "fty_common_asset_types.h"
 #include <array>
+#include <functional>
 #include <map>
 #include <string.h>
 
@@ -83,11 +84,11 @@ const static std::array<std::string, NB_ASSET_SUBTYPES> subtype_names {
     "vm",
     "N_A",
     "router",
-    "rack controller",
+    "rackcontroller",
     "sensor",
     "appliance",
     "chassis",
-    "patch panel",
+    "patchpanel",
     "other",
     "sensorgpio",
 
@@ -145,18 +146,23 @@ const static std::array<std::string, NB_ASSET_SUBTYPES> subtype_names {
 };
 
 const static std::map<std::string, std::string> subtype_equivs {
-    { "rackcontroller", "rack controller" },
-    { "patchpanel", "patch panel" },
+    { "rack controller", "rackcontroller" },
+    { "patch panel", "patchpanel" },
     { "", "N_A" }
 } ;
+
+bool caseInsensitiveCompare(const std::string& a, const std::string& b)
+{
+    std::string la, lb;
+    std::transform(a.begin(), a.end(), la.begin(), ::tolower);
+    std::transform(b.begin(), b.end(), lb.begin(), ::tolower);
+    return la == lb;
+}
 
 uint16_t
 type_to_typeid (const std::string& type)
 {
-    std::string t (type);
-    std::transform(t.begin(), t.end(), t.begin(), ::tolower);
-
-    auto r = std::find(type_names.begin(), type_names.end(), t);
+    auto r = std::find_if(type_names.begin(), type_names.end(), std::bind(caseInsensitiveCompare, type, std::placeholders::_1));
     if (r == type_names.end() || *r == "") {
         return TUNKNOWN;
     }
@@ -181,7 +187,7 @@ subtype_to_subtypeid (const std::string &subtype)
         st = itEquiv->second;
     }
 
-    auto r = std::find(subtype_names.begin(), subtype_names.end(), st);
+    auto r = std::find_if(subtype_names.begin(), subtype_names.end(), std::bind(caseInsensitiveCompare, st, std::placeholders::_1));
     if (r == subtype_names.end()) {
         return SUNKNOWN;
     }
