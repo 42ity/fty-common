@@ -154,8 +154,8 @@ const static std::map<std::string, std::string> subtype_equivs {
 bool caseInsensitiveCompare(const std::string& a, const std::string& b)
 {
     std::string la, lb;
-    std::transform(a.begin(), a.end(), la.begin(), ::tolower);
-    std::transform(b.begin(), b.end(), lb.begin(), ::tolower);
+    std::transform(a.begin(), a.end(), std::back_inserter(la), ::tolower);
+    std::transform(b.begin(), b.end(), std::back_inserter(lb), ::tolower);
     return la == lb;
 }
 
