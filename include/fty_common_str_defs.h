@@ -24,7 +24,7 @@
  * \brief Not yet documented file
  */
 #ifndef FTY_COMMON_COMMON_STR_DEFS_H__
-#define FTY_COMMON_COMMON_DEFS_H__
+#define FTY_COMMON_COMMON_STR_DEFS_H__
 
 #ifdef __cplusplus
 
