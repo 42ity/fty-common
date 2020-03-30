@@ -28,6 +28,15 @@
 
 namespace persist {
 
+    enum asset_status {
+        STATUS_UNKNOWN                  = 0,
+
+        STATUS_ACTIVE                   = 1,
+        STATUS_NONACTIVE,
+
+        NB_ASSET_STATUSES
+    };
+
     enum asset_type {
         TUNKNOWN                        = 0,
 
@@ -141,6 +150,12 @@ namespace persist {
 
     asset_operation
     str2operation (const std::string &operation);
+
+    asset_status
+    status_to_statusid (const std::string &status);
+
+    std::string
+    statusid_to_status (asset_status status_id);
 
     uint16_t
     type_to_typeid (const std::string &type);

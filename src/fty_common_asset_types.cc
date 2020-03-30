@@ -42,6 +42,16 @@ namespace persist {
 /**
  * FIXME: THIS IS REDUNDANT WITH THE DATABASE, REPLACE WITH DATABASE QUERIES!
  */
+const static std::array<std::string, NB_ASSET_STATUSES> status_names {
+    "unknown",
+
+    "active",
+    "nonactive"
+};
+
+/**
+ * FIXME: THIS IS REDUNDANT WITH THE DATABASE, REPLACE WITH DATABASE QUERIES!
+ */
 const static std::array<std::string, NB_ASSET_TYPES> type_names {
     "unknown",
 
@@ -157,6 +167,23 @@ bool caseInsensitiveCompare(const std::string& a, const std::string& b)
     std::transform(a.begin(), a.end(), std::back_inserter(la), ::tolower);
     std::transform(b.begin(), b.end(), std::back_inserter(lb), ::tolower);
     return la == lb;
+}
+
+asset_status
+status_to_statusid (const std::string &status)
+{
+    auto r = std::find_if(status_names.begin(), status_names.end(), std::bind(caseInsensitiveCompare, status, std::placeholders::_1));
+    if (r == status_names.end() || *r == "") {
+        return STATUS_UNKNOWN;
+    }
+
+    return static_cast<asset_status>(std::distance(status_names.begin(), r));
+}
+
+std::string
+statusid_to_status (asset_status status_id)
+{
+    return status_names[status_id < status_names.size() ? status_id : STATUS_UNKNOWN];
 }
 
 uint16_t
