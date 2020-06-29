@@ -146,9 +146,10 @@ const static std::array<std::string, NB_ASSET_SUBTYPES> subtype_names {
 };
 
 const static std::map<std::string, std::string> subtype_equivs {
-    { "rack controller", "rackcontroller" },
-    { "patch panel", "patchpanel" },
-    { "", "N_A" }
+    // Except "" for N_A, the names on the left are the ones from database
+    { "rack controller", "rackcontroller" }, // Mind the space!
+    { "patch panel", "patchpanel" }, // Mind the space!
+    { "", "N_A" } // Do not change, this string with id==11 (not NULL!) is database default for assets with undefined type
 } ;
 
 bool caseInsensitiveCompare(const std::string& a, const std::string& b)
@@ -198,7 +199,21 @@ subtype_to_subtypeid (const std::string &subtype)
 std::string
 subtypeid_to_subtype (uint16_t subtype_id)
 {
-    return subtype_names[subtype_id < subtype_names.size() ? subtype_id : SUNKNOWN];
+    std::string st = subtype_names[subtype_id < subtype_names.size() ? subtype_id : SUNKNOWN];
+
+    // For database manipulation, we need database string values, e.g. "rack controller" with the space
+    std::string itEquiv = ""; // also "N_A" maps to "" and we DO NOT want this one converted to empty string
+    for (auto &i : subtype_equivs) {
+        if (i.second == st) {
+            itEquiv = i.first;
+            break;
+        }
+    }
+    if ( itEquiv != "") {
+        st = itEquiv;
+    }
+
+    return st;
 }
 
 std::string
