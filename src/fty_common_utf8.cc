@@ -189,7 +189,7 @@ utf8_octets (const char *c) {
 // 1 - different
 
 static int
-utf8_compare_octets (const char *s1, const char *s2, size_t pos, size_t length, uint8_t count) {
+utf8_compare_octets (const char *s1, const char *s2, size_t pos, size_t length, int8_t count) {
     assert (s1);
     assert (s2);
 
@@ -200,7 +200,7 @@ utf8_compare_octets (const char *s1, const char *s2, size_t pos, size_t length, 
     // FIXME: When assert is a no-op (production) should this proceed with errors then ignored above?
     // e.g. a count==-1 would yield "return 0" below, and so perceived-equal utf8 chars...
 
-    for (int i = 0; i < count; i++) {
+    for (int8_t i = 0; i < count; i++) {
         const char c1 = s1[pos + i];
         const char c2 = s2[pos + i];
 
