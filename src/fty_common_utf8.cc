@@ -160,6 +160,7 @@ compare_utf8_codepoint (const char *str_utf8, const char *str_codepoint) {
     return 1;
 }
 
+// How many 8-bit bytes of the input comprise the next UTF-8 logical character?
 // 1, ..., 4 - # of utf8 octets
 // -1 - error
 
@@ -188,8 +189,12 @@ utf8_octets (const char *c) {
 
 static int
 utf8_compare_octets (const char *s1, const char *s2, size_t pos, size_t length, uint8_t count) {
+    // FIXME: Should the process really die with invalid UTF strings?
     assert (count >= 1 && count <= 4);
     assert (pos + count <= length);
+
+    // FIXME: When assert is a no-op (production) should this proceed with errors then ignored above?
+    // e.g. a count==-1 would yield "return 0" below, and so perceived-equal utf8 chars...
 
     for (int i = 0; i < count; i++) {
         const char c1 = s1[pos + i];
@@ -204,9 +209,15 @@ utf8_compare_octets (const char *s1, const char *s2, size_t pos, size_t length, 
 
 // compare utf8 strings for equality
 // ignore case on ascii (i.e on 1 byte chars)
+// 0 - different
+// 1 - same
+// -1 - error
 
 int
 utf8eq (const char *s1, const char *s2) {
+    // FIXME: Should we really crash if one string pointer
+    //        is NULL, or return an equal/not-equal verdict?
+    // Also, are two NULLs considered equal strings?
     assert (s1);
     assert (s2);
 
@@ -224,12 +235,15 @@ utf8eq (const char *s1, const char *s2) {
         if (s1_octets == -1 || s2_octets == -1)
             return -1;
 
+        // Different octet lengths at position "pos"
         if (s1_octets != s2_octets)
             return 0;
 
+        // Same length for both inputs, should be safe...
         if (utf8_compare_octets (s1, s2, pos, length, s1_octets) == 1)
             return 0;
 
+        // Try next logical char...
         pos = pos + s1_octets;
     }
     return 1;
