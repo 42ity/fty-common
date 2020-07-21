@@ -233,8 +233,8 @@ utf8eq (const char *s1, const char *s2) {
 
 
     while (pos < length) {
-        uint8_t s1_octets = utf8_octets (s1 + pos);
-        uint8_t s2_octets = utf8_octets (s2 + pos);
+        int8_t s1_octets = utf8_octets (s1 + pos);
+        int8_t s2_octets = utf8_octets (s2 + pos);
 
         if (s1_octets == -1 || s2_octets == -1)
             return -1;
