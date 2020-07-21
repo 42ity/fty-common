@@ -282,6 +282,11 @@ escape (const char *string) {
     while (i < length) {
         char c = string[i];
         int8_t width = UTF8::utf8_octets (string + i);
+        if (width == -1) {
+            log_debug ("Cannot escape string '%s' because of invalid UTF-8 sequences at offset %ju", string, (uintmax_t)i);
+            return "(invalid_utf8)";
+        }
+
         if (c == '"') {
             after.append ("\\\"");
         }
@@ -319,6 +324,8 @@ escape (const char *string) {
         else {
             after += c;
         }
+
+        // We should not have width==0 ever, and -1 is filtered above
         i += width;
     }
     return after;
