@@ -167,19 +167,20 @@ compare_utf8_codepoint (const char *str_utf8, const char *str_codepoint) {
 int8_t
 utf8_octets (const char *c) {
     assert (c);
-    if ((*c & 0x80) == 0) // lead bit is zero, must be a single ascii
+    uint8_t b = (uint8_t)(*c); // UTF is defined in terms of 8-bit octets, do not equate those to potentially varied-width platform defined char's
+    if ((b & 0x80) == 0) // lead bit is zero, must be a single ascii
         return 1;
     else
-        if ((*c & 0xE0) == 0xC0) // 110x xxxx (2 octets)
+        if ((b & 0xE0) == 0xC0) // 110x xxxx (2 octets)
         return 2;
     else
-        if ((*c & 0xF0) == 0xE0) // 1110 xxxx (3 octets)
+        if ((b & 0xF0) == 0xE0) // 1110 xxxx (3 octets)
         return 3;
     else
-        if ((*c & 0xF8) == 0xF0) // 1111 0xxx (4 octets)
+        if ((b & 0xF8) == 0xF0) // 1111 0xxx (4 octets)
         return 4;
     else
-        log_error ("Unrecognized utf8 lead byte '%" PRIx8 "' in string '%s'", *c, c);
+        log_error ("Unrecognized utf8 lead byte '%" PRIx8 "' in string '%s'", b, c);
     return -1;
 }
 
