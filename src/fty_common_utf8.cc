@@ -179,7 +179,7 @@ utf8_octets (const char *c) {
         if ((*c & 0xF8) == 0xF0) // 1111 0xxx (4 octets)
         return 4;
     else
-        log_error ("Unrecognized utf8 lead byte '%x' in string '%s'", *c, c);
+        log_error ("Unrecognized utf8 lead byte '%" PRIx8 "' in string '%s'", *c, c);
     return -1;
 }
 
