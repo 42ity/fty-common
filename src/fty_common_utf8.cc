@@ -225,13 +225,11 @@ utf8eq (const char *s1, const char *s2) {
     assert (s1);
     assert (s2);
 
-    if (strlen (s1) != strlen (s2))
+    size_t length = strlen (s1);
+    if (length != strlen (s2))
         return 0;
 
     size_t pos = 0;
-    size_t length = strlen (s1);
-
-
     while (pos < length) {
         int8_t s1_octets = utf8_octets (s1 + pos);
         int8_t s2_octets = utf8_octets (s2 + pos);
