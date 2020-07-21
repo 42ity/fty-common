@@ -167,7 +167,7 @@ compare_utf8_codepoint (const char *str_utf8, const char *str_codepoint) {
 int8_t
 utf8_octets (const char *c) {
     assert (c);
-    uint8_t b = (uint8_t)(*c); // UTF is defined in terms of 8-bit octets, do not equate those to potentially varied-width platform defined char's
+    const uint8_t b = (uint8_t)(*c); // UTF is defined in terms of 8-bit octets, do not equate those to potentially varied-width platform defined char's
     if ((b & 0x80) == 0) // lead bit is zero, must be a single ascii
         return 1;
     else
