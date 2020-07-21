@@ -190,6 +190,9 @@ utf8_octets (const char *c) {
 
 static int
 utf8_compare_octets (const char *s1, const char *s2, size_t pos, size_t length, uint8_t count) {
+    assert (s1);
+    assert (s2);
+
     // FIXME: Should the process really die with invalid UTF strings?
     assert (count >= 1 && count <= 4);
     assert (pos + count <= length);
