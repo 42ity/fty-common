@@ -282,48 +282,60 @@ escape (const char *string) {
     while (i < length) {
         char c = string[i];
         int8_t width = UTF8::utf8_octets (string + i);
-        if (width == -1) {
-            log_debug ("Cannot escape string '%s' because of invalid UTF-8 sequences at offset %ju", string, (uintmax_t)i);
-            return "(invalid_utf8)";
-        }
+        switch (width) {
+            case -1:
+                log_debug ("Cannot escape string '%s' because of invalid UTF-8 sequences at offset %ju", string, (uintmax_t)i);
+                return "(invalid_utf8)";
+            case 1:
+                switch (c) {
+                    case '"':
+                        after.append ("\\\"");
+                        break;
+                    case '\b':
+                        after.append ("\\\\b");
+                        break;
+                    case '\f':
+                        after.append ("\\\\f");
+                        break;
+                    case '\n':
+                        after.append ("\\\\n");
+                        break;
+                    case '\r':
+                        after.append ("\\\\r");
+                        break;
+                    case '\t':
+                        after.append ("\\\\t");
+                        break;
+                    case '\\':
+                        after.append ("\\\\");
+                        break;
+                    default:
+                        after += c;
+                } // cases of single-byte codepoint "c"
+                break; // case width==1
+            case 2:
+            case 3:
+            case 4:
+                {
+                // escape UTF-8 chars which have more than 1 byte
+                // allocate memory for "\u" + 4 hex digits + terminator
+                // allocating 8 bytes just for performance doesn't make sense
+                char *codepoint = (char *) calloc (7, sizeof (char));
+                // calloc () takes care of zero termination, which utf8_to_codepoint () doesn't do
+                UTF8::utf8_to_codepoint (string + i, &codepoint);
 
-        if (c == '"') {
-            after.append ("\\\"");
-        }
-        else if (c =='\b') {
-            after.append ("\\\\b");
-        }
-        else if (c =='\f') {
-            after.append ("\\\\f");
-        }
-        else if (c == '\n') {
-            after.append ("\\\\n");
-        }
-        else if (c == '\r') {
-            after.append ("\\\\r");
-        }
-        else if (c == '\t') {
-            after.append ("\\\\t");
-        }
-        else if (c == '\\') {
-            after.append ("\\\\");
-        }
-        // escape UTF-8 chars which have more than 1 byte
-        else if (width > 1) {
-            // allocate memory for "\u" + 4 hex digits + terminator
-            // allocating 8 bytes just for performance doesn't make sense
-            char *codepoint = (char *) calloc (7, sizeof (char));
-            // calloc () takes care of zero termination, which utf8_to_codepoint () doesn't do
-            UTF8::utf8_to_codepoint (string + i, &codepoint);
-
-            std::string codepoint_str (codepoint);
-            free (codepoint);
-            codepoint = NULL;
-            after.append (codepoint_str);
-        }
-        else {
-            after += c;
-        }
+                std::string codepoint_str (codepoint);
+                free (codepoint);
+                codepoint = NULL;
+                after.append (codepoint_str);
+                } // scope codepoint_str and codepoint
+                break;
+            default:
+                log_debug ("Cannot escape string '%s' because utf8_octets() returned "
+                    "unexpected byte length %" PRIi8 " for logical character at offset %ju",
+                    string, width, (uintmax_t)i);
+                return "(invalid_utf8)";
+        } // cases of width
 
         // We should not have width==0 ever, and -1 is filtered above
         i += width;
