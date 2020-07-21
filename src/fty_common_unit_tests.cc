@@ -36,23 +36,23 @@ namespace fty
         m_lastSender = sender;
         return payload;
     }
-    
+
     const Sender & EchoServer::getLastSender() const
     {
         return m_lastSender;
     }
-    
+
 /*---------------------------------------------------------------*/
-    
+
     SyncClientTest::SyncClientTest(const Sender & sender, SyncServer & server)
-        : m_sender(sender), m_syncServer(server) 
+        : m_sender(sender), m_syncServer(server)
     {}
 
     Payload SyncClientTest::syncRequestWithReply(const Payload & payload)
     {
         return m_syncServer.handleRequest(m_sender, payload);
     }
-    
+
 /*---------------------------------------------------------------*/
     StreamClientTest::~StreamClientTest()
     {
@@ -61,7 +61,7 @@ namespace fty
             m_listernerThread.join();
         }
     }
-        
+
     void StreamClientTest::publish(const Payload & payload)
     {
         if(m_callback)
@@ -70,9 +70,9 @@ namespace fty
             {
                 m_listernerThread.join();
             }
-            
+
             m_lastPayload = payload;
-            
+
             m_listernerThread = std::thread(m_callback, m_lastPayload);
         }
     }
@@ -83,7 +83,7 @@ namespace fty
         {
             m_listernerThread.join();
         }
-        
+
         m_callback = callback;
         return 0;
     }
@@ -94,7 +94,7 @@ namespace fty
         {
             m_listernerThread.join();
         }
-                
+
         m_callback = nullptr;
     }
 
@@ -151,7 +151,7 @@ fty_common_unit_tests_test (bool verbose)
         printf ("OK\n");
     }
     //  @end
-    
+
     //  @selftest Test SyncClientTest
     {
         printf (" * * * SyncClientTest: ");
@@ -166,15 +166,15 @@ fty_common_unit_tests_test (bool verbose)
         printf ("OK\n");
     }
     //  @end
-    
+
     //  @selftest Test StreamClientTest
     {
         printf (" * * * StreamClientTest: ");
         fty::StreamClientTest client;
-        
+
         fty::Payload expectedPayload = {"This", "is", "a", "test"};
         g_payload = {};
-        
+
         {
             uint32_t registrationId = client.subscribe(callback);
 
@@ -188,17 +188,17 @@ fty_common_unit_tests_test (bool verbose)
             }
 
             assert (expectedPayload == g_payload);
-            
+
             client.unsubscribe(registrationId);
         }
-        
+
         {
             g_payload = {};
-            
+
             std::unique_lock<std::mutex> lock(g_lock);
-            
+
             client.publish(expectedPayload);
-            
+
             if (g_condvar.wait_for(lock, std::chrono::seconds(5)) != std::cv_status::timeout)
             {
                 assert(false);
@@ -206,10 +206,10 @@ fty_common_unit_tests_test (bool verbose)
 
             assert (g_payload.empty());
         }
-        
+
         printf ("OK\n");
     }
     //  @end
-    
-    
+
+
 }

@@ -30,37 +30,37 @@ namespace fty
 {
     using Callback = std::function<void(const std::vector<std::string> &)>;
     using Payload = std::vector<std::string>;
-    
+
     /**
     * \brief Interface for basic synchronous client
     * The client will send a request with a payload(vector or string) to the server
     * The server will receive the payload and identify the Sender
     * The server will reply with a payload.
-    * 
-    * \see Interface for basic synchronous server 
+    *
+    * \see Interface for basic synchronous server
     */
     class SyncClient
     {
     public:
         virtual Payload syncRequestWithReply(const Payload & payload) = 0;
     };
-    
+
     /**
     * \brief Interface for stream producer
     * The interface user has to implement a function which publish payload to a stream
-    * 
+    *
     */
     class StreamPublisher
     {
     public:
         virtual void publish(const Payload & payload) = 0;
     };
-    
+
     /**
     * \brief Interface for stream listeners
     * The interface user has to implement a function to register a callback.
-    * This callback is going to be call each time we receive a message on the stream 
-    * 
+    * This callback is going to be call each time we receive a message on the stream
+    *
     * The user has also to implement a function to de-register a Callback from the stream
     */
     class StreamSubscriber
@@ -69,7 +69,7 @@ namespace fty
         virtual uint32_t subscribe( Callback callback) = 0;
         virtual void unsubscribe(uint32_t subId) = 0;
     };
-    
+
 } //namespace fty
 
 #endif

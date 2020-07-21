@@ -33,38 +33,38 @@ namespace fty
     /**
     * \brief Helper class to test synchronous client and server
     * The server is replaying with the same payload as received
-    * 
+    *
     */
     class EchoServer final : public SyncServer
     {
     public:
         Payload handleRequest(const Sender & sender, const Payload & payload) override;
         const Sender & getLastSender() const;
-        
+
     private:
         Sender m_lastSender;
     };
-    
+
     /**
     * \brief Helper class to test synchronous client with a server
     * the client will use the handle request of the server to execute the request
-    * 
+    *
     */
     class SyncClientTest final : public SyncClient
     {
     public:
         explicit SyncClientTest(const Sender & sender, SyncServer & server);
         Payload syncRequestWithReply(const Payload & payload) override;
-        
+
     private:
         Sender m_sender;
         SyncServer & m_syncServer;
     };
-    
+
     /**
     * \brief Helper class to test stream client with only one subscriber and one publisher
     * When publish, the call back will be called if exist.
-    * 
+    *
     */
     class StreamClientTest final : public StreamPublisher, public StreamSubscriber
     {
@@ -73,7 +73,7 @@ namespace fty
         virtual void publish(const Payload & payload) override;
         virtual uint32_t subscribe( Callback callback) override;
         virtual void unsubscribe(uint32_t subId) override;
-        
+
     private:
         Callback m_callback;
         Payload m_lastPayload;
