@@ -150,6 +150,8 @@ const static std::array<std::string, NB_ASSET_SUBTYPES> subtype_names {
     "",
     "",
     "",
+    "",
+    "",
 
     "ups.multiplexer" // UPS Parallel Power Source multiplexer
 };

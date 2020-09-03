@@ -125,7 +125,7 @@ namespace persist {
         VMWARE_SRM = 65,
         VMWARE_SRM_PLAN,
 
-        UPS_MULTIPLEXER = 70,
+        UPS_MULTIPLEXER = 72,
 
         NB_ASSET_SUBTYPES
     };
