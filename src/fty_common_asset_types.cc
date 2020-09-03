@@ -146,7 +146,12 @@ const static std::array<std::string, NB_ASSET_SUBTYPES> subtype_names {
     "",
     "",
     "vmware.srm",
-    "vmware.srm.plan"
+    "vmware.srm.plan",
+    "",
+    "",
+    "",
+
+    "ups.multiplexer" // UPS Parallel Power Source multiplexer
 };
 
 const static std::map<std::string, std::string> subtype_equivs {

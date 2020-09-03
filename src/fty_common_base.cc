@@ -34,7 +34,7 @@ fty_common_base_test (bool verbose)
 {
     printf ("fty_common_base_test...\n");
 
-    // type
+    // type/typeid
 
     assert(persist::type_to_typeid("unknown") == persist::asset_type::TUNKNOWN);
     assert(persist::typeid_to_type(persist::asset_type::TUNKNOWN) == "unknown");
@@ -51,7 +51,7 @@ fty_common_base_test (bool verbose)
     assert(persist::type_to_typeid("cops") == persist::asset_type::COPS);
     assert(persist::typeid_to_type(persist::asset_type::COPS) == "cops");
 
-    // subtype
+    // subtype/subtypeid
 
     assert(persist::subtype_to_subtypeid("unknown") == persist::asset_subtype::SUNKNOWN);
     assert(persist::subtypeid_to_subtype(persist::asset_subtype::SUNKNOWN) == "unknown");
@@ -64,6 +64,10 @@ fty_common_base_test (bool verbose)
     assert(persist::subtype_to_subtypeid("N_A") == persist::asset_subtype::N_A);
     assert(persist::subtypeid_to_subtype(persist::asset_subtype::N_A) == "N_A");
     assert(persist::asset_subtype::N_A == 11);
+
+    assert(persist::subtype_to_subtypeid("ups.multiplexer") == persist::asset_subtype::UPS_MULTIPLEXER);
+    assert(persist::subtypeid_to_subtype(persist::asset_subtype::UPS_MULTIPLEXER) == "ups.multiplexer");
+    assert(persist::asset_subtype::UPS_MULTIPLEXER == 70);
 
     //  @end
     printf ("fty_common_base_test: OK\n");
