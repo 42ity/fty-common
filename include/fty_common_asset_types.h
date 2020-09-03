@@ -49,6 +49,8 @@ namespace persist {
         PLANNER,
         PLAN,
 
+        COPS, // Composite Power System
+
         NB_ASSET_TYPES
     };
 

@@ -41,6 +41,7 @@ namespace persist {
 
 /**
  * FIXME: THIS IS REDUNDANT WITH THE DATABASE, REPLACE WITH DATABASE QUERIES!
+ * see corresp. asset_type enum in include/fty_common_asset_types.h
  */
 const static std::array<std::string, NB_ASSET_TYPES> type_names {
     "unknown",
@@ -62,11 +63,14 @@ const static std::array<std::string, NB_ASSET_TYPES> type_names {
     "",
     "server",
     "planner",
-    "plan"
+    "plan",
+
+    "cops" // Composite Power System
 };
 
 /**
  * FIXME: THIS IS REDUNDANT WITH THE DATABASE, REPLACE WITH DATABASE QUERIES!
+ * see corresp. asset_subtype enum in include/fty_common_asset_types.h
  */
 const static std::array<std::string, NB_ASSET_SUBTYPES> subtype_names {
     "unknown",
