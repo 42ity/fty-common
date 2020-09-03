@@ -50,6 +50,7 @@ fty_common_base_test (bool verbose)
 
     assert(persist::type_to_typeid("cops") == persist::asset_type::COPS);
     assert(persist::typeid_to_type(persist::asset_type::COPS) == "cops");
+    assert(persist::asset_type::COPS == 20);
 
     // subtype/subtypeid
 

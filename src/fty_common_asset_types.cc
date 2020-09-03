@@ -42,11 +42,12 @@ namespace persist {
 /**
  * FIXME: THIS IS REDUNDANT WITH THE DATABASE, REPLACE WITH DATABASE QUERIES!
  * see corresp. asset_type enum in include/fty_common_asset_types.h
+ * see mysql box_utf8/ 'select * from t_bios_asset_element_type order by id_asset_element_type;'
  */
 const static std::array<std::string, NB_ASSET_TYPES> type_names {
-    "unknown",
+    "unknown",      // = 0
 
-    "group",
+    "group",        // = 1
     "datacenter",
     "room",
     "row",
@@ -60,17 +61,20 @@ const static std::array<std::string, NB_ASSET_TYPES> type_names {
     "storage-service",
     "vapp",
     "connector",
-    "",
-    "server",
+    "",             // = 14 (not used)
+    "server",       // = 15
     "planner",
     "plan",
+    "",             // operating-system
+    "",             // host-group
 
-    "cops" // Composite Power System
+    "cops"          // = 20 Composite Power System
 };
 
 /**
  * FIXME: THIS IS REDUNDANT WITH THE DATABASE, REPLACE WITH DATABASE QUERIES!
  * see corresp. asset_subtype enum in include/fty_common_asset_types.h
+ * see mysql box_utf8/ 'select * from t_bios_asset_device_type order by id_asset_device_type;'
  */
 const static std::array<std::string, NB_ASSET_SUBTYPES> subtype_names {
     "unknown",
