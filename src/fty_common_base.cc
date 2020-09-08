@@ -66,9 +66,9 @@ fty_common_base_test (bool verbose)
     assert(persist::subtypeid_to_subtype(persist::asset_subtype::N_A) == "N_A");
     assert(persist::asset_subtype::N_A == 11);
 
-    assert(persist::subtype_to_subtypeid("ups.multiplexer") == persist::asset_subtype::UPS_MULTIPLEXER);
-    assert(persist::subtypeid_to_subtype(persist::asset_subtype::UPS_MULTIPLEXER) == "ups.multiplexer");
-    assert(persist::asset_subtype::UPS_MULTIPLEXER == 72);
+    assert(persist::subtype_to_subtypeid("pcu") == persist::asset_subtype::PCU);
+    assert(persist::subtypeid_to_subtype(persist::asset_subtype::PCU) == "pcu");
+    assert(persist::asset_subtype::PCU == 72);
 
     //  @end
     printf ("fty_common_base_test: OK\n");

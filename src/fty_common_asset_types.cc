@@ -157,7 +157,7 @@ const static std::array<std::string, NB_ASSET_SUBTYPES> subtype_names {
     "",
     "",
 
-    "ups.multiplexer" // UPS Parallel Power Source multiplexer
+    "pcu" // Power Control Unit (marker for UPS Parallel System)
 };
 
 const static std::map<std::string, std::string> subtype_equivs {

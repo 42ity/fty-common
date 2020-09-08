@@ -125,7 +125,7 @@ namespace persist {
         VMWARE_SRM = 65,
         VMWARE_SRM_PLAN,
 
-        UPS_MULTIPLEXER = 72,
+        PCU = 72, // Power Control Unit
 
         NB_ASSET_SUBTYPES
     };
