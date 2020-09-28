@@ -28,6 +28,8 @@
 
 namespace persist {
 
+    // CAUTION: THESE ENUMS REFLECT (PARTS OF) THE DATABASE
+
     enum asset_type {
         TUNKNOWN                        = 0,
 
@@ -49,6 +51,8 @@ namespace persist {
         PLANNER,
         PLAN,
 
+        COPS = 20, // Composite Power System
+
         NB_ASSET_TYPES
     };
 
@@ -65,9 +69,9 @@ namespace persist {
         SWITCH,
         STORAGE,
         VIRTUAL,
+        VM = VIRTUAL,
 
-        VM,
-        N_A                             = 11, /* ATTENTION: don't change N_A id. It is used as default value in initdb.sql for types, that don't have N_A */
+        N_A             = 11, /* ATTENTION: don't change N_A id. It is used as default value in initdb.sql for types, that don't have N_A */
         ROUTER,
         RACKCONTROLLER,
         SENSOR,
@@ -117,11 +121,13 @@ namespace persist {
         NUTANIX_CLUSTER,
         NUTANIX_PRISM_CONNECTOR,
 
-        VMWARE_VCENTER_CONNECTOR = 60,
+        VMWARE_VCENTER_CONNECTOR            = 60,
         VMWARE_STANDALONE_ESXI_CONNECTOR,
         NETAPP_ONTAP,
         VMWARE_SRM = 65,
         VMWARE_SRM_PLAN,
+
+        PCU                                 = 75, // Parallel Control Unit
 
         NB_ASSET_SUBTYPES
     };
