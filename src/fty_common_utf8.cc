@@ -472,11 +472,16 @@ s_jsonify_translation_string (const char *key, va_list args)
 
     // replace formatting directives with real content
     char *json_attempt = (char *) zmalloc (json_format.length ());
+    if (json_attempt == NULL) {
+        log_error ("JSON buffer allocate has failed (%zu bytes)", json_format.length());
+    }
     size_t missing = vsnprintf (json_attempt, json_format.length (), json_format.c_str (), args2);
     va_end (args2);
     if (missing >= json_format.length ()) {
-        log_trace ("JSON buffer too small, we have to reallocate");
         char *json = (char *) realloc ((void *) json_attempt, missing + 1);
+        if (json == NULL) {
+            log_error ("JSON buffer reallocate has failed (%zu bytes)", (missing + 1));
+        }
         if (json != NULL && json != json_attempt) {
             json_attempt = json;
         }
