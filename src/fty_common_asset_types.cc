@@ -44,7 +44,7 @@ namespace persist {
 // select * from t_bios_asset_device_type order by id_asset_device_type asc;
 // Note: except for "N_A", all string tokens below *must* be lowercase
 
-const std::string STR_UNKNOWN("unknown");
+const static std::string STR_UNKNOWN("unknown");
 
 const static std::map<uint16_t, std::string> type_names {
     { asset_type::TUNKNOWN,         STR_UNKNOWN }, // **must* be set
@@ -269,7 +269,6 @@ is_ups(int x) {
     return x == asset_subtype::UPS;
 }
 
-
 bool
 is_container (std::string asset_type)
 {
@@ -293,7 +292,7 @@ bool
 is_ok_name (const char* name)
 {
     size_t length = name ? strlen (name) : 0;
-    if ( length == 0)
+    if (length == 0)
         return false;
 
     // Bad characters _ % @

@@ -210,16 +210,14 @@ fty_common_base_test (bool verbose)
             "pcu"
         });
 
-        const uint16_t idUnknown = persist::asset_subtype::SUNKNOWN;
-        const std::string sUnknown = persist::subtypeid_to_subtype(idUnknown);
-
         bool success = true;
         for (auto type : types) {
             uint16_t id = persist::subtype_to_subtypeid(type);
             std::string s = persist::subtypeid_to_subtype(id);
 
             std::string attempt(type);
-            if (attempt != "N_A") std::transform(attempt.begin(), attempt.end(), attempt.begin(), ::tolower);
+            if (attempt != "N_A")
+                std::transform(attempt.begin(), attempt.end(), attempt.begin(), ::tolower);
 
             // handle exceptions
             if (type == "") attempt = "N_A";
