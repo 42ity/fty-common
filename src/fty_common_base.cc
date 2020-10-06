@@ -39,14 +39,12 @@ fty_common_base_test (bool verbose)
         assert(persist::asset_type::TUNKNOWN == 0);
         assert(persist::asset_type::GROUP == 1);
         assert(persist::asset_type::TSERVER == 15);
-        assert(persist::asset_type::COPS == 20);
 
         assert(persist::asset_subtype::SUNKNOWN == 0);
         assert(persist::asset_subtype::UPS == 1);
         assert(persist::asset_subtype::N_A == 11);
         assert(persist::asset_subtype::VMWARE_VCENTER_CONNECTOR == 60);
         assert(persist::asset_subtype::VMWARE_SRM == 65);
-        assert(persist::asset_subtype::PCU == 75);
     }
 
     printf("test: type/typeid unknown\n");

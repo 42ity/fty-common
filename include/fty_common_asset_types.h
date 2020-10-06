@@ -50,8 +50,7 @@ namespace persist {
         TSERVER                          = 15,
         PLANNER,
         PLAN,
-
-        COPS = 20, // Composite Power System
+        COPS, // Composite Power System
 
         NB_ASSET_TYPES
     };
@@ -68,8 +67,8 @@ namespace persist {
         STS,
         SWITCH,
         STORAGE,
-        VIRTUAL,
-        VM = VIRTUAL,
+        VM,
+        VIRTUAL = VM,
 
         N_A             = 11, /* ATTENTION: don't change N_A id. It is used as default value in initdb.sql for types, that don't have N_A */
         ROUTER,
@@ -124,10 +123,9 @@ namespace persist {
         VMWARE_VCENTER_CONNECTOR            = 60,
         VMWARE_STANDALONE_ESXI_CONNECTOR,
         NETAPP_ONTAP,
-        VMWARE_SRM = 65,
+        VMWARE_SRM                          = 65,
         VMWARE_SRM_PLAN,
-
-        PCU                                 = 75, // Parallel Control Unit
+        PCU,      // Parallel Control Unit
 
         NB_ASSET_SUBTYPES
     };
