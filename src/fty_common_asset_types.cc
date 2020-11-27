@@ -59,7 +59,7 @@ const static std::map<uint16_t, std::string> type_names {
     { asset_type::STORAGE_SERVICE,  ::fty::TYPE_STORAGE_SERVICE },
     { asset_type::VAPP,             ::fty::TYPE_VAPP },
     { asset_type::CONNECTOR,        ::fty::TYPE_CONNECTOR },
-    { asset_type::TSERVER,          ::fty::TYPE_TSERVE },
+    { asset_type::TSERVER,          ::fty::TYPE_SERVER },
     { asset_type::PLANNER,          ::fty::TYPE_PLANNER },
     { asset_type::PLAN,             ::fty::TYPE_PLAN },
     { asset_type::COPS,             ::fty::TYPE_COPS } // Composite Power System
@@ -82,11 +82,11 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::N_A,     ::fty::SUB_N_A },
 
     { asset_subtype::ROUTER,         ::fty::SUB_ROUTER },
-    { asset_subtype::RACKCONTROLLER, ::fty::SUB_RACKCONTROLLER },
+    { asset_subtype::RACKCONTROLLER, ::fty::SUB_RACK_CONTROLLER },
     { asset_subtype::SENSOR,         ::fty::SUB_SENSOR },
     { asset_subtype::APPLIANCE,      ::fty::SUB_APPLIANCE },
     { asset_subtype::CHASSIS,        ::fty::SUB_CHASSIS },
-    { asset_subtype::PATCHPANEL,     ::fty::SUB_PATCHPANEL },
+    { asset_subtype::PATCHPANEL,     ::fty::SUB_PATCH_PANEL },
     { asset_subtype::OTHER,          ::fty::SUB_OTHER },
     { asset_subtype::SENSORGPIO,     ::fty::SUB_SENSORGPIO },
 

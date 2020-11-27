@@ -174,7 +174,7 @@ namespace fty {
     static constexpr const char* SUB_VM                               = "vm";                               // 10
     static constexpr const char* SUB_N_A                              = "N_A";                              // 11
     static constexpr const char* SUB_ROUTER                           = "router";                           // 12
-    static constexpr const char* SUB_RACK_CONTROLLER                  = "rack controller";                  // 13
+    static constexpr const char* SUB_RACK_CONTROLLER                  = "rackcontroller";                   // 13
     static constexpr const char* SUB_SENSOR                           = "sensor";                           // 14
     static constexpr const char* SUB_APPLIANCE                        = "appliance";                        // 15
     static constexpr const char* SUB_CHASSIS                          = "chassis";                          // 16
@@ -226,6 +226,7 @@ namespace fty {
 } //namespace fty
 
 namespace persiste {
+
     enum asset_operation
     {
         INSERT = 1,
