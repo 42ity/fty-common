@@ -225,7 +225,7 @@ namespace fty {
     static constexpr const char* SUB_PCU                              = "pcu";                              // 72
 } //namespace fty
 
-namespace persiste {
+namespace persist {
 
     enum asset_operation
     {
