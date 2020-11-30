@@ -44,102 +44,100 @@ namespace persist {
 // select * from t_bios_asset_device_type order by id_asset_device_type asc;
 // Note: except for "N_A", all string tokens below *must* be lowercase
 
-const static std::string STR_UNKNOWN("unknown");
-
 const static std::map<uint16_t, std::string> type_names {
-    { asset_type::TUNKNOWN,         STR_UNKNOWN }, // **must* be set
-    { asset_type::GROUP,            "group" },
-    { asset_type::DATACENTER,       "datacenter" },
-    { asset_type::ROOM,             "room" },
-    { asset_type::ROW,              "row" },
-    { asset_type::RACK,             "rack" },
-    { asset_type::DEVICE,           "device" },
-    { asset_type::INFRA_SERVICE,    "infra-service" },
-    { asset_type::CLUSTER,          "cluster" },
-    { asset_type::HYPERVISOR,       "hypervisor" },
-    { asset_type::VIRTUAL_MACHINE,  "virtual-machine" },
-    { asset_type::STORAGE_SERVICE,  "storage-service" },
-    { asset_type::VAPP,             "vapp" },
-    { asset_type::CONNECTOR,        "connector" },
-    { asset_type::TSERVER,          "server" },
-    { asset_type::PLANNER,          "planner" },
-    { asset_type::PLAN,             "plan" },
-    { asset_type::COPS,             "cops" } // Composite Power System
+    { asset_type::TUNKNOWN,         ::fty::TYPE_UNKNOWN }, // **must* be set
+    { asset_type::GROUP,            ::fty::TYPE_GROUP },
+    { asset_type::DATACENTER,       ::fty::TYPE_DATACENTER },
+    { asset_type::ROOM,             ::fty::TYPE_ROOM },
+    { asset_type::ROW,              ::fty::TYPE_ROW },
+    { asset_type::RACK,             ::fty::TYPE_RACK },
+    { asset_type::DEVICE,           ::fty::TYPE_DEVICE },
+    { asset_type::INFRA_SERVICE,    ::fty::TYPE_INFRA_SERVICE },
+    { asset_type::CLUSTER,          ::fty::TYPE_CLUSTER },
+    { asset_type::HYPERVISOR,       ::fty::TYPE_HYPERVISOR },
+    { asset_type::VIRTUAL_MACHINE,  ::fty::TYPE_VIRTUAL_MACHINE },
+    { asset_type::STORAGE_SERVICE,  ::fty::TYPE_STORAGE_SERVICE },
+    { asset_type::VAPP,             ::fty::TYPE_VAPP },
+    { asset_type::CONNECTOR,        ::fty::TYPE_CONNECTOR },
+    { asset_type::TSERVER,          ::fty::TYPE_SERVER },
+    { asset_type::PLANNER,          ::fty::TYPE_PLANNER },
+    { asset_type::PLAN,             ::fty::TYPE_PLAN },
+    { asset_type::COPS,             ::fty::TYPE_COPS } // Composite Power System
 };
 
 const static std::map<uint16_t, std::string> subtype_names {
-    { asset_subtype::SUNKNOWN, STR_UNKNOWN }, // **must* be set
+    { asset_subtype::SUNKNOWN, ::fty::SUB_UNKNOWN }, // **must* be set
 
-    { asset_subtype::UPS,     "ups" },
-    { asset_subtype::GENSET,  "genset" },
-    { asset_subtype::EPDU,    "epdu" },
-    { asset_subtype::PDU,     "pdu" },
-    { asset_subtype::SERVER,  "server" },
-    { asset_subtype::FEED,    "feed" },
-    { asset_subtype::STS,     "sts" },
-    { asset_subtype::SWITCH,  "switch" },
-    { asset_subtype::STORAGE, "storage" },
-    { asset_subtype::VIRTUAL, "vm" },
-    { asset_subtype::VM,      "vm" },
-    { asset_subtype::N_A,     "N_A" },
+    { asset_subtype::UPS,     ::fty::SUB_UPS },
+    { asset_subtype::GENSET,  ::fty::SUB_GENSET },
+    { asset_subtype::EPDU,    ::fty::SUB_EPDU },
+    { asset_subtype::PDU,     ::fty::SUB_PDU },
+    { asset_subtype::SERVER,  ::fty::SUB_SERVER },
+    { asset_subtype::FEED,    ::fty::SUB_FEED },
+    { asset_subtype::STS,     ::fty::SUB_STS },
+    { asset_subtype::SWITCH,  ::fty::SUB_SWITCH },
+    { asset_subtype::STORAGE, ::fty::SUB_STORAGE },
+    { asset_subtype::VIRTUAL, ::fty::SUB_VM },
+    { asset_subtype::VM,      ::fty::SUB_VM },
+    { asset_subtype::N_A,     ::fty::SUB_N_A },
 
-    { asset_subtype::ROUTER,         "router" },
-    { asset_subtype::RACKCONTROLLER, "rackcontroller" },
-    { asset_subtype::SENSOR,         "sensor" },
-    { asset_subtype::APPLIANCE,      "appliance" },
-    { asset_subtype::CHASSIS,        "chassis" },
-    { asset_subtype::PATCHPANEL,     "patchpanel" },
-    { asset_subtype::OTHER,          "other" },
-    { asset_subtype::SENSORGPIO,     "sensorgpio" },
+    { asset_subtype::ROUTER,         ::fty::SUB_ROUTER },
+    { asset_subtype::RACKCONTROLLER, ::fty::SUB_RACK_CONTROLLER },
+    { asset_subtype::SENSOR,         ::fty::SUB_SENSOR },
+    { asset_subtype::APPLIANCE,      ::fty::SUB_APPLIANCE },
+    { asset_subtype::CHASSIS,        ::fty::SUB_CHASSIS },
+    { asset_subtype::PATCHPANEL,     ::fty::SUB_PATCH_PANEL },
+    { asset_subtype::OTHER,          ::fty::SUB_OTHER },
+    { asset_subtype::SENSORGPIO,     ::fty::SUB_SENSORGPIO },
 
-    { asset_subtype::GPO,               "gpo" },
-    { asset_subtype::NETAPP_ONTAP_NODE, "netapp.ontap.node" },
-    { asset_subtype::IPMINFRA_SERVER,   "ipminfra.server" },
-    { asset_subtype::IPMINFRA_SERVICE,  "ipminfra.service" },
-    { asset_subtype::VMWARE_VCENTER,    "vmware.vcenter" },
-    { asset_subtype::CITRIX_POOL,       "citrix.pool" },
-    { asset_subtype::VMWARE_CLUSTER,    "vmware.cluster" },
-    { asset_subtype::VMWARE_ESXI,       "vmware.esxi" },
-    { asset_subtype::MICROSOFT_HYPERV,  "microsoft.hyperv" },
-    { asset_subtype::VMWARE_VM,         "vmware.vm" },
+    { asset_subtype::GPO,               ::fty::SUB_GPO },
+    { asset_subtype::NETAPP_ONTAP_NODE, ::fty::SUB_NETAPP_ONTAP_NODE },
+    { asset_subtype::IPMINFRA_SERVER,   ::fty::SUB_IPMINFRA_SERVER },
+    { asset_subtype::IPMINFRA_SERVICE,  ::fty::SUB_IPMINFRA_SERVICE },
+    { asset_subtype::VMWARE_VCENTER,    ::fty::SUB_VMWARE_VCENTER },
+    { asset_subtype::CITRIX_POOL,       ::fty::SUB_CITRIX_POOL },
+    { asset_subtype::VMWARE_CLUSTER,    ::fty::SUB_VMWARE_CLUSTER },
+    { asset_subtype::VMWARE_ESXI,       ::fty::SUB_VMWARE_ESXI },
+    { asset_subtype::MICROSOFT_HYPERV,  ::fty::SUB_MICROSOFT_HYPERV },
+    { asset_subtype::VMWARE_VM,         ::fty::SUB_VMWARE_VM },
 
-    { asset_subtype::MICROSOFT_VM,                      "microsoft.vm" },
-    { asset_subtype::CITRIX_VM,                         "citrix.vm" },
-    { asset_subtype::NETAPP_NODE,                       "netapp.node" },
-    { asset_subtype::VMWARE_STANDALONE_ESXI,            "vmware.standalone.esxi" },
-    { asset_subtype::VMWARE_TASK,                       "vmware.task" },
-    { asset_subtype::VMWARE_VAPP,                       "vmware.vapp" },
-    { asset_subtype::CITRIX_XENSERVER,                  "citrix.xenserver" },
-    { asset_subtype::CITRIX_VAPP,                       "citrix.vapp" },
-    { asset_subtype::CITRIX_TASK,                       "citrix.task" },
-    { asset_subtype::MICROSOFT_VIRTUALIZATION_MACHINE,  "microsoft.virtualization.machine" },
+    { asset_subtype::MICROSOFT_VM,                      ::fty::SUB_MICROSOFT_VM },
+    { asset_subtype::CITRIX_VM,                         ::fty::SUB_CITRIX_VM },
+    { asset_subtype::NETAPP_NODE,                       ::fty::SUB_NETAPP_NODE },
+    { asset_subtype::VMWARE_STANDALONE_ESXI,            ::fty::SUB_VMWARE_STANDALONE_ESXI },
+    { asset_subtype::VMWARE_TASK,                       ::fty::SUB_VMWARE_TASK },
+    { asset_subtype::VMWARE_VAPP,                       ::fty::SUB_VMWARE_VAPP },
+    { asset_subtype::CITRIX_XENSERVER,                  ::fty::SUB_CITRIX_XENSERVER },
+    { asset_subtype::CITRIX_VAPP,                       ::fty::SUB_CITRIX_VAPP },
+    { asset_subtype::CITRIX_TASK,                       ::fty::SUB_CITRIX_TASK },
+    { asset_subtype::MICROSOFT_VIRTUALIZATION_MACHINE,  ::fty::SUB_MICROSOFT_VIRTUALIZATION_MACHINE },
 
-    { asset_subtype::MICROSOFT_TASK,                "microsoft.task" },
-    { asset_subtype::MICROSOFT_SERVER_CONNECTOR,    "microsoft.server.connector" },
-    { asset_subtype::MICROSOFT_SERVER,              "microsoft.server" },
-    { asset_subtype::MICROSOFT_CLUSTER,             "microsoft.cluster" },
-    { asset_subtype::HP_ONEVIEW_CONNECTOR,          "hp.oneview.connector" },
-    { asset_subtype::HP_ONEVIEW,                    "hp.oneview" },
-    { asset_subtype::HP_IT_SERVER,                  "hp.it.server" },
-    { asset_subtype::HP_IT_RACK,                    "hp.it.rack" },
-    { asset_subtype::NETAPP_SERVER,                 "netapp.server" },
-    { asset_subtype::NETAPP_ONTAP_CONNECTOR,        "netapp.ontap.connector" },
+    { asset_subtype::MICROSOFT_TASK,               ::fty::SUB_MICROSOFT_TASK },
+    { asset_subtype::MICROSOFT_SERVER_CONNECTOR,   ::fty::SUB_MICROSOFT_SERVER_CONNECTOR },
+    { asset_subtype::MICROSOFT_SERVER,             ::fty::SUB_MICROSOFT_SERVER },
+    { asset_subtype::MICROSOFT_CLUSTER,            ::fty::SUB_MICROSOFT_CLUSTER },
+    { asset_subtype::HP_ONEVIEW_CONNECTOR,         ::fty::SUB_HP_ONEVIEW_CONNECTOR },
+    { asset_subtype::HP_ONEVIEW,                   ::fty::SUB_HP_ONEVIEW },
+    { asset_subtype::HP_IT_SERVER,                 ::fty::SUB_HP_IT_SERVER },
+    { asset_subtype::HP_IT_RACK,                   ::fty::SUB_HP_IT_RACK },
+    { asset_subtype::NETAPP_SERVER,                ::fty::SUB_NETAPP_SERVER },
+    { asset_subtype::NETAPP_ONTAP_CONNECTOR,       ::fty::SUB_NETAPP_ONTAP_CONNECTOR },
 
-    { asset_subtype::NETAPP_ONTAP_CLUSTER,      "netapp.ontap.cluster" },
-    { asset_subtype::NUTANIX_VM,                "nutanix.vm" },
-    { asset_subtype::NUTANIX_PRISM_GATEWAY,     "nutanix.prism.gateway" },
-    { asset_subtype::NUTANIX_NODE,              "nutanix.node" },
-    { asset_subtype::NUTANIX_CLUSTER,           "nutanix.cluster" },
-    { asset_subtype::NUTANIX_PRISM_CONNECTOR,   "nutanix.prism.connector" },
+    { asset_subtype::NETAPP_ONTAP_CLUSTER,     ::fty::SUB_NETAPP_ONTAP_CLUSTER },
+    { asset_subtype::NUTANIX_VM,               ::fty::SUB_NUTANIX_VM },
+    { asset_subtype::NUTANIX_PRISM_GATEWAY,    ::fty::SUB_NUTANIX_PRISM_GATEWAY },
+    { asset_subtype::NUTANIX_NODE,             ::fty::SUB_NUTANIX_NODE },
+    { asset_subtype::NUTANIX_CLUSTER,          ::fty::SUB_NUTANIX_CLUSTER },
+    { asset_subtype::NUTANIX_PRISM_CONNECTOR,  ::fty::SUB_NUTANIX_PRISM_CONNECTOR },
 
-    { asset_subtype::VMWARE_VCENTER_CONNECTOR,          "vmware.vcenter.connector" },
-    { asset_subtype::VMWARE_STANDALONE_ESXI_CONNECTOR,  "vmware.standalone.esxi.connector" },
-    { asset_subtype::NETAPP_ONTAP,                      "netapp.ontap" },
+    { asset_subtype::VMWARE_VCENTER_CONNECTOR,         ::fty::SUB_VMWARE_VCENTER_CONNECTOR },
+    { asset_subtype::VMWARE_STANDALONE_ESXI_CONNECTOR, ::fty::SUB_VMWARE_STANDALONE_ESXI_CONNECTOR },
+    { asset_subtype::NETAPP_ONTAP,                     ::fty::SUB_NETAPP_ONTAP },
 
-    { asset_subtype::VMWARE_SRM,        "vmware.srm" },
-    { asset_subtype::VMWARE_SRM_PLAN,   "vmware.srm.plan" },
+    { asset_subtype::VMWARE_SRM,        ::fty::SUB_VMWARE_SRM },
+    { asset_subtype::VMWARE_SRM_PLAN,   ::fty::SUB_VMWARE_SRM_PLAN },
 
-    { asset_subtype::PCU,   "pcu" } // Parallel Control Unit
+    { asset_subtype::PCU,   ::fty::SUB_PCU } // Parallel Control Unit
 };
 
 // Except "" for N_A, the names on the left are the ones from database
@@ -156,7 +154,7 @@ typeid_to_type (uint16_t type_id)
 {
     try { return type_names.at(type_id); }
     catch (...) {}
-    return STR_UNKNOWN; //type_names.at(asset_type::TUNKNOWN);
+    return ::fty::TYPE_UNKNOWN; //type_names.at(asset_type::TUNKNOWN);
 }
 
 uint16_t
@@ -182,7 +180,7 @@ subtypeid_to_subtype (uint16_t subtype_id)
         return subtype;
     }
     catch (...) {}
-    return STR_UNKNOWN; //subtype_names.at(asset_subtype::SUNKNOWN);
+    return ::fty::SUB_UNKNOWN; //subtype_names.at(asset_subtype::SUNKNOWN);
 }
 
 uint16_t
@@ -270,7 +268,7 @@ is_ups(int x) {
 }
 
 bool
-is_container (std::string asset_type)
+is_container (const std::string & asset_type)
 {
     if (asset_type == "datacenter" ||
         asset_type == "room"       ||
@@ -285,7 +283,7 @@ is_container (std::string asset_type)
 bool
 is_ok_element_type (uint16_t element_type_id)
 {
-    return typeid_to_type(element_type_id) != STR_UNKNOWN;
+    return typeid_to_type(element_type_id) != ::fty::TYPE_UNKNOWN;
 }
 
 bool
