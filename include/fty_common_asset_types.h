@@ -178,7 +178,7 @@ namespace fty {
     static constexpr const char* SUB_SENSOR                           = "sensor";                           // 14
     static constexpr const char* SUB_APPLIANCE                        = "appliance";                        // 15
     static constexpr const char* SUB_CHASSIS                          = "chassis";                          // 16
-    static constexpr const char* SUB_PATCH_PANEL                      = "patch panel";                      // 17
+    static constexpr const char* SUB_PATCH_PANEL                      = "patchpanel";                       // 17
     static constexpr const char* SUB_OTHER                            = "other";                            // 18
     static constexpr const char* SUB_SENSORGPIO                       = "sensorgpio";                       // 19
     static constexpr const char* SUB_GPO                              = "gpo";                              // 20
