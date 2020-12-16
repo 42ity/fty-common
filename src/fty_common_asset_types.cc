@@ -174,9 +174,6 @@ subtypeid_to_subtype (uint16_t subtype_id)
 {
     try {
         std::string subtype = subtype_names.at(subtype_id);
-        for (auto& it : subtype_equivs)
-            if (subtype == it.second)
-                { if (!it.first.empty()) return it.first; break; }
         return subtype;
     }
     catch (...) {}
