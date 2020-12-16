@@ -218,9 +218,9 @@ fty_common_base_test (bool verbose)
                 std::transform(attempt.begin(), attempt.end(), attempt.begin(), ::tolower);
 
             // handle exceptions
-            if (type == "") attempt = "N_A";
-            else if (type == "rackcontroller") attempt = "rack controller";
-            else if (type == "patchpanel") attempt = "patch panel";
+            if (type == "") attempt = fty::SUB_N_A;
+            else if (type == "rack controller") attempt = fty::SUB_RACK_CONTROLLER;
+            else if (type == "patch panel") attempt = fty::SUB_PATCH_PANEL;
 
             bool ok = (attempt == s);
             if (!ok) printf("ERROR: subtype: %s, id: %d, s: %s, attempt: %s\n", type.c_str(), id, s.c_str(), attempt.c_str());
