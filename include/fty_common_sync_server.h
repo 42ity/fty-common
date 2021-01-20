@@ -43,6 +43,7 @@ namespace fty
     class SyncServer
     {
     public:
+        virtual ~SyncServer() = default;
         virtual Payload handleRequest(const Sender & sender, const Payload & payload) = 0;
     };
 
