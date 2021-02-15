@@ -62,7 +62,9 @@ const static std::map<uint16_t, std::string> type_names {
     { asset_type::TSERVER,          ::fty::TYPE_SERVER },
     { asset_type::PLANNER,          ::fty::TYPE_PLANNER },
     { asset_type::PLAN,             ::fty::TYPE_PLAN },
-    { asset_type::COPS,             ::fty::TYPE_COPS } // Composite Power System
+    { asset_type::COPS,             ::fty::TYPE_COPS }, // Composite Power System
+    { asset_type::OPERATING_SYSTEM, ::fty::TYPE_OPERATING_SYSTEM },
+    { asset_type::HOST_GROUP,       ::fty::TYPE_HOST_GROUP }
 };
 
 const static std::map<uint16_t, std::string> subtype_names {
@@ -90,18 +92,17 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::OTHER,          ::fty::SUB_OTHER },
     { asset_subtype::SENSORGPIO,     ::fty::SUB_SENSORGPIO },
 
-    { asset_subtype::GPO,               ::fty::SUB_GPO },
-    { asset_subtype::NETAPP_ONTAP_NODE, ::fty::SUB_NETAPP_ONTAP_NODE },
-    { asset_subtype::IPMINFRA_SERVER,   ::fty::SUB_IPMINFRA_SERVER },
-    { asset_subtype::IPMINFRA_SERVICE,  ::fty::SUB_IPMINFRA_SERVICE },
-    { asset_subtype::VMWARE_VCENTER,    ::fty::SUB_VMWARE_VCENTER },
-    { asset_subtype::CITRIX_POOL,       ::fty::SUB_CITRIX_POOL },
-    { asset_subtype::VMWARE_CLUSTER,    ::fty::SUB_VMWARE_CLUSTER },
-    { asset_subtype::VMWARE_ESXI,       ::fty::SUB_VMWARE_ESXI },
-    { asset_subtype::MICROSOFT_HYPERV,  ::fty::SUB_MICROSOFT_HYPERV },
-    { asset_subtype::VMWARE_VM,         ::fty::SUB_VMWARE_VM },
+    { asset_subtype::GPO,                     ::fty::SUB_GPO },
+    { asset_subtype::NETAPP_ONTAP_NODE,       ::fty::SUB_NETAPP_ONTAP_NODE },
+    { asset_subtype::IPMINFRA_SERVER,         ::fty::SUB_IPMINFRA_SERVER },
+    { asset_subtype::IPMINFRA_SERVICE,        ::fty::SUB_IPMINFRA_SERVICE },
+    { asset_subtype::VMWARE_VCENTER,          ::fty::SUB_VMWARE_VCENTER },
+    { asset_subtype::CITRIX_POOL,             ::fty::SUB_CITRIX_POOL },
+    { asset_subtype::VMWARE_CLUSTER,          ::fty::SUB_VMWARE_CLUSTER },
+    { asset_subtype::VMWARE_ESXI,             ::fty::SUB_VMWARE_ESXI },
+    { asset_subtype::MICROSOFT_HYPERV_SERVER, ::fty::SUB_MICROSOFT_HYPERV_SERVER },
+    { asset_subtype::VMWARE_VM,               ::fty::SUB_VMWARE_VM },
 
-    { asset_subtype::MICROSOFT_VM,                      ::fty::SUB_MICROSOFT_VM },
     { asset_subtype::CITRIX_VM,                         ::fty::SUB_CITRIX_VM },
     { asset_subtype::NETAPP_NODE,                       ::fty::SUB_NETAPP_NODE },
     { asset_subtype::VMWARE_STANDALONE_ESXI,            ::fty::SUB_VMWARE_STANDALONE_ESXI },
@@ -110,8 +111,8 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::CITRIX_XENSERVER,                  ::fty::SUB_CITRIX_XENSERVER },
     { asset_subtype::CITRIX_VAPP,                       ::fty::SUB_CITRIX_VAPP },
     { asset_subtype::CITRIX_TASK,                       ::fty::SUB_CITRIX_TASK },
-    { asset_subtype::MICROSOFT_VIRTUALIZATION_MACHINE,  ::fty::SUB_MICROSOFT_VIRTUALIZATION_MACHINE },
 
+    { asset_subtype::MICROSOFT_VM,                 ::fty::SUB_MICROSOFT_VM },
     { asset_subtype::MICROSOFT_TASK,               ::fty::SUB_MICROSOFT_TASK },
     { asset_subtype::MICROSOFT_SERVER_CONNECTOR,   ::fty::SUB_MICROSOFT_SERVER_CONNECTOR },
     { asset_subtype::MICROSOFT_SERVER,             ::fty::SUB_MICROSOFT_SERVER },
@@ -137,7 +138,14 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::VMWARE_SRM,        ::fty::SUB_VMWARE_SRM },
     { asset_subtype::VMWARE_SRM_PLAN,   ::fty::SUB_VMWARE_SRM_PLAN },
 
-    { asset_subtype::PCU,   ::fty::SUB_PCU } // Parallel Control Unit
+    { asset_subtype::PCU,   ::fty::SUB_PCU }, // Parallel Control Unit
+    { asset_subtype::DELL_VXRAIL_CONNECTOR,       ::fty::SUB_DELL_VXRAIL_CONNECTOR },
+    { asset_subtype::DELL_VXRAIL_MANAGER,         ::fty::SUB_DELL_VXRAIL_MANAGER },
+    { asset_subtype::DELL_VXRAIL_CLUSTER,         ::fty::SUB_DELL_VXRAIL_CLUSTER },
+    { asset_subtype::MICROSOFT_HYPERV_SERVICE,    ::fty::SUB_MICROSOFT_HYPERV_SERVICE },
+    { asset_subtype::VMWARE_CLUSTER_FAULT_DOMAIN, ::fty::SUB_VMWARE_CLUSTER_FAULT_DOMAIN },
+    { asset_subtype::MICROSOFT_SCVMM_CONNECTOR,   ::fty::SUB_MICROSOFT_SCVMM_CONNECTOR },
+    { asset_subtype::MICROSOFT_SCVMM,             ::fty::SUB_MICROSOFT_SCVMM }
 };
 
 // Except "" for N_A, the names on the left are the ones from database
