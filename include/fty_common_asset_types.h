@@ -184,11 +184,11 @@ namespace fty {
     static constexpr const char* SUB_VM                               = "vm";
     static constexpr const char* SUB_N_A                              = "N_A";
     static constexpr const char* SUB_ROUTER                           = "router";
-    static constexpr const char* SUB_RACK_CONTROLLER                  = "rack controller";
+    static constexpr const char* SUB_RACK_CONTROLLER                  = "rackcontroller";
     static constexpr const char* SUB_SENSOR                           = "sensor";
     static constexpr const char* SUB_APPLIANCE                        = "appliance";
     static constexpr const char* SUB_CHASSIS                          = "chassis";
-    static constexpr const char* SUB_PATCH_PANEL                      = "patch panel";
+    static constexpr const char* SUB_PATCH_PANEL                      = "patchpanel";
     static constexpr const char* SUB_OTHER                            = "other";
     static constexpr const char* SUB_SENSORGPIO                       = "sensorgpio";
     static constexpr const char* SUB_GPO                              = "gpo";
