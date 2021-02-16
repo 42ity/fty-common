@@ -164,6 +164,7 @@ namespace persist {
         VMWARE_CLUSTER_FAULT_DOMAIN,
         MICROSOFT_SCVMM_CONNECTOR,
         MICROSOFT_SCVMM,
+        DELL_VXRAIL_EXSI,
 
         NB_ASSET_SUBTYPES
     };
@@ -239,6 +240,7 @@ namespace fty {
     static constexpr const char* SUB_VMWARE_CLUSTER_FAULT_DOMAIN      = "vmware.cluster.fault.domain";
     static constexpr const char* SUB_MICROSOFT_SCVMM_CONNECTOR        = "microsoft.scvmm.connector";
     static constexpr const char* SUB_MICROSOFT_SCVMM                  = "microsoft.scvmm";
+    static constexpr const char* SUB_DELL_VXRAIL_EXSI                 = "dell.vxrail.exsi";
 } //namespace fty
 
 namespace persist {
