@@ -137,6 +137,7 @@ fty_common_base_test (bool verbose)
 
             "ups",      "UPS",
             "genset",   "Genset",
+            "unknown",
             "epdu",
             "pdu",
             "server",
@@ -146,18 +147,14 @@ fty_common_base_test (bool verbose)
             "storage",
             "vm",
             "N_A",
-
             "router",
-            "rackcontroller", // "rack controller"
             "rack controller",
             "sensor",
             "appliance",
             "chassis",
-            "patchpanel", // "patch panel"
             "patch panel",
             "other",
             "sensorgpio",
-
             "gpo",
             "netapp.ontap.node",
             "ipminfra.server",
@@ -166,10 +163,8 @@ fty_common_base_test (bool verbose)
             "citrix.pool",
             "vmware.cluster",
             "vmware.esxi",
-            "microsoft.hyperv",
+            "microsoft.hyperv.server",
             "vmware.vm",
-
-            "microsoft.vm",
             "citrix.vm",
             "netapp.node",
             "vmware.standalone.esxi",
@@ -178,8 +173,7 @@ fty_common_base_test (bool verbose)
             "citrix.xenserver",
             "citrix.vapp",
             "citrix.task",
-            "microsoft.virtualization.machine",
-
+            "microsoft.vm",
             "microsoft.task",
             "microsoft.server.connector",
             "microsoft.server",
@@ -190,22 +184,25 @@ fty_common_base_test (bool verbose)
             "hp.it.rack",
             "netapp.server",
             "netapp.ontap.connector",
-
             "netapp.ontap.cluster",
             "nutanix.vm",
             "nutanix.prism.gateway",
             "nutanix.node",
             "nutanix.cluster",
             "nutanix.prism.connector",
-
             "vmware.vcenter.connector",
             "vmware.standalone.esxi.connector",
             "netapp.ontap",
-
             "vmware.srm",
             "vmware.srm.plan",
-
-            "pcu"
+            "pcu",
+            "dell.vxrail.connector",
+            "dell.vxrail.manager",
+            "dell.vxrail.cluster",
+            "microsoft.hyperv.service",
+            "vmware.cluster.fault.domain",
+            "microsoft.scvmm.connector",
+            "microsoft.scvmm"
         });
 
         bool success = true;
