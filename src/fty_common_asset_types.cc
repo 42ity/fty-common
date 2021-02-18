@@ -145,7 +145,8 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::MICROSOFT_HYPERV_SERVICE,    ::fty::SUB_MICROSOFT_HYPERV_SERVICE },
     { asset_subtype::VMWARE_CLUSTER_FAULT_DOMAIN, ::fty::SUB_VMWARE_CLUSTER_FAULT_DOMAIN },
     { asset_subtype::MICROSOFT_SCVMM_CONNECTOR,   ::fty::SUB_MICROSOFT_SCVMM_CONNECTOR },
-    { asset_subtype::MICROSOFT_SCVMM,             ::fty::SUB_MICROSOFT_SCVMM }
+    { asset_subtype::MICROSOFT_SCVMM,             ::fty::SUB_MICROSOFT_SCVMM },
+    { asset_subtype::DELL_VXRAIL_EXSI,            ::fty::SUB_DELL_VXRAIL_EXSI }
 };
 
 // Except "" for N_A, the names on the left are the ones from database
