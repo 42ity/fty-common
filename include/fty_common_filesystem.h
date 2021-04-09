@@ -21,79 +21,78 @@ with this program; if not, write to the Free Software Foundation, Inc.,
     \author Tomas Halman <TomasHalman@Eaton.com>
 */
 
-#ifndef FTY_COMMON_COMMON_FILESYSTEM_H
-#define FTY_COMMON_COMMON_FILESYSTEM_H
+#pragma once
 
 #ifdef __cplusplus
 
 // #include <dirent.h>
+#include <string>
 #include <sys/stat.h>
 #include <vector>
-#include <string>
 
 namespace shared {
 
 /**
  * \brief returns "/"
  */
-const char *path_separator();
+const char* path_separator();
 
 /**
  * \brief get the file mode
  * \param path to the file
  */
-mode_t file_mode( const char *path );
+mode_t file_mode(const char* path);
 
 /**
  * \brief return true if path exists and it is a regular file
  * \param path to the file
  */
-bool is_file( const char  *path );
+bool is_file(const char* path);
 
 /**
  * \brief return true if path exists and it is a directory
  * \param path to the directory
  */
-bool is_dir( const char  *path );
+bool is_dir(const char* path);
 
 /**
  * \brief get list of all items in directory
  * \param path to the directory
  */
-std::vector<std::string> items_in_directory( const char *path );
+std::vector<std::string> items_in_directory(const char* path);
 
 /**
  * \brief check if certain item exists
  * \param path to the directory and item name
  */
-bool is_item_in_directory (const std::string& path, std::vector <std::string>& items);
+bool is_item_in_directory(const std::string& path, std::vector<std::string>& items);
 
 /**
  * \brief get list of all regular files in directory
  * \param path to the directory
  */
-std::vector<std::string> files_in_directory( const char *path );
+std::vector<std::string> files_in_directory(const char* path);
 
 /**
  * \brief check if certain file exists in given directory
  * \param path to the directory and file name
  */
-bool is_file_in_directory (const std::string& path, std::vector <std::string>& files);
+bool is_file_in_directory(const std::string& path, std::vector<std::string>& files);
 
 /**
  * \brief create directory (if not exists
  * \param path to the newly created directory
  * \param mode (rights)
- * \param create parent directories if needed
+ * \param create_parent directories if needed
  *
  * In case of failure also errno is set, see "man 3 mkdir" for details.
  */
-bool mkdir_if_needed(const char *path, mode_t mode = 0x755, bool create_parent=true );
+bool mkdir_if_needed(const char* path, mode_t mode = 0x755, bool create_parent = true);
 
 /**
  * \brief return basename from given string
  *
- * \param path
+ * \param path file path
  *
  * \return the component of path following the final path_separator()
  */
@@ -102,5 +101,3 @@ std::string basename(const std::string& path);
 } // namespace shared
 
 #endif //__cplusplus
-
-#endif

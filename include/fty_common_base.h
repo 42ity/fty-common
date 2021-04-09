@@ -19,8 +19,7 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMONS_H_INCLUDED
-#define FTY_COMMONS_H_INCLUDED
+#pragma once
 
 #include <string.h>
 
@@ -38,14 +37,4 @@ extern "C"
 
 #ifdef __cplusplus
 }
-#endif
-
-
-//  @interface
-//  Self test of this class
-void
-    fty_common_base_test (bool verbose);
-
-//  @end
-
 #endif

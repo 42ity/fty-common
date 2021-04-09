@@ -23,8 +23,7 @@
  * \author Karol Hrdina <KarolHrdina@Eaton.com>
  * \brief Not yet documented file
  */
-#ifndef FTY_COMMON_COMMON_STR_DEFS_H__
-#define FTY_COMMON_COMMON_STR_DEFS_H__
+#pragma once
 
 #ifdef __cplusplus
 
@@ -50,4 +49,3 @@ extern const char* EV_DB_INITIALIZED_DIR; // directory holding database ready fi
 
 #endif // __cplusplus
 
-#endif // FTY_COMMON_COMMON_STR_DEFS_H__

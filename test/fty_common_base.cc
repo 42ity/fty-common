@@ -19,32 +19,25 @@
     =========================================================================
 */
 
-/*
-@header
-    fty_commons - Singleton object and common functions
-@discuss
-@end
-*/
+#include "fty_common_base.h"
+#include "fty_common_asset_types.h"
+#include <catch2/catch.hpp>
 
-#include "fty_common_classes.h"
-#include <stdio.h>
-
-void
-fty_common_base_test (bool verbose)
+TEST_CASE("Base")
 {
     printf (" * fty_commons: \n");
 
     printf("test: typeid/subtypeid enum. milestones\n");
     {
-        assert(persist::asset_type::TUNKNOWN == 0);
-        assert(persist::asset_type::GROUP == 1);
-        assert(persist::asset_type::TSERVER == 15);
+        CHECK(persist::asset_type::TUNKNOWN == 0);
+        CHECK(persist::asset_type::GROUP == 1);
+        CHECK(persist::asset_type::TSERVER == 15);
 
-        assert(persist::asset_subtype::SUNKNOWN == 0);
-        assert(persist::asset_subtype::UPS == 1);
-        assert(persist::asset_subtype::N_A == 11);
-        assert(persist::asset_subtype::VMWARE_VCENTER_CONNECTOR == 60);
-        assert(persist::asset_subtype::VMWARE_SRM == 65);
+        CHECK(persist::asset_subtype::SUNKNOWN == 0);
+        CHECK(persist::asset_subtype::UPS == 1);
+        CHECK(persist::asset_subtype::N_A == 11);
+        CHECK(persist::asset_subtype::VMWARE_VCENTER_CONNECTOR == 60);
+        CHECK(persist::asset_subtype::VMWARE_SRM == 65);
     }
 
     printf("test: type/typeid unknown\n");
@@ -67,7 +60,7 @@ fty_common_base_test (bool verbose)
             if (!ok) printf("ERROR: type: %s, id: %d, s: %s\n", type.c_str(), id, s.c_str());
             success &= ok;
         }
-        assert(success);
+        CHECK(success);
     }
 
     printf("test: type/typeid\n");
@@ -105,7 +98,7 @@ fty_common_base_test (bool verbose)
             if (!ok) printf("ERROR: type: %s, id: %d, s: %s, attempt: %s\n", type.c_str(), id, s.c_str(), attempt.c_str());
             success &= ok;
         }
-        assert(success);
+        CHECK(success);
     }
 
     printf("test: subtype/subtypeid unknown\n");
@@ -223,7 +216,7 @@ fty_common_base_test (bool verbose)
             if (!ok) printf("ERROR: subtype: %s, id: %d, s: %s, attempt: %s\n", type.c_str(), id, s.c_str(), attempt.c_str());
             success &= ok;
         }
-        assert(success);
+        CHECK(success);
     }
 
     //  @end

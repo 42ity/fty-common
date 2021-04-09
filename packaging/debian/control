@@ -23,11 +23,10 @@ Priority:       optional
 Maintainer:     fty-common Developers <eatonipcopensource@eaton.com>
 Standards-Version: 4.0.1.0
 Build-Depends: debhelper (>= 9),
-    pkg-config,
+    cmake (>=3.0),
+    fty-cmake-dev,
     libcxxtools-dev,
-    libfty-common-logging-dev,
-    asciidoc-base | asciidoc, xmlto,
-    dh-autoreconf
+    libfty-common-logging-dev
 
 Package: libfty-common1
 Architecture: any
@@ -47,14 +46,3 @@ Depends:
 Description: fty-common development tools
  This package contains development files for fty-common:
  provides common tools for agents
-
-Package: fty-common-dbg
-Architecture: any
-Section: debug
-Priority: optional
-Depends:
-    libfty-common1 (= ${binary:Version}),
-    ${misc:Depends}
-Description: fty-common debugging symbols
- This package contains the debugging symbols for fty-common:
- provides common tools for agents.

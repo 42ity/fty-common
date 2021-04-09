@@ -19,8 +19,7 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_SYNC_SERVER_H_INCLUDED
-#define FTY_COMMON_SYNC_SERVER_H_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
@@ -49,4 +48,3 @@ namespace fty
 
 } //namespace fty
 
-#endif

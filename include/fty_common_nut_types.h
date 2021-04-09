@@ -19,8 +19,7 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_NUT_TYPES_H_INCLUDED
-#define FTY_COMMON_NUT_TYPES_H_INCLUDED
+#pragma once
 
 #ifdef __cplusplus
 
@@ -48,4 +47,3 @@ using DeviceConfigurations = std::vector<DeviceConfiguration>;
 
 #endif
 
-#endif

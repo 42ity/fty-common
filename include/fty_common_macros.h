@@ -19,8 +19,7 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_MACROS_H_INCLUDED
-#define FTY_COMMON_MACROS_H_INCLUDED
+#pragma once
 
 #include <fty_common_utf8.h>
 
@@ -44,4 +43,3 @@
 // macro for translating formatting strings for which params are not yet known; used for error handling
 #define TRANSLATE_ME_IGNORE_PARAMS(...) __VA_ARGS__
 
-#endif

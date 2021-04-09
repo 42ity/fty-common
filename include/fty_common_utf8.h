@@ -19,8 +19,7 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_UTF8_H_INCLUDED
-#define FTY_COMMON_UTF8_H_INCLUDED
+#pragma once
 
 #ifdef __cplusplus
 
@@ -89,4 +88,3 @@ bash_escape (std::string& param);
 
 #endif
 
-#endif

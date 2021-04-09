@@ -26,17 +26,20 @@
 @end
 */
 
-#include "fty_common_classes.h"
-#include <stdarg.h>
+#include "fty_common_utf8.h"
+#include "fty_common_json.h"
+#include <cassert>
+#include <czmq.h>
+#include <fty_log.h>
 
 namespace UTF8 {
 
-int
-codepoint_size (const char *uchar) {
-    //ASCII
-    if ((((unsigned char) uchar[0]) & 0x80) == 0)
+static int codepoint_size(const char* uchar)
+{
+    // ASCII
+    if (((static_cast<unsigned char>(uchar[0])) & 0x80) == 0)
         return 0;
-    unsigned char start = ((unsigned char) uchar[0]) & 0xF0;
+    unsigned char start = (static_cast<unsigned char>(uchar[0])) & 0xF0;
     if ((start & 0xF0) == 0xF0)
         return 7;
     if (((start & 0xE0) == 0xE0) || ((start & 0xC0) == 0xC0))
@@ -44,36 +47,40 @@ codepoint_size (const char *uchar) {
     return -1;
 }
 
-size_t
-utf8_len (const char *s) {
+static size_t utf8_len(const char* s)
+{
     size_t len = 0;
-    for (; *s; ++s) if ((*s & 0xC0) != 0x80) ++len;
+    for (; *s; ++s)
+        if ((*s & 0xC0) != 0x80)
+            ++len;
     return len;
 }
 
-//returns a pointer to the beginning of the pos'th utf8 codepoint
+// returns a pointer to the beginning of the pos'th utf8 codepoint
 
-const char
-*utf8_index (const char *s, size_t pos) {
+static const char* utf8_index(const char* s, size_t pos)
+{
     ++pos;
     for (; *s; ++s) {
-        if ((*s & 0xC0) != 0x80) --pos;
-        if (pos == 0) return s;
+        if ((*s & 0xC0) != 0x80)
+            --pos;
+        if (pos == 0)
+            return s;
     }
-    return NULL;
+    return nullptr;
 }
 
-int
-utf8_to_codepoint (const char *uchar, char **codepoint) {
-    //codepoint is NOT null-terminated because it makes comparison too cumbersome
-    assert (codepoint);
+int utf8_to_codepoint(const char* uchar, char** codepoint)
+{
+    // codepoint is NOT null-terminated because it makes comparison too cumbersome
+    assert(codepoint);
 
-    const unsigned char *uuchar = (unsigned char *) uchar;
-    static const char hex[] = "0123456789abcdef";
-    unsigned char start = uuchar[0] & 0xF0;
-    unsigned char ubytes[4] = {0, 0, 0, 0};
-    unsigned int codepoint_int = 0;
-    int mask = 0xf;
+    const unsigned char* uuchar        = reinterpret_cast<const unsigned char*>(uchar);
+    static const char    hex[]         = "0123456789abcdef";
+    unsigned char        start         = uuchar[0] & 0xF0;
+    unsigned char        ubytes[4]     = {0, 0, 0, 0};
+    unsigned int         codepoint_int = 0;
+    int                  mask          = 0xf;
 
     // 4-byte character - 7 bytes for codepoint
     if ((start & 0xF0) == 0xF0) {
@@ -81,16 +88,16 @@ utf8_to_codepoint (const char *uchar, char **codepoint) {
         for (int i = 1; i < 4; i++)
             ubytes[i] = uuchar[i] & 0x3f;
 
-        codepoint_int = (ubytes[0] << 18) + (ubytes[1] << 12) + (ubytes[2] << 6) + ubytes[3];
+        codepoint_int = uint(ubytes[0] << 18) + uint(ubytes[1] << 12) + uint(ubytes[2] << 6) + ubytes[3];
         if (codepoint_int <= 0x10fff) {
             for (int i = 6; i > 1; i--) {
-                (*codepoint)[i] = hex[codepoint_int & mask];
+                (*codepoint)[i] = hex[codepoint_int & uint(mask)];
                 codepoint_int >>= 4;
             }
             (*codepoint)[1] = 'u';
             (*codepoint)[0] = '\\';
             return 4;
-        }            // everything else is unassigned character
+        } // everything else is unassigned character
         else
             return -1;
     }
@@ -99,22 +106,22 @@ utf8_to_codepoint (const char *uchar, char **codepoint) {
         ubytes[0] = uuchar[0] & 0xf;
         for (int i = 1; i < 3; i++)
             ubytes[i] = uuchar[i] & 0x3f;
-        codepoint_int = (ubytes[0] << 12) + (ubytes[1] << 6) + ubytes[2];
+        codepoint_int = uint(ubytes[0] << 12) + uint(ubytes[1] << 6) + ubytes[2];
         for (int i = 5; i > 1; i--) {
-            (*codepoint)[i] = hex[codepoint_int & mask];
+            (*codepoint)[i] = hex[codepoint_int & uint(mask)];
             codepoint_int >>= 4;
         }
         (*codepoint)[1] = 'u';
         (*codepoint)[0] = '\\';
         return 3;
     }
-    //2-byte character
+    // 2-byte character
     if ((start & 0xC0) == 0xC0) {
-        ubytes[0] = uuchar[0] & 0x1f;
-        ubytes[1] = uuchar[1] & 0x3f;
-        codepoint_int = (ubytes[0] << 6) + ubytes[1];
+        ubytes[0]     = uuchar[0] & 0x1f;
+        ubytes[1]     = uuchar[1] & 0x3f;
+        codepoint_int = uint(ubytes[0] << 6) + ubytes[1];
         for (int i = 5; i > 2; i--) {
-            (*codepoint)[i] = hex[codepoint_int & mask];
+            (*codepoint)[i] = hex[codepoint_int & uint(mask)];
             codepoint_int >>= 4;
         }
         (*codepoint)[2] = '0';
@@ -129,32 +136,33 @@ utf8_to_codepoint (const char *uchar, char **codepoint) {
     return -1;
 }
 
-int
-compare_utf8_codepoint (const char *str_utf8, const char *str_codepoint) {
-    assert (str_utf8);
-    assert (str_codepoint);
-    size_t len = utf8_len (str_utf8);
+[[maybe_unused]] static int compare_utf8_codepoint(const char* str_utf8, const char* str_codepoint)
+{
+    assert(str_utf8);
+    assert(str_codepoint);
+    size_t len = utf8_len(str_utf8);
 
     int j = 0;
     for (size_t i = 0; i < len; i++) {
-        const char *pos = utf8_index (str_utf8, i);
-        if (codepoint_size (pos) == 0) {
-            log_debug ("Comparing '%c' with '%c'\n", *pos, str_codepoint[j]);
+        const char* pos = utf8_index(str_utf8, i);
+        if (codepoint_size(pos) == 0) {
+            log_debug("Comparing '%c' with '%c'\n", *pos, str_codepoint[j]);
             if (*pos != str_codepoint[j])
                 return 0;
             j++;
         } else {
-            char *codepoint = (char *) malloc (codepoint_size (pos) * sizeof (char));
-            int rv = utf8_to_codepoint (pos, &codepoint);
+            char* codepoint = static_cast<char*>(malloc(size_t(codepoint_size(pos)) * sizeof(char)));
+            int   rv        = utf8_to_codepoint(pos, &codepoint);
             if (rv == -1)
-                log_error ("Error while converting alert name '%s' for comparison with alert name '%s'\n", str_utf8, str_codepoint);
-            for (int k = 0; k < codepoint_size (pos); k++) {
-                log_debug ("codepoint : Comparing '%c' with '%c'\n", codepoint[k], str_codepoint[j]);
-                if (tolower (codepoint[k]) != tolower (str_codepoint[j]))
+                log_error("Error while converting alert name '%s' for comparison with alert name '%s'\n", str_utf8,
+                    str_codepoint);
+            for (int k = 0; k < codepoint_size(pos); k++) {
+                log_debug("codepoint : Comparing '%c' with '%c'\n", codepoint[k], str_codepoint[j]);
+                if (tolower(codepoint[k]) != tolower(str_codepoint[j]))
                     return 0;
                 j++;
             }
-            free (codepoint);
+            free(codepoint);
         }
     }
     return 1;
@@ -164,23 +172,21 @@ compare_utf8_codepoint (const char *str_utf8, const char *str_codepoint) {
 // 1, ..., 4 - # of utf8 octets
 // -1 - error
 
-int8_t
-utf8_octets (const char *c) {
-    assert (c);
-    const uint8_t b = (uint8_t)(*c); // UTF is defined in terms of 8-bit octets, do not equate those to potentially varied-width platform defined char's
-    if ((b & 0x80) == 0) // lead bit is zero, must be a single ascii
+int8_t utf8_octets(const char* c)
+{
+    assert(c);
+    const uint8_t b = uint8_t(*c); // UTF is defined in terms of 8-bit octets, do not equate those to potentially
+                                     // varied-width platform defined char's
+    if ((b & 0x80) == 0)             // lead bit is zero, must be a single ascii
         return 1;
-    else
-        if ((b & 0xE0) == 0xC0) // 110x xxxx (2 octets)
+    else if ((b & 0xE0) == 0xC0) // 110x xxxx (2 octets)
         return 2;
-    else
-        if ((b & 0xF0) == 0xE0) // 1110 xxxx (3 octets)
+    else if ((b & 0xF0) == 0xE0) // 1110 xxxx (3 octets)
         return 3;
-    else
-        if ((b & 0xF8) == 0xF0) // 1111 0xxx (4 octets)
+    else if ((b & 0xF8) == 0xF0) // 1111 0xxx (4 octets)
         return 4;
     else
-        log_error ("Unrecognized utf8 lead byte '%" PRIx8 "' in string '%s'", b, c);
+        log_error("Unrecognized utf8 lead byte '%" PRIx8 "' in string '%s'", b, c);
     return -1;
 }
 
@@ -188,24 +194,23 @@ utf8_octets (const char *c) {
 // 0 - same
 // 1 - different
 
-static int
-utf8_compare_octets (const char *s1, const char *s2, size_t pos, size_t length, int8_t count) {
-    assert (s1);
-    assert (s2);
+static int utf8_compare_octets(const char* s1, const char* s2, size_t pos, [[maybe_unused]] size_t length, int8_t count)
+{
+    assert(s1);
+    assert(s2);
 
     // FIXME: Should the process really die with invalid UTF strings?
-    assert (count >= 1 && count <= 4);
-    assert (pos + count <= length);
+    assert(count >= 1 && count <= 4);
+    assert(pos + size_t(count) <= length);
 
     // FIXME: When assert is a no-op (production) should this proceed with errors then ignored above?
     // e.g. a count==-1 would yield "return 0" below, and so perceived-equal utf8 chars...
 
-    for (int8_t i = 0; i < count; i++) {
+    for (size_t i = 0; i < size_t(count); i++) {
         const char c1 = s1[pos + i];
         const char c2 = s2[pos + i];
 
-        if ((count == 1 && tolower (c1) != tolower (c2)) ||
-                (count > 1 && c1 != c2))
+        if ((count == 1 && tolower(c1) != tolower(c2)) || (count > 1 && c1 != c2))
             return 1;
     }
     return 0;
@@ -217,25 +222,25 @@ utf8_compare_octets (const char *s1, const char *s2, size_t pos, size_t length, 
 // 1 - same
 // -1 - error
 
-int
-utf8eq (const char *s1, const char *s2) {
+int utf8eq(const char* s1, const char* s2)
+{
     // FIXME: Should we really crash if one string pointer
     //        is NULL, or return an equal/not-equal verdict?
     // Also, are two NULLs considered equal strings?
-    assert (s1);
-    assert (s2);
+    assert(s1);
+    assert(s2);
 
-    size_t length = strlen (s1);
-    if (length != strlen (s2))
+    size_t length = strlen(s1);
+    if (length != strlen(s2))
         return 0;
 
     size_t pos = 0;
     while (pos < length) {
-        int8_t s1_octets = utf8_octets (s1 + pos);
-        int8_t s2_octets = utf8_octets (s2 + pos);
+        int8_t s1_octets = utf8_octets(s1 + pos);
+        int8_t s2_octets = utf8_octets(s2 + pos);
 
         if (s1_octets == -1 || s2_octets == -1) {
-            log_debug ("Strings '%s' and '%s' are not equal because of invalid UTF-8 sequences", s1, s2);
+            log_debug("Strings '%s' and '%s' are not equal because of invalid UTF-8 sequences", s1, s2);
             return -1;
         }
 
@@ -244,124 +249,124 @@ utf8eq (const char *s1, const char *s2) {
             return 0;
 
         // Same length for both inputs, should be safe...
-        if (utf8_compare_octets (s1, s2, pos, length, s1_octets) == 1)
+        if (utf8_compare_octets(s1, s2, pos, length, s1_octets) == 1)
             return 0;
 
         // Try next logical char...
-        pos = pos + s1_octets;
+        pos = pos + size_t(s1_octets);
     }
     return 1;
 }
 
-std::string
-escape (const char *string) {
+std::string escape(const char* string)
+{
     if (!string)
         return "(null_ptr)";
 
-    std::string after;
-    std::string::size_type length = strlen (string);
-    after.reserve (length * 2);
+    std::string            after;
+    std::string::size_type length = strlen(string);
+    after.reserve(length * 2);
 
-/*
-    Quote from http://www.json.org/
-    -------------------------------
-    Char
-    any-Unicode-character-except-"-or-\-or-control-character:
-        \"
-        \\
-        \/
-        \b
-        \f
-        \n
-        \r
-        \t
-        \u four-hex-digits
-    ------------------------------
-*/
+    /*
+        Quote from http://www.json.org/
+        -------------------------------
+        Char
+        any-Unicode-character-except-"-or-\-or-control-character:
+            \"
+            \\
+            \/
+            \b
+            \f
+            \n
+            \r
+            \t
+            \u four-hex-digits
+        ------------------------------
+    */
     std::string::size_type i = 0;
     while (i < length) {
-        char c = string[i];
-        int8_t width = UTF8::utf8_octets (string + i);
+        char   c     = string[i];
+        int8_t width = UTF8::utf8_octets(string + i);
         switch (width) {
             case -1:
-                log_debug ("Cannot escape string '%s' because of invalid UTF-8 sequences at offset %ju", string, (uintmax_t)i);
+                log_debug(
+                    "Cannot escape string '%s' because of invalid UTF-8 sequences at offset %ju", string, i);
                 return "(invalid_utf8)";
             case 1:
                 switch (c) {
                     case '"':
-                        after.append ("\\\"");
+                        after.append("\\\"");
                         break;
                     case '\b':
-                        after.append ("\\\\b");
+                        after.append("\\\\b");
                         break;
                     case '\f':
-                        after.append ("\\\\f");
+                        after.append("\\\\f");
                         break;
                     case '\n':
-                        after.append ("\\\\n");
+                        after.append("\\\\n");
                         break;
                     case '\r':
-                        after.append ("\\\\r");
+                        after.append("\\\\r");
                         break;
                     case '\t':
-                        after.append ("\\\\t");
+                        after.append("\\\\t");
                         break;
                     case '\\':
-                        after.append ("\\\\");
+                        after.append("\\\\");
                         break;
                     default:
                         after += c;
-                } // cases of single-byte codepoint "c"
+                }      // cases of single-byte codepoint "c"
                 break; // case width==1
             case 2:
             case 3:
-            case 4:
-                {
+            case 4: {
                 // escape UTF-8 chars which have more than 1 byte
                 // allocate memory for "\u" + 4 hex digits + terminator
                 // allocating 8 bytes just for performance doesn't make sense
-                char *codepoint = (char *) calloc (7, sizeof (char));
+                char* codepoint = static_cast<char*>(calloc(7, sizeof(char)));
                 // calloc () takes care of zero termination, which utf8_to_codepoint () doesn't do
-                UTF8::utf8_to_codepoint (string + i, &codepoint);
+                UTF8::utf8_to_codepoint(string + i, &codepoint);
 
-                std::string codepoint_str (codepoint);
-                free (codepoint);
-                codepoint = NULL;
-                after.append (codepoint_str);
-                } // scope codepoint_str and codepoint
-                break;
+                std::string codepoint_str(codepoint);
+                free(codepoint);
+                codepoint = nullptr;
+                after.append(codepoint_str);
+            } // scope codepoint_str and codepoint
+            break;
             default:
-                log_debug ("Cannot escape string '%s' because utf8_octets() returned "
+                log_debug(
+                    "Cannot escape string '%s' because utf8_octets() returned "
                     "unexpected byte length %" PRIi8 " for logical character at offset %ju",
-                    string, width, (uintmax_t)i);
+                    string, width, i);
                 return "(invalid_utf8)";
         } // cases of width
 
         // We should not have width==0 ever, and -1 is filtered above
-        i += width;
+        i += uintmax_t(width);
     }
     return after;
 }
 
-std::string
-escape (const std::string& before) {
-    return escape (before.c_str ());
+std::string escape(const std::string& before)
+{
+    return escape(before.c_str());
 }
 
-std::string
-bash_escape (std::string& param)
+std::string bash_escape(std::string& param)
 {
-    std::string escape_chars (" \t!\"#$&'()*,;<=>?[\\]^`{|}~");
+    std::string escape_chars(" \t!\"#$&'()*,;<=>?[\\]^`{|}~");
     std::string escaped;
-    size_t start = 0;
+    size_t      start = 0;
     while (true) {
-        size_t end = param.find_first_of (escape_chars, start);
+        size_t end = param.find_first_of(escape_chars, start);
         if (end == std::string::npos) {
-            escaped += param.substr (start);
+            escaped += param.substr(start);
             break;
         }
         size_t length = end - start;
-        escaped += param.substr (start, length) + "\\" + param[end];
+        escaped += param.substr(start, length) + "\\" + param[end];
         start = end + 1;
     }
 
@@ -381,35 +386,34 @@ bash_escape (std::string& param)
 // * we are not using a 'space' flag in formatting directives
 // * every conversion is either %s, or a sequence of non-space characters started with % and ended with a space
 
-std::string
-s_jsonify_translation_string (const char *key, va_list args)
+static std::string s_jsonify_translation_string(const char* key, va_list args)
 {
-    //log_trace ("called");
+    // log_trace ("called");
 
     // check if 'key' is already in JSON format
     // since we may start/end with {{vari}} and we don't want to go through the whole string,
     // check just first two and last two characters
-    size_t length = strlen (key);
-    if (length >= 2 && key[0] == '{' && key[1] != '{' && key[length-2] != '}' && key[length-1] == '}') {
-        return std::string (key);
+    size_t length = strlen(key);
+    if (length >= 2 && key[0] == '{' && key[1] != '{' && key[length - 2] != '}' && key[length - 1] == '}') {
+        return std::string(key);
     }
 
-    int pos = 0;
-    int va_index = 1;
+    size_t     pos   = 0;
+    int     va_index = 1;
     va_list args2, args3;
-    va_copy (args2, args);
-    va_copy (args3, args);
+    va_copy(args2, args);
+    va_copy(args3, args);
 
     // make std::string copy so we can use insert/append
     std::string key_replaced;
-    key_replaced.reserve (length);
+    key_replaced.reserve(length);
     std::string json_format;
     std::string var_entry;
 
     while (*key != '\0') {
         // start of formatting directive
         if (*key == '%') {
-            std::string var_str = "var" + std::to_string (va_index);
+            std::string var_str     = "var" + std::to_string(va_index);
             std::string var_str_ref = "{{" + var_str + "}}";
             std::string format;
             // copy the formatting directive
@@ -429,9 +433,11 @@ s_jsonify_translation_string (const char *key, va_list args)
                         if (*(key - 1) != '%') {
                             loop_control = false;
                             break;
+                        } else {
+                            [[fallthrough]];
                         }
                     default:
-                        format.append (key, 1);
+                        format.append(key, 1);
                         key++;
                         if (format == "%s")
                             loop_control = false;
@@ -441,25 +447,25 @@ s_jsonify_translation_string (const char *key, va_list args)
 
             var_entry = " \"" + var_str + "\": \"" + format + "\",";
             // update the key_replaced with variable string reference
-            key_replaced.append (var_str_ref);
+            key_replaced.append(var_str_ref);
 
             // append JSON format entry for this variable
             // TODO: build objects for some variables (like dates)
-            json_format.append (var_entry);
+            json_format.append(var_entry);
             va_index++;
 
-            format.clear ();
-            var_entry.clear ();
+            format.clear();
+            var_entry.clear();
             // update the position in key_replaced to correspond to key
-            pos += var_str_ref.size ();
-        }
-        else {
-            key_replaced.insert (pos, key, 1);
-            key++; pos++;
+            pos += var_str_ref.size();
+        } else {
+            key_replaced.insert(pos, key, 1);
+            key++;
+            pos++;
         }
     }
 
-    if (json_format.empty ()) {
+    if (json_format.empty()) {
         // no formatting directives, finish up the JSON and return
         return "{ \"key\": \"" + key_replaced + "\" }";
     }
@@ -467,353 +473,109 @@ s_jsonify_translation_string (const char *key, va_list args)
     // finish up the JSON with formatting directives:
     json_format = "{ \"key\": \"" + key_replaced + "\", \"variables\": {" + json_format;
     // remove the trailing comma
-    json_format.pop_back ();
-    json_format.append (" } }");
+    json_format.pop_back();
+    json_format.append(" } }");
 
     // replace formatting directives with real content
-    char *json_attempt = (char *) zmalloc (json_format.length ());
-    if (json_attempt == NULL) {
-        log_error ("JSON buffer allocate has failed (%zu bytes)", json_format.length());
+    char* json_attempt = static_cast<char*>(zmalloc(json_format.length()));
+    if (json_attempt == nullptr) {
+        log_error("JSON buffer allocate has failed (%zu bytes)", json_format.length());
     }
-    size_t missing = vsnprintf (json_attempt, json_format.length (), json_format.c_str (), args2);
-    va_end (args2);
-    if (missing >= json_format.length ()) {
-        char *json = (char *) realloc ((void *) json_attempt, missing + 1);
-        if (json == NULL) {
-            log_error ("JSON buffer reallocate has failed (%zu bytes)", (missing + 1));
+    size_t missing = size_t(vsnprintf(json_attempt, json_format.length(), json_format.c_str(), args2));
+    va_end(args2);
+    if (missing >= json_format.length()) {
+        char* json = static_cast<char*>(realloc(json_attempt, missing + 1));
+        if (json == nullptr) {
+            log_error("JSON buffer reallocate has failed (%zu bytes)", (missing + 1));
         }
-        if (json != NULL && json != json_attempt) {
+        if (json != nullptr && json != json_attempt) {
             json_attempt = json;
         }
-        vsnprintf (json_attempt, missing + 1, json_format.c_str (), args3);
-        va_end (args3);
-    }
-    else {
-        //log_trace ("JSON buffer was sufficient");
+        vsnprintf(json_attempt, missing + 1, json_format.c_str(), args3);
+        va_end(args3);
+    } else {
+        // log_trace ("JSON buffer was sufficient");
     }
 
-    std::string json_str (json_attempt);
-    free (json_attempt);
+    std::string json_str(json_attempt);
+    free(json_attempt);
 
     // drop quotes enclosing inserted variables which are already in JSON format
     // - one from the previous call, second from this one
-    size_t insert_start = json_str.find ("\"{");
+    size_t insert_start = json_str.find("\"{");
     size_t object_start = insert_start, object_end;
     while (insert_start != std::string::npos) {
         try {
-            std::string res = JSON::readObject (json_str, object_start, object_end);
-            log_trace ("JSON object = %s\n", res.c_str ());
-        } catch (JSON::NotFoundException &e) {
-            log_trace ("JSON object not found in %s", json_str.substr (insert_start).c_str ());
+            std::string res = JSON::readObject(json_str, object_start, object_end);
+            log_trace("JSON object = %s\n", res.c_str());
+        } catch (JSON::NotFoundException&) {
+            log_trace("JSON object not found in %s", json_str.substr(insert_start).c_str());
             object_end = std::string::npos;
-        } catch (JSON::CorruptedLineException &e) {
-            log_trace ("Corrupted line %s", json_str.substr (insert_start).c_str ());
+        } catch (JSON::CorruptedLineException&) {
+            log_trace("Corrupted line %s", json_str.substr(insert_start).c_str());
             object_end = std::string::npos;
         }
-        size_t insert_end = json_str.find ("}\"", insert_start);
+        size_t insert_end = json_str.find("}\"", insert_start);
         while (insert_end != std::string::npos && insert_end != object_end) {
-            insert_end = json_str.find ("}\"", insert_end + 1);
+            insert_end = json_str.find("}\"", insert_end + 1);
         }
         if (insert_end == object_end) {
-            json_str.replace (insert_start, 2, " {");
-            json_str.replace (insert_end, 2, "} ");
+            json_str.replace(insert_start, 2, " {");
+            json_str.replace(insert_end, 2, "} ");
         }
         // move in case match was not replacable
         insert_start++;
-        insert_start = json_str.find ("\"{", insert_start);
+        insert_start = json_str.find("\"{", insert_start);
         object_start = insert_start;
     }
-    key_replaced.clear ();
+    key_replaced.clear();
     return json_str;
 }
 
-std::string
-jsonify_translation_string (const char *key, ...)
+std::string jsonify_translation_string(const char* key, ...)
 {
     va_list args;
-    va_start (args, key);
-    std::string jsonified_str = UTF8::s_jsonify_translation_string (key, args);
-    va_end (args);
+    va_start(args, key);
+    std::string jsonified_str = UTF8::s_jsonify_translation_string(key, args);
+    va_end(args);
     return jsonified_str;
 }
 
-std::string
-vajsonify_translation_string (const char *key, va_list args)
+std::string vajsonify_translation_string(const char* key, va_list args)
 {
-    std::string jsonified_str = UTF8::s_jsonify_translation_string (key, args);
+    std::string jsonified_str = UTF8::s_jsonify_translation_string(key, args);
     return jsonified_str;
 }
+
 } // namespace UTF8
 
-char *
-utf8_escape (const char *string)
+char* utf8_escape(const char* string)
 {
-    std::string escaped_str = UTF8::escape (string);
-    size_t length = escaped_str.length ();
-    char *escaped = (char *) zmalloc (length + 1);
-    strcpy (escaped, escaped_str.c_str ());
+    std::string escaped_str = UTF8::escape(string);
+    size_t      length      = escaped_str.length();
+    char*       escaped     = static_cast<char*>(zmalloc(length + 1));
+    strcpy(escaped, escaped_str.c_str());
     return escaped;
 }
 
-char *
-utf8_bash_escape (const char *string)
+char* utf8_bash_escape(const char* string)
 {
-    std::string string_str (string);
-    std::string escaped_str = UTF8::bash_escape (string_str);
-    size_t length = escaped_str.length ();
-    char *escaped = (char *) zmalloc (length + 1);
-    strcpy (escaped, escaped_str.c_str ());
+    std::string string_str(string);
+    std::string escaped_str = UTF8::bash_escape(string_str);
+    size_t      length      = escaped_str.length();
+    char*       escaped     = static_cast<char*>(zmalloc(length + 1));
+    strcpy(escaped, escaped_str.c_str());
     return escaped;
 }
 
-char *
-utf8_jsonify_translation_string (const char *key, ...)
+char* utf8_jsonify_translation_string(const char* key, ...)
 {
     va_list args;
-    va_start (args, key);
-    std::string jsonified_str = UTF8::s_jsonify_translation_string (key, args);
-    va_end (args);
-    size_t length = jsonified_str.length ();
-    char *jsonified = (char *) zmalloc (length + 1);
-    strcpy (jsonified, jsonified_str.c_str ());
+    va_start(args, key);
+    std::string jsonified_str = UTF8::s_jsonify_translation_string(key, args);
+    va_end(args);
+    size_t length    = jsonified_str.length();
+    char*  jsonified = static_cast<char*>(zmalloc(length + 1));
+    strcpy(jsonified, jsonified_str.c_str());
     return jsonified;
-}
-
-//  --------------------------------------------------------------------------
-//  Self test of this class
-
-// If your selftest reads SCMed fixture data, please keep it in
-// src/selftest-ro; if your test creates filesystem objects, please
-// do so under src/selftest-rw.
-// The following pattern is suggested for C selftest code:
-//    char *filename = NULL;
-//    filename = zsys_sprintf ("%s/%s", SELFTEST_DIR_RO, "mytemplate.file");
-//    assert (filename);
-//    ... use the "filename" for I/O ...
-//    zstr_free (&filename);
-// This way the same "filename" variable can be reused for many subtests.
-#define SELFTEST_DIR_RO "src/selftest-ro"
-#define SELFTEST_DIR_RW "src/selftest-rw"
-
-void
-fty_common_utf8_test (bool verbose)
-{
-    printf (" * fty_common_utf8: ");
-
-    //  @selftest
-    //  utf8eq test
-    //  @end
-    {
-        assert (UTF8::utf8eq ("ŽlUťOUčKý kůň", "\u017dlu\u0165ou\u010dk\xc3\xbd K\u016f\xc5\x88") == 1);
-        assert (UTF8::utf8eq ("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň") == 1);
-        assert (UTF8::utf8eq ("Žluťou\u0165ký kůň", "ŽLUťou\u0165Ký kůň ") == 0);
-        assert (UTF8::utf8eq ("Ka\xcc\x81rol", "K\xc3\xa1rol") == 0);
-        assert (UTF8::utf8eq ("супер test", "\u0441\u0443\u043f\u0435\u0440 Test") == 1);
-        assert (UTF8::utf8eq ("ŽlUťOUčKý kůň", "ŽlUťOUčKý kůn") == 0);
-        log_debug ("utf8eq: OK");
-    }
-
-    // utils::json::escape (<first>) should equal <second>
-    std::vector <std::pair <std::string, std::string>> tests {
-        {"'jednoduche ' uvozovky'",                                     "'jednoduche ' uvozovky'"},
-        {"'jednoduche '' uvozovky'",                                    "'jednoduche '' uvozovky'"},
-        {"dvojite \" uvozovky",                                         R"(dvojite \" uvozovky)"},
-        {"dvojite \\\" uvozovky",                                       R"(dvojite \\\" uvozovky)"},
-        {"dvojite \\\\\" uvozovky",                                     R"(dvojite \\\\\" uvozovky)"},
-        {"dvojite \\\\\\\" uvozovky",                                   R"(dvojite \\\\\\\" uvozovky)"},
-        {"dvojite \\\\\\\\\" uvozovky",                                 R"(dvojite \\\\\\\\\" uvozovky)"},
-        {"'",                                                           R"(')"},
-        {"\"",                                                          R"(\")"},
-        {"'\"",                                                         R"('\")"},
-        {"\"\"",                                                        R"(\"\")"},
-        {"\"\"\"",                                                      R"(\"\"\")"},
-        {"\\\"\"\"",                                                    R"(\\\"\"\")"},
-        {"\"\\\"\"",                                                    R"(\"\\\"\")"},
-        {"\"\"\\\"",                                                    R"(\"\"\\\")"},
-        {"\\\"\\\"\\\"",                                                R"(\\\"\\\"\\\")"},
-        {"\" dvojite \\\\\" uvozovky \"",                               R"(\" dvojite \\\\\" uvozovky \")"},
-        {"dvojite \"\\\"\" uvozovky",                                   R"(dvojite \"\\\"\" uvozovky)"},
-        {"dvojite \\\\\"\\\\\"\\\\\" uvozovky",                         R"(dvojite \\\\\"\\\\\"\\\\\" uvozovky)"},
-
-        {"\b",                                                          R"(\\b)"},
-        {"\\b",                                                         R"(\\b)"},
-        {"\\\b",                                                        R"(\\\\b)"},
-        {"\\\\b",                                                       R"(\\\\b)"},
-        {"\\\\\b",                                                      R"(\\\\\\b)"},
-        {"\\\\\\b",                                                     R"(\\\\\\b)"},
-        {"\\\\\\\b",                                                    R"(\\\\\\\\b)"},
-        {"\\\\\\\\b",                                                   R"(\\\\\\\\b)"},
-        {"\\\\\\\\\b",                                                  R"(\\\\\\\\\\b)"},
-
-        {"\\",                                                          R"(\\)"},
-        {"\\\\",                                                        R"(\\\\)"},
-        {"\\\\\\",                                                      R"(\\\\\\)"},
-        {"\\\\\\\\",                                                    R"(\\\\\\\\)"},
-        {"\\\\\\\\\\",                                                  R"(\\\\\\\\\\)"},
-        // tests for version which does not escape UTF-8
-        //{"\uA66A",                                                    "\uA66A"},
-        //{"Ꙫ",                                                         "Ꙫ"},
-        //{"\uA66A Ꙫ",                                                  "\uA66A Ꙫ"},
-
-        {"\\uA66A",                                                     R"(\\uA66A)"},
-        {"Ꙫ",                                                           R"(\ua66a)"},
-        {"\\Ꙫ",                                                         R"(\\\ua66a)"},
-        {"\u040A Њ",                                                    R"(\u040a \u040a)"},
-        // do not escape control chars yet
-        //{"\u0002\u0005\u0018\u001B",                                  R"(\u0002\u0005\u0018\u001b)"},
-
-        {"\\\uA66A",                                                    R"(\\\ua66a)"},
-        {"\\\\uA66A",                                                   R"(\\\\uA66A)"},
-        {"\\\\\uA66A",                                                  R"(\\\\\ua66a)"},
-
-        {"\\\\Ꙫ",                                                       R"(\\\\\ua66a)"},
-        {"\\\\\\Ꙫ",                                                     R"(\\\\\\\ua66a)"},
-
-        {"first second \n third\n\n \\n \\\\\n fourth",                 R"(first second \\n third\\n\\n \\n \\\\\\n fourth)"},
-        // do not escape control chars yet
-        //{"first second \n third\n\"\n \\n \\\\\"\f\\\t\\u\u0007\\\n fourth", R"(first second \\n third\\n\"\\n \\n \\\\\"\\f\\\\t\\u\u0007\\\\n fourth)"}
-    };
-
-    {
-        log_debug ("fty-common-utf8:escape: Test #1");
-        log_debug ("Manual comparison");
-
-        std::string escaped;
-        for (auto const& item : tests) {
-            escaped = UTF8::escape (item.first);
-            assert ( escaped.compare (item.second) == 0);
-        }
-        printf ("OK\n");
-    }
-
-    {
-        log_debug ("fty-common-utf8:escape: Test #2");
-        log_debug ("Manual comparison - C wrapper");
-
-        char *escaped;
-        for (auto const& item : tests) {
-            escaped = utf8_escape (item.first.c_str ());
-            assert (streq (escaped, item.second.c_str ()));
-            free (escaped);
-        }
-        printf ("OK\n");
-    }
-
-    const char *translation_string1 = "Text used as a key with %s and %d";
-    const char *translation_string2 = "Text used as a key with %'.2f and %lld";
-    const char *translation_string3 = "Text used as a key";
-    const char *translation_string4 = "Text used as a key,%s and (%s)";
-    const char *translation_string5 = "{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }";
-    const char *translation_string6 = "%s. Text used as a key: %s";
-    const char *translation_string7 = "Internal Server Error. %s";
-    const char *translation_string8 = "Internal Server Error. %s %s";
-    const char *translation_string_badval = "Parameter %s has bad value. Received %s. Expected %s";
-
-    std::string output1 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"foo\", \"var2\": \"5\" } }");
-    std::string output2 ("{ \"key\": \"Text used as a key with {{var1}} and {{var2}}\", \"variables\": { \"var1\": \"10.25\", \"var2\": \"256\" } }");
-    std::string output_arch ("{ \"key\": \"Text used as a key with {{var1}}\", \"variables\": { \"var1\": \"5\" } }");
-    std::string output3 ("{ \"key\": \"Text used as a key\" }");
-    std::string output4 ("{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
-    std::string output5 ("{ \"key\": \"Text used as a key,{{var1}} and ({{var2}})\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
-    std::string output6 ("{ \"key\": \"{{var1}}. Text used as a key: {{var2}}\", \"variables\": { \"var1\": \"foo\", \"var2\": \"bar\" } }");
-    std::string output7 ("{ \"key\": \"Internal Server Error. {{var1}}\", \"variables\": { \"var1\":  { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }  } }");
-    std::string output8 ("{ \"key\": \"Internal Server Error. {{var1}} {{var2}}\", \"variables\": { \"var1\":  { \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } } , \"var2\":  { \"key\": \"Unexpected param\" }  } }");
-    std::string output9 ("{ \"key\": \"Internal Server Error. {{var1}}\", \"variables\": { \"var1\":  { \"key\": \"Timed out waiting for message.\" }  } }");
-    std::string output_badval ("{ \"key\": \"Parameter {{var1}} has bad value. Received {{var2}}. Expected {{var3}}\", \"variables\": { \"var1\": \"state\", \"var2\":  { \"key\": \"value '{{var1}}'\", \"variables\": { \"var1\": \"XYZ\" } } , \"var3\":  { \"key\": \"one of the following values {{var1}}\", \"variables\": { \"var1\": \"[ ALL | ALL-ACTIVE | ACTIVE | ACK-WIP | ACK-IGNORE | ACK-PAUSE | ACK-SILENCE | RESOLVED ]\" } }  } }");
-
-    {
-        log_debug ("fty-common-utf8:jsonify_translation_string: Test #1");
-        log_debug ("Manual comparison");
-        std::string json;
-        json = UTF8::jsonify_translation_string (translation_string1, "foo", 5);
-        assert (json == output1);
-
-        int64_t val = 256;
-        json = UTF8::jsonify_translation_string (translation_string2, 10.25, val);
-        assert (json == output2);
-
-        json = UTF8::jsonify_translation_string ("Text used as a key with %" PRIu32, 5);
-        assert (json == output_arch);
-
-        json = UTF8::jsonify_translation_string (translation_string3);
-        assert (json == output3);
-
-        json = UTF8::jsonify_translation_string (translation_string4, "foo", "bar");
-        assert (json == output4);
-
-        json = UTF8::jsonify_translation_string (translation_string5, "foo", "bar");
-        assert (json == output5);
-
-        json = UTF8::jsonify_translation_string (translation_string6, "foo", "bar");
-        assert (json == output6);
-
-        const char *param1 = "{ \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }";
-        json = UTF8::jsonify_translation_string (translation_string7, param1);
-        assert (json == output7);
-
-        const char *param2 = "{ \"key\": \"Unexpected param\" }";
-        json = UTF8::jsonify_translation_string (translation_string8, param1, param2);
-        assert (json == output8);
-
-        json = UTF8::jsonify_translation_string (translation_string7, "{ \"key\": \"Timed out waiting for message.\" }");
-        assert (json == output9);
-
-        json = UTF8::jsonify_translation_string (translation_string_badval, "state", "{ \"key\": \"value '{{var1}}'\", \"variables\": { \"var1\": \"XYZ\" } }", "{ \"key\": \"one of the following values {{var1}}\", \"variables\": { \"var1\": \"[ ALL | ALL-ACTIVE | ACTIVE | ACK-WIP | ACK-IGNORE | ACK-PAUSE | ACK-SILENCE | RESOLVED ]\" } }");
-        assert (json == output_badval);
-        printf ("OK\n");
-    }
-
-    {
-        log_debug ("fty-common-utf8:jsonify_translation_string: Test #2");
-        log_debug ("Manual comparison - C wrapper");
-
-        char *json;
-        json = utf8_jsonify_translation_string (translation_string1, "foo", 5);
-        assert (streq (json, output1.c_str ()));
-        free (json);
-
-        int64_t val = 256;
-        json = utf8_jsonify_translation_string (translation_string2, 10.25, val);
-        assert (streq (json, output2.c_str ()));
-        free (json);
-
-        json = utf8_jsonify_translation_string ("Text used as a key with %" PRIu32, 5);
-        assert (streq (json, output_arch.c_str ()));
-        free (json);
-
-        json = utf8_jsonify_translation_string (translation_string3);
-        assert (streq (json, output3.c_str ()));
-        free (json);
-
-        json = utf8_jsonify_translation_string (translation_string4, "foo", "bar");
-        assert (streq (json, output4.c_str ()));
-        free (json);
-
-        json = utf8_jsonify_translation_string (translation_string5, "foo", "bar");
-        assert (streq (json, output5.c_str ()));
-        free (json);
-
-        json = utf8_jsonify_translation_string (translation_string6, "foo", "bar");
-        assert (streq (json, output6.c_str ()));
-        free (json);
-
-        const char *param1 = "{ \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": \"60')\" } }";
-        json = utf8_jsonify_translation_string (translation_string7, param1);
-        assert (streq (json, output7.c_str ()));
-        free (json);
-
-        const char *param2 = "{ \"key\": \"Unexpected param\" }";
-        json = utf8_jsonify_translation_string (translation_string8, param1, param2);
-        assert (streq (json, output8.c_str ()));
-        free (json);
-
-        json = utf8_jsonify_translation_string (translation_string7, "{ \"key\": \"Timed out waiting for message.\" }");
-        assert (streq (json, output9.c_str ()));
-        free (json);
-
-        json = utf8_jsonify_translation_string (translation_string_badval, "state", "{ \"key\": \"value '{{var1}}'\", \"variables\": { \"var1\": \"XYZ\" } }", "{ \"key\": \"one of the following values {{var1}}\", \"variables\": { \"var1\": \"[ ALL | ALL-ACTIVE | ACTIVE | ACK-WIP | ACK-IGNORE | ACK-PAUSE | ACK-SILENCE | RESOLVED ]\" } }");
-        assert ( streq (json, output_badval.c_str ()));
-        free (json);
-        printf ("OK\n");
-    }
 }

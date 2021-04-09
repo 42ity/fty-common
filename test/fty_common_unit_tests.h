@@ -69,7 +69,7 @@ namespace fty
     class StreamClientTest final : public StreamPublisher, public StreamSubscriber
     {
     public:
-        ~StreamClientTest();
+        ~StreamClientTest() override;
         virtual void publish(const Payload & payload) override;
         virtual uint32_t subscribe( Callback callback) override;
         virtual void unsubscribe(uint32_t subId) override;

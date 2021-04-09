@@ -19,8 +19,7 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_JSON_H_INCLUDED
-#define FTY_COMMON_JSON_H_INCLUDED
+#pragma once
 
 #ifdef __cplusplus
 #include <climits>
@@ -33,6 +32,7 @@
 #include <fstream>
 #include <cxxtools/jsonserializer.h>
 #include <cxxtools/jsondeserializer.h>
+#include "fty_common.h"
 #endif
 
 typedef enum {
@@ -98,7 +98,6 @@ namespace JSON {
      * \brief Read/set a SerializationInfo object from a JSON file.
      * \param[in]   path_name - the path to the JSON file
      * \param[out]  si - cxxtools::SerializationInfo object
-     * \return void
      * \throw std::ifstream::failbit | std::ifstream::badbit | generic exceptions
      */
     void readFromFile (const std::string path_name, cxxtools::SerializationInfo& si);
@@ -107,7 +106,6 @@ namespace JSON {
      * \brief Read/set a SerializationInfo object from a JSON string.
      * \param[in]   string - the JSON string
      * \param[out]  si - cxxtools::SerializationInfo object
-     * \return void
      * \throw generic exceptions
      */
     void readFromString (const std::string string, cxxtools::SerializationInfo& si);
@@ -116,7 +114,6 @@ namespace JSON {
      * \brief Read/set a SerializationInfo object from a JSON istringstream.
      * \param[in]   input - the stream
      * \param[out]  si - cxxtools::SerializationInfo object
-     * \return void
      * \throw generic exceptions
      */
     void readFromStream (std::istringstream& input, cxxtools::SerializationInfo& si);
@@ -126,7 +123,6 @@ namespace JSON {
      * \param[in]  path_name - the path to JSON file
      * \param[in]  si - cxxtools::SerializationInfo object
      * \param[in]  beautify - beautify'er
-     * \return void
      * \throw std::ofstream::failbit | std::ofstream::badbit | generic exceptions
      */
     void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si, bool beautify = true);
@@ -145,16 +141,9 @@ namespace JSON {
      * \param[out] output - the stream
      * \param[in]  si - cxxtools::SerializationInfo object
      * \param[in]  beautify - beautify'er
-     * \return void
      * \throw generic exceptions
      */
     void writeToStream (std::ostringstream& output, cxxtools::SerializationInfo& si, bool beautify = true);
 
 }
-#endif
-//  @end
-
-//  Self test of this class
-void fty_common_json_test (bool verbose);
-
 #endif

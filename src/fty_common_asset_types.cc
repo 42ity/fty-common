@@ -33,9 +33,9 @@
 #include <string.h>
 
 // t_bios_asset_ext_attributes.keytag
-#define MAX_KEYTAG_LENGTH       40
+#define MAX_KEYTAG_LENGTH 40
 // t_bios_asset_ext_attributes.value
-#define MAX_VALUE_LENGTH        255
+#define MAX_VALUE_LENGTH 255
 
 namespace persist {
 
@@ -44,6 +44,7 @@ namespace persist {
 // select * from t_bios_asset_device_type order by id_asset_device_type asc;
 // Note: except for "N_A", all string tokens below *must* be lowercase
 
+// clang-format off
 const static std::map<uint16_t, std::string> type_names {
     { asset_type::TUNKNOWN,         ::fty::TYPE_UNKNOWN }, // **must* be set
     { asset_type::GROUP,            ::fty::TYPE_GROUP },
@@ -155,19 +156,20 @@ const static std::map<std::string, std::string> subtype_equivs {
     { "patch panel",     "patchpanel" },     // Mind the space!
     { "",                "N_A" }             // Do not change, string for assets with undefined type
 };
+// clang-format on
 
 // see fty_common_base.cc for selftests
 
-std::string
-typeid_to_type (uint16_t type_id)
+std::string typeid_to_type(uint16_t type_id)
 {
-    try { return type_names.at(type_id); }
-    catch (...) {}
-    return ::fty::TYPE_UNKNOWN; //type_names.at(asset_type::TUNKNOWN);
+    try {
+        return type_names.at(type_id);
+    } catch (...) {
+    }
+    return ::fty::TYPE_UNKNOWN; // type_names.at(asset_type::TUNKNOWN);
 }
 
-uint16_t
-type_to_typeid (const std::string& type_)
+uint16_t type_to_typeid(const std::string& type_)
 {
     std::string type(type_);
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
@@ -178,19 +180,17 @@ type_to_typeid (const std::string& type_)
     return asset_type::TUNKNOWN;
 }
 
-std::string
-subtypeid_to_subtype (uint16_t subtype_id)
+std::string subtypeid_to_subtype(uint16_t subtype_id)
 {
     try {
         std::string subtype = subtype_names.at(subtype_id);
         return subtype;
+    } catch (...) {
     }
-    catch (...) {}
-    return ::fty::SUB_UNKNOWN; //subtype_names.at(asset_subtype::SUNKNOWN);
+    return ::fty::SUB_UNKNOWN; // subtype_names.at(asset_subtype::SUNKNOWN);
 }
 
-uint16_t
-subtype_to_subtypeid (const std::string &subtype_)
+uint16_t subtype_to_subtypeid(const std::string& subtype_)
 {
     std::string subtype(subtype_);
     if (subtype != "N_A")
@@ -206,10 +206,9 @@ subtype_to_subtypeid (const std::string &subtype_)
     return asset_subtype::SUNKNOWN;
 }
 
-std::string
-operation2str (asset_operation operation)
+std::string operation2str(asset_operation operation)
 {
-    switch(operation) {
+    switch (operation) {
         case asset_operation::INSERT:
             return "create";
         case asset_operation::DELETE:
@@ -222,120 +221,107 @@ operation2str (asset_operation operation)
             return "retire";
         case asset_operation::INVENTORY:
             return "inventory";
-        default:
-            return "unknown";
     }
+    return "unknown";
 }
 
-asset_operation
-str2operation (const std::string &operation)
+asset_operation str2operation(const std::string& operation)
 {
-    std::string t (operation);
+    std::string t(operation);
     std::transform(t.begin(), t.end(), t.begin(), ::tolower);
-    if(t == "create") {
+    if (t == "create") {
         return asset_operation::INSERT;
-    } else if(t == "delete") {
+    } else if (t == "delete") {
         return asset_operation::DELETE;
-    } else if(t == "retire") {
+    } else if (t == "retire") {
         return asset_operation::RETIRE;
-    } else if(t == "inventory") {
+    } else if (t == "inventory") {
         return asset_operation::INVENTORY;
-    } else if(t == "update") {
+    } else if (t == "update") {
         return asset_operation::UPDATE;
-    } else if(t == "get") {
+    } else if (t == "get") {
         return asset_operation::GET;
     }
     return asset_operation::INVENTORY;
 }
 
-bool
-is_epdu(int x) {
+bool is_epdu(int x)
+{
     return x == asset_subtype::EPDU;
 }
 
-bool
-is_pdu(int x) {
+bool is_pdu(int x)
+{
     return x == asset_subtype::PDU;
 }
 
-bool
-is_rack(int x) {
+bool is_rack(int x)
+{
     return x == asset_type::RACK;
 }
 
-bool
-is_dc(int x) {
+bool is_dc(int x)
+{
     return x == asset_type::DATACENTER;
 }
 
-bool
-is_ups(int x) {
+bool is_ups(int x)
+{
     return x == asset_subtype::UPS;
 }
 
-bool
-is_container (const std::string & asset_type)
+bool is_container(const std::string& asset_type)
 {
-    if (asset_type == "datacenter" ||
-        asset_type == "room"       ||
-        asset_type == "row"        ||
-        asset_type == "rack" ) {
+    if (asset_type == "datacenter" || asset_type == "room" || asset_type == "row" || asset_type == "rack") {
         return true;
     }
 
     return false;
 }
 
-bool
-is_ok_element_type (uint16_t element_type_id)
+bool is_ok_element_type(uint16_t element_type_id)
 {
     return typeid_to_type(element_type_id) != ::fty::TYPE_UNKNOWN;
 }
 
-bool
-is_ok_name (const char* name)
+bool is_ok_name(const char* name)
 {
-    size_t length = name ? strlen (name) : 0;
+    size_t length = name ? strlen(name) : 0;
     if (length == 0)
         return false;
 
     // Bad characters _ % @
-    if (strchr (name, '_') != NULL ||
-        strchr (name, '%') != NULL ||
-        strchr (name, '@') != NULL)
-       return false;
+    if (strchr(name, '_') != nullptr || strchr(name, '%') != nullptr || strchr(name, '@') != nullptr)
+        return false;
 
     return true;
 }
 
-bool
-is_ok_keytag (const char *keytag)
+bool is_ok_keytag(const char* keytag)
 {
     size_t length = keytag ? strlen(keytag) : 0;
-    if ( ( length > 0 ) && ( length <= MAX_KEYTAG_LENGTH ) )
+    if ((length > 0) && (length <= MAX_KEYTAG_LENGTH))
         return true;
     else
         return false;
 }
 
-bool
-is_ok_value (const char *value)
+bool is_ok_value(const char* value)
 {
     size_t length = value ? strlen(value) : 0;
-    if ( ( length > 0 ) && ( length <= MAX_VALUE_LENGTH ) )
+    if ((length > 0) && (length <= MAX_VALUE_LENGTH))
         return true;
     else
         return false;
 }
 
-bool
-is_ok_link_type (uint8_t link_type_id)
+bool is_ok_link_type(uint8_t link_type_id)
 {
     // TODO: manage link types
-    if ( link_type_id > 0 )
+    if (link_type_id > 0)
         return true;
     else
         return false;
 }
 
-} // namespace end
+} // namespace persist

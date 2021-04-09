@@ -19,8 +19,7 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_AGENTS_H_INCLUDED
-#define FTY_COMMON_AGENTS_H_INCLUDED
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,6 +54,4 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
