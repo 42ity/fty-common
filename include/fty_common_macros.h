@@ -26,11 +26,11 @@
 // macro for strings we want to process by xgettext
 #ifdef __cplusplus
 
-#define TRANSLATE_ME(...) UTF8::jsonify_translation_string (__VA_ARGS__)
+#define TRANSLATE_ME(...) UTF8::jsonify_translation_string(__VA_ARGS__)
 
 #else
 
-#define TRANSLATE_ME(...) utf8_jsonify_translation_string (__VA_ARGS__)
+#define TRANSLATE_ME(...) utf8_jsonify_translation_string(__VA_ARGS__)
 
 #endif
 
@@ -42,4 +42,3 @@
 
 // macro for translating formatting strings for which params are not yet known; used for error handling
 #define TRANSLATE_ME_IGNORE_PARAMS(...) __VA_ARGS__
-

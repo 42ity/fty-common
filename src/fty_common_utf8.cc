@@ -176,8 +176,8 @@ int8_t utf8_octets(const char* c)
 {
     assert(c);
     const uint8_t b = uint8_t(*c); // UTF is defined in terms of 8-bit octets, do not equate those to potentially
-                                     // varied-width platform defined char's
-    if ((b & 0x80) == 0)             // lead bit is zero, must be a single ascii
+                                   // varied-width platform defined char's
+    if ((b & 0x80) == 0)           // lead bit is zero, must be a single ascii
         return 1;
     else if ((b & 0xE0) == 0xC0) // 110x xxxx (2 octets)
         return 2;
@@ -289,8 +289,7 @@ std::string escape(const char* string)
         int8_t width = UTF8::utf8_octets(string + i);
         switch (width) {
             case -1:
-                log_debug(
-                    "Cannot escape string '%s' because of invalid UTF-8 sequences at offset %ju", string, i);
+                log_debug("Cannot escape string '%s' because of invalid UTF-8 sequences at offset %ju", string, i);
                 return "(invalid_utf8)";
             case 1:
                 switch (c) {
@@ -398,7 +397,7 @@ static std::string s_jsonify_translation_string(const char* key, va_list args)
         return std::string(key);
     }
 
-    size_t     pos   = 0;
+    size_t  pos      = 0;
     int     va_index = 1;
     va_list args2, args3;
     va_copy(args2, args);

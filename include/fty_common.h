@@ -24,10 +24,12 @@
 // Afwul hack, but I need exceptions to be valid for whole content
 #ifdef __cplusplus
 #include <cxxtools/allocator.h>
-#include <stdexcept>
 #include <fty_log.h>
+#include <stdexcept>
 /// general IPM exception
-class IPMException : public std::exception { };
+class IPMException : public std::exception
+{
+};
 #endif // __cplusplus
 
 //  Opaque class structures to allow forward references
@@ -48,13 +50,13 @@ typedef struct _fty_common_unit_tests_t fty_common_unit_tests_t;
 #define FTY_COMMON_UNIT_TESTS_T_DEFINED
 
 #include "fty_common_agents.h"
-#include "fty_common_macros.h"
-#include "fty_common_nut_types.h"
-#include "fty_common_client.h"
-#include "fty_common_sync_server.h"
-#include "fty_common_base.h"
 #include "fty_common_asset_types.h"
-#include "fty_common_str_defs.h"
+#include "fty_common_base.h"
+#include "fty_common_client.h"
 #include "fty_common_filesystem.h"
 #include "fty_common_json.h"
+#include "fty_common_macros.h"
+#include "fty_common_nut_types.h"
+#include "fty_common_str_defs.h"
+#include "fty_common_sync_server.h"
 #include "fty_common_utf8.h"

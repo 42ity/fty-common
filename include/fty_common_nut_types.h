@@ -35,15 +35,12 @@
  * fty-security-wallet.
  */
 
-namespace fty {
-namespace nut {
+namespace fty::nut {
 
-using KeyValues = std::map<std::string, std::string>;
-using DeviceConfiguration = std::map<std::string, std::string>;
+using KeyValues            = std::map<std::string, std::string>;
+using DeviceConfiguration  = std::map<std::string, std::string>;
 using DeviceConfigurations = std::vector<DeviceConfiguration>;
 
-}
-}
+} // namespace fty::nut
 
 #endif
-

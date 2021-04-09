@@ -30,12 +30,13 @@
 
 namespace JSON {
 
-JSON_TYPE getNextObject (const std::string &line, size_t &start_pos) {
-    start_pos = line.find_first_not_of ("\t :,", start_pos);
+JSON_TYPE getNextObject(const std::string& line, size_t& start_pos)
+{
+    start_pos = line.find_first_not_of("\t :,", start_pos);
     if (start_pos == std::string::npos) {
         return JT_None;
     }
-    switch (line.at (start_pos)) {
+    switch (line.at(start_pos)) {
         case '{':
             return JT_Object;
         case '}':
@@ -47,20 +48,21 @@ JSON_TYPE getNextObject (const std::string &line, size_t &start_pos) {
     }
 }
 
-std::string readObject (const std::string &line, size_t &start_pos, size_t &end_pos) {
+std::string readObject(const std::string& line, size_t& start_pos, size_t& end_pos)
+{
     size_t temp = 0;
-    end_pos = 0;
-    start_pos = line.find_first_of ('{', start_pos);
+    end_pos     = 0;
+    start_pos   = line.find_first_of('{', start_pos);
     if (std::string::npos == start_pos) {
-        throw NotFoundException ();
+        throw NotFoundException();
     }
     int count = 1;
-    temp = start_pos; // searching at temp+1, so no need to add 1 here
+    temp      = start_pos; // searching at temp+1, so no need to add 1 here
     while (end_pos == 0) {
-        temp = line.find_first_of ("{}", temp + 1); // always searching at pos > 0
+        temp = line.find_first_of("{}", temp + 1); // always searching at pos > 0
         if (std::string::npos == temp) {
-            throw CorruptedLineException ();
-        } else if (line.at (temp) == '{') {
+            throw CorruptedLineException();
+        } else if (line.at(temp) == '{') {
             ++count;
         } else {
             --count; // closing curly bracket
@@ -69,27 +71,28 @@ std::string readObject (const std::string &line, size_t &start_pos, size_t &end_
             end_pos = temp;
         }
     }
-    return line.substr (start_pos, end_pos - start_pos + 1);
+    return line.substr(start_pos, end_pos - start_pos + 1);
 }
 
-std::string readString (const std::string &line, size_t &start_pos, size_t &end_pos) {
+std::string readString(const std::string& line, size_t& start_pos, size_t& end_pos)
+{
     size_t temp = 0;
-    end_pos = 0;
-    start_pos = line.find_first_of ('"', start_pos);
+    end_pos     = 0;
+    start_pos   = line.find_first_of('"', start_pos);
     if (std::string::npos == start_pos) {
-        throw NotFoundException ();
+        throw NotFoundException();
     }
     temp = start_pos + 1;
     while (end_pos == 0) {
-        temp = line.find_first_of ('"', temp + 1); // always searching at pos > 0
+        temp = line.find_first_of('"', temp + 1); // always searching at pos > 0
         if (std::string::npos == temp) {
-            throw CorruptedLineException ();
+            throw CorruptedLineException();
         }
         if (line[temp - 1] != '\\') {
             end_pos = temp;
         }
     }
-    return line.substr (start_pos + 1, end_pos - start_pos - 1);
+    return line.substr(start_pos + 1, end_pos - start_pos - 1);
 }
 
 //
@@ -97,7 +100,7 @@ std::string readString (const std::string &line, size_t &start_pos, size_t &end_
 //
 
 // write SI to JSON ostringstream
-void writeToStream (std::ostringstream& output, cxxtools::SerializationInfo& si, bool beautify)
+void writeToStream(std::ostringstream& output, cxxtools::SerializationInfo& si, bool beautify)
 {
     cxxtools::JsonSerializer serializer;
     serializer.beautify(beautify);
@@ -107,7 +110,7 @@ void writeToStream (std::ostringstream& output, cxxtools::SerializationInfo& si,
 }
 
 // write SI to JSON string
-std::string writeToString (cxxtools::SerializationInfo& si, bool beautify)
+std::string writeToString(cxxtools::SerializationInfo& si, bool beautify)
 {
     std::ostringstream output;
     writeToStream(output, si, beautify);
@@ -115,7 +118,7 @@ std::string writeToString (cxxtools::SerializationInfo& si, bool beautify)
 }
 
 // write SI to JSON file
-void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si, bool beautify)
+void writeToFile(const std::string path_name, cxxtools::SerializationInfo& si, bool beautify)
 {
     std::ofstream output;
     output.exceptions(std::ofstream::failbit | std::ofstream::badbit);
@@ -129,21 +132,21 @@ void writeToFile (const std::string path_name, cxxtools::SerializationInfo& si, 
 }
 
 // read/set SI from JSON istringstream
-void readFromStream (std::istringstream& input, cxxtools::SerializationInfo& si)
+void readFromStream(std::istringstream& input, cxxtools::SerializationInfo& si)
 {
     cxxtools::JsonDeserializer deserializer(input);
     deserializer.deserialize(si);
 }
 
 // read/set SI from JSON string
-void readFromString (const std::string string, cxxtools::SerializationInfo& si)
+void readFromString(const std::string string, cxxtools::SerializationInfo& si)
 {
     std::istringstream input(string);
     readFromStream(input, si);
 }
 
 // read/set SI from JSON file
-void readFromFile (const std::string path_name, cxxtools::SerializationInfo& si)
+void readFromFile(const std::string path_name, cxxtools::SerializationInfo& si)
 {
     std::ifstream input;
     input.open(path_name);
@@ -154,4 +157,3 @@ void readFromFile (const std::string path_name, cxxtools::SerializationInfo& si)
 }
 
 } // namespace JSON
-

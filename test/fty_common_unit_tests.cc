@@ -26,12 +26,12 @@
 @end
 */
 
+#include "fty_common_unit_tests.h"
 #include "fty_common.h"
+#include <catch2/catch.hpp>
 #include <chrono>
 #include <condition_variable>
 #include <thread>
-#include <catch2/catch.hpp>
-#include "fty_common_unit_tests.h"
 
 namespace fty {
 Payload EchoServer::handleRequest(const Sender& sender, const Payload& payload)

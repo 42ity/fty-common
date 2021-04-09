@@ -26,12 +26,11 @@
 #define STR(X) #X
 
 #ifndef srteq
-#define streq(s1,s2) (!strcmp ((s1), (s2)))
+#define streq(s1, s2) (!strcmp((s1), (s2)))
 #endif
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 
