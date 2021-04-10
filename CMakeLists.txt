@@ -54,6 +54,8 @@ etn_test_target(${PROJECT_NAME}
         fty_common_unit_tests.cc
         fty_common_unit_tests.h
         fty_common_utf8.cc
+    USES
+        pthread
     SUBDIR
         test
 )

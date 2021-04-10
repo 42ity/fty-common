@@ -343,7 +343,7 @@ std::string escape(const char* string)
         } // cases of width
 
         // We should not have width==0 ever, and -1 is filtered above
-        i += uintmax_t(width);
+        i += size_t(width);
     }
     return after;
 }
