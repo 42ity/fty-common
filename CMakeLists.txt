@@ -27,12 +27,14 @@ etn_target(shared ${PROJECT_NAME}
         fty_common_nut_types.h
         fty_common_sync_server.h
         fty_common_utf8.h
+        fty_common_unit_tests.h
     SOURCES
         src/fty_common_asset_types.cc
         src/fty_common_filesystem.cc
         src/fty_common_json.cc
         src/fty_common_str_defs.cc
         src/fty_common_utf8.cc
+        src/fty_common_unit_tests.cc
     FLAGS
         -Wno-format-nonliteral
     USES
@@ -52,7 +54,6 @@ etn_test_target(${PROJECT_NAME}
         fty_common_base.cc
         fty_common_json.cc
         fty_common_unit_tests.cc
-        fty_common_unit_tests.h
         fty_common_utf8.cc
     USES
         pthread

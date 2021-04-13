@@ -55,7 +55,7 @@ TEST_CASE("Json")
     try {
         JSON::readObject(input, i, j);
         CHECK(std::string("Exception should have been raised first") == std::string("Code should never get here"));
-    } catch (JSON::NotFoundException& e) {
+    } catch (JSON::NotFoundException&) {
         // this is only valid case
     } catch (...) {
         CHECK(std::string("Specific exception expected") == std::string("Code should never get here"));
@@ -64,7 +64,7 @@ TEST_CASE("Json")
     try {
         JSON::readObject(input, i, j);
         CHECK(std::string("Exception should have been raised first") == std::string("Code should never get here"));
-    } catch (JSON::CorruptedLineException& e) {
+    } catch (JSON::CorruptedLineException&) {
         // this is only valid case
     } catch (...) {
         CHECK(std::string("Specific exception expected") == std::string("Code should never get here"));
