@@ -51,10 +51,10 @@ etn_test_target(${PROJECT_NAME}
         test/data/test-config.conf
     SOURCES
         test/main.cpp
-        fty_common_base.cc
-        fty_common_json.cc
-        fty_common_unit_tests.cc
-        fty_common_utf8.cc
+        test/fty_common_base.cc
+        test/fty_common_json.cc
+        test/fty_common_unit_tests.cc
+        test/fty_common_utf8.cc
     USES
         pthread
     SUBDIR
