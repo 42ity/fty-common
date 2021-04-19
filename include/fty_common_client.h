@@ -42,6 +42,7 @@ namespace fty
     class SyncClient
     {
     public:
+        virtual ~SyncClient() = default;
         virtual Payload syncRequestWithReply(const Payload & payload) = 0;
     };
 
@@ -53,6 +54,7 @@ namespace fty
     class StreamPublisher
     {
     public:
+        virtual ~StreamPublisher() = default;
         virtual void publish(const Payload & payload) = 0;
     };
 
@@ -66,6 +68,7 @@ namespace fty
     class StreamSubscriber
     {
     public:
+        virtual ~StreamSubscriber() = default;
         virtual uint32_t subscribe( Callback callback) = 0;
         virtual void unsubscribe(uint32_t subId) = 0;
     };
