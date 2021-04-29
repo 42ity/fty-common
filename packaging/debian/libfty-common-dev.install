@@ -1,3 +1,4 @@
 usr/include/*
+usr/share/*
 usr/lib/*/pkgconfig/libfty_common.pc
 usr/lib/*/libfty_common.so
