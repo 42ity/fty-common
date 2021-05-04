@@ -19,34 +19,30 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_SYNC_SERVER_H_INCLUDED
-#define FTY_COMMON_SYNC_SERVER_H_INCLUDED
+#pragma once
 
 #include <string>
 #include <vector>
 
-namespace fty
+namespace fty {
+using Sender  = std::string;
+using Payload = std::vector<std::string>;
+
+/**
+ * \brief Interface for basic synchronous server
+ * The server receive a request from a Sender and with a payload(vector or string)
+ * The server will reply with a payload.
+ *
+ * If return payload is empty, no answer will be returned to the client.
+ *
+ * \see Interface for basic synchronous client
+ */
+
+class SyncServer
 {
-    using Sender = std::string;
-    using Payload = std::vector<std::string>;
+public:
+    virtual ~SyncServer()                                                       = default;
+    virtual Payload handleRequest(const Sender& sender, const Payload& payload) = 0;
+};
 
-    /**
-    * \brief Interface for basic synchronous server
-    * The server receive a request from a Sender and with a payload(vector or string)
-    * The server will reply with a payload.
-    *
-    * If return payload is empty, no answer will be returned to the client.
-    *
-    * \see Interface for basic synchronous client
-    */
-
-    class SyncServer
-    {
-    public:
-        virtual ~SyncServer() = default;
-        virtual Payload handleRequest(const Sender & sender, const Payload & payload) = 0;
-    };
-
-} //namespace fty
-
-#endif
+} // namespace fty

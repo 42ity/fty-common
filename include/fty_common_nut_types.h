@@ -19,8 +19,7 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_NUT_TYPES_H_INCLUDED
-#define FTY_COMMON_NUT_TYPES_H_INCLUDED
+#pragma once
 
 #ifdef __cplusplus
 
@@ -36,16 +35,12 @@
  * fty-security-wallet.
  */
 
-namespace fty {
-namespace nut {
+namespace fty::nut {
 
-using KeyValues = std::map<std::string, std::string>;
-using DeviceConfiguration = std::map<std::string, std::string>;
+using KeyValues            = std::map<std::string, std::string>;
+using DeviceConfiguration  = std::map<std::string, std::string>;
 using DeviceConfigurations = std::vector<DeviceConfiguration>;
 
-}
-}
-
-#endif
+} // namespace fty::nut
 
 #endif

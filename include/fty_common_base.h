@@ -19,33 +19,21 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMONS_H_INCLUDED
-#define FTY_COMMONS_H_INCLUDED
+#pragma once
 
 #include <string.h>
 
 #define STR(X) #X
 
 #ifndef srteq
-#define streq(s1,s2) (!strcmp ((s1), (s2)))
+#define streq(s1, s2) (!strcmp((s1), (s2)))
 #endif
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 
 #ifdef __cplusplus
 }
-#endif
-
-
-//  @interface
-//  Self test of this class
-void
-    fty_common_base_test (bool verbose);
-
-//  @end
-
 #endif

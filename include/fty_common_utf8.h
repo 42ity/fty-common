@@ -19,8 +19,7 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_UTF8_H_INCLUDED
-#define FTY_COMMON_UTF8_H_INCLUDED
+#pragma once
 
 #ifdef __cplusplus
 
@@ -36,21 +35,20 @@
 #include <stdarg.h>
 
 //  Self test of this class
-void fty_common_utf8_test (bool verbose);
+void fty_common_utf8_test(bool verbose);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // C wrapper for UTF8::escape
-char* utf8_escape(const char *string);
+char* utf8_escape(const char* string);
 
 // C wrapper for UTF8::escape
-char* utf8_bash_escape(const char *string);
+char* utf8_bash_escape(const char* string);
 
 // C wrapper for UTF8::jsonify_translation_string
-char *
-utf8_jsonify_translation_string (const char *key, ...);
+char* utf8_jsonify_translation_string(const char* key, ...);
 
 #ifdef __cplusplus
 }
@@ -60,33 +58,28 @@ utf8_jsonify_translation_string (const char *key, ...);
 
 namespace UTF8 {
 
-int8_t utf8_octets (const char *c);
+int8_t utf8_octets(const char* c);
 
-int utf8_to_codepoint(const char *uchar, char **codepoint);
+int utf8_to_codepoint(const char* uchar, char** codepoint);
 
-int utf8eq(const char *s1, const char *s2);
+int utf8eq(const char* s1, const char* s2);
 
 // Convenient wrapper for escape"("const char *string")"
-std::string escape(const char *string);
+std::string escape(const char* string);
 
 //  Escape string for json output
 // Returns escaped json on success, "(null_ptr)" string on null argument
-std::string escape(const std::string &before);
+std::string escape(const std::string& before);
 
 // Convert translation string + variable number of args into JSON
-std::string
-jsonify_translation_string (const char *key, ...);
+std::string jsonify_translation_string(const char* key, ...);
 
 // Convert translation string + va_list into JSON
-std::string
-vajsonify_translation_string (const char *key, va_list args);
+std::string vajsonify_translation_string(const char* key, va_list args);
 
 // escape string for use as a bash command parameter
-std::string
-bash_escape (std::string& param);
+std::string bash_escape(std::string& param);
 
-}
-
-#endif
+} // namespace UTF8
 
 #endif

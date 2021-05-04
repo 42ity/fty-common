@@ -19,70 +19,70 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_ASSET_TYPES_H_INCLUDED
-#define FTY_COMMON_ASSET_TYPES_H_INCLUDED
+#pragma once
 
+#include <algorithm>
 #include <inttypes.h>
 #include <string>
-#include <algorithm>
 
 namespace persist {
 
-    // CAUTION: THESE ENUMS REFLECT (PARTS OF) THE DATABASE
+// CAUTION: THESE ENUMS REFLECT (PARTS OF) THE DATABASE
 
-    enum asset_type {
-        TUNKNOWN                        = 0,
+enum asset_type
+{
+    TUNKNOWN = 0,
 
-        GROUP                           = 1,
-        DATACENTER,
-        ROOM,
-        ROW,
-        RACK,
-        DEVICE,
-        INFRA_SERVICE,
-        CLUSTER,
-        HYPERVISOR,
+    GROUP = 1,
+    DATACENTER,
+    ROOM,
+    ROW,
+    RACK,
+    DEVICE,
+    INFRA_SERVICE,
+    CLUSTER,
+    HYPERVISOR,
 
-        VIRTUAL_MACHINE,
-        STORAGE_SERVICE,
-        VAPP,
-        CONNECTOR,
-        TSERVER                          = 15,
-        PLANNER,
-        PLAN,
-        COPS, // Composite Power System
-        OPERATING_SYSTEM,
-        HOST_GROUP, // Composite Power System
+    VIRTUAL_MACHINE,
+    STORAGE_SERVICE,
+    VAPP,
+    CONNECTOR,
+    TSERVER = 15,
+    PLANNER,
+    PLAN,
+    COPS, // Composite Power System
+    OPERATING_SYSTEM,
+    HOST_GROUP, // Composite Power System
 
-        NB_ASSET_TYPES
-    };
+    NB_ASSET_TYPES
+};
 
-} //namespace persiste
+} // namespace persist
 
 namespace fty {
-    // WARNING keep consistent with DB table t_bios_asset_element_type
-    static constexpr const char* TYPE_UNKNOWN          = "unknown";         // 0
-    static constexpr const char* TYPE_GROUP            = "group";           // 1
-    static constexpr const char* TYPE_DATACENTER       = "datacenter";      // 2
-    static constexpr const char* TYPE_ROOM             = "room";            // 3
-    static constexpr const char* TYPE_ROW              = "row";             // 4
-    static constexpr const char* TYPE_RACK             = "rack";            // 5
-    static constexpr const char* TYPE_DEVICE           = "device";          // 6
-    static constexpr const char* TYPE_INFRA_SERVICE    = "infra-service";   // 7
-    static constexpr const char* TYPE_CLUSTER          = "cluster";         // 8
-    static constexpr const char* TYPE_HYPERVISOR       = "hypervisor";      // 9
-    static constexpr const char* TYPE_VIRTUAL_MACHINE  = "virtual-machine"; // 10
-    static constexpr const char* TYPE_STORAGE_SERVICE  = "storage-service"; // 11
-    static constexpr const char* TYPE_VAPP             = "vapp";            // 12
-    static constexpr const char* TYPE_CONNECTOR        = "connector";       // 13
-    static constexpr const char* TYPE_SERVER           = "server";          // 15
-    static constexpr const char* TYPE_PLANNER          = "planner";         // 16
-    static constexpr const char* TYPE_PLAN             = "plan";            // 17
-    static constexpr const char* TYPE_COPS             = "cops";            // 18
-    static constexpr const char* TYPE_OPERATING_SYSTEM = "operating-system";// 19
-    static constexpr const char* TYPE_HOST_GROUP       = "host-group";      // 20
+// WARNING keep consistent with DB table t_bios_asset_element_type
+static constexpr const char* TYPE_UNKNOWN          = "unknown";          // 0
+static constexpr const char* TYPE_GROUP            = "group";            // 1
+static constexpr const char* TYPE_DATACENTER       = "datacenter";       // 2
+static constexpr const char* TYPE_ROOM             = "room";             // 3
+static constexpr const char* TYPE_ROW              = "row";              // 4
+static constexpr const char* TYPE_RACK             = "rack";             // 5
+static constexpr const char* TYPE_DEVICE           = "device";           // 6
+static constexpr const char* TYPE_INFRA_SERVICE    = "infra-service";    // 7
+static constexpr const char* TYPE_CLUSTER          = "cluster";          // 8
+static constexpr const char* TYPE_HYPERVISOR       = "hypervisor";       // 9
+static constexpr const char* TYPE_VIRTUAL_MACHINE  = "virtual-machine";  // 10
+static constexpr const char* TYPE_STORAGE_SERVICE  = "storage-service";  // 11
+static constexpr const char* TYPE_VAPP             = "vapp";             // 12
+static constexpr const char* TYPE_CONNECTOR        = "connector";        // 13
+static constexpr const char* TYPE_SERVER           = "server";           // 15
+static constexpr const char* TYPE_PLANNER          = "planner";          // 16
+static constexpr const char* TYPE_PLAN             = "plan";             // 17
+static constexpr const char* TYPE_COPS             = "cops";             // 18
+static constexpr const char* TYPE_OPERATING_SYSTEM = "operating-system"; // 19
+static constexpr const char* TYPE_HOST_GROUP       = "host-group";       // 20
 
-} //namespace fty
+} // namespace fty
 
 namespace persist {
     enum asset_subtype {
@@ -247,66 +247,47 @@ namespace fty {
 
 namespace persist {
 
-    enum asset_operation
-    {
-        INSERT = 1,
-        DELETE,
-        UPDATE,
-        GET,
-        RETIRE,
-        INVENTORY
-    };
+enum asset_operation
+{
+    INSERT = 1,
+    DELETE,
+    UPDATE,
+    GET,
+    RETIRE,
+    INVENTORY
+};
 
-    std::string
-    operation2str (asset_operation operation);
+std::string operation2str(asset_operation operation);
 
-    asset_operation
-    str2operation (const std::string &operation);
+asset_operation str2operation(const std::string& operation);
 
-    uint16_t
-    type_to_typeid (const std::string &type);
+uint16_t type_to_typeid(const std::string& type);
 
-    std::string
-    typeid_to_type (uint16_t type_id);
+std::string typeid_to_type(uint16_t type_id);
 
-    uint16_t
-    subtype_to_subtypeid (const std::string &subtype);
+uint16_t subtype_to_subtypeid(const std::string& subtype);
 
-    std::string
-    subtypeid_to_subtype (uint16_t subtype_id);
+std::string subtypeid_to_subtype(uint16_t subtype_id);
 
-    bool
-    is_epdu(int x);
+bool is_epdu(int x);
 
-    bool
-    is_pdu(int x);
+bool is_pdu(int x);
 
-    bool
-    is_rack(int x);
+bool is_rack(int x);
 
-    bool
-    is_dc(int x);
+bool is_dc(int x);
 
-    bool
-    is_ups(int x);
+bool is_ups(int x);
 
-    bool
-    is_container (const std::string & asset_type);
+bool is_container(const std::string& asset_type);
 
-    bool
-    is_ok_element_type (uint16_t element_type_id);
+bool is_ok_element_type(uint16_t element_type_id);
 
-    bool
-    is_ok_name (const char* name);
+bool is_ok_name(const char* name);
 
-    bool
-    is_ok_keytag (const char* keytag);
+bool is_ok_keytag(const char* keytag);
 
-    bool
-    is_ok_value (const char* value);
+bool is_ok_value(const char* value);
 
-    bool
-    is_ok_link_type (uint8_t link_type_id);
-} //namespace persist
-
-#endif
+bool is_ok_link_type(uint8_t link_type_id);
+} // namespace persist

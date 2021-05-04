@@ -27,21 +27,9 @@
 #include "fty_common_str_defs.h"
 
 /* Implement variables declared in str_defs.h */
-const char *AVG_STEPS[AVG_STEPS_SIZE] = {
-    "15m",
-    "30m",
-    "1h",
-    "8h",
-    "24h",
-    "7d",
-    "30d"
-};
+const char* AVG_STEPS[AVG_STEPS_SIZE] = {"15m", "30m", "1h", "8h", "24h", "7d", "30d"};
 
-const char *AVG_TYPES[AVG_TYPES_SIZE] = {
-    "arithmetic_mean",
-    "min",
-    "max"
-};
+const char* AVG_TYPES[AVG_TYPES_SIZE] = {"arithmetic_mean", "min", "max"};
 
 const char* DATETIME_FORMAT = "%4d%2d%2d%2d%2d%2d%c";
 
@@ -65,7 +53,7 @@ const char* BIOS_WEB_AVERAGE_REPLY_JSON_DATA_ITEM_TMPL =
 
 const char* STRFTIME_DATETIME_FORMAT = "%FT%TZ";
 
-const char* EV_BIOS_LOG_LEVEL = "BIOS_LOG_LEVEL";
-const char* EV_LICENSE_DIR = "LICENSE_DIR";
-const char* EV_DATA_DIR = "DATADIR";
+const char* EV_BIOS_LOG_LEVEL     = "BIOS_LOG_LEVEL";
+const char* EV_LICENSE_DIR        = "LICENSE_DIR";
+const char* EV_DATA_DIR           = "DATADIR";
 const char* EV_DB_INITIALIZED_DIR = "DATABASE_READY_DIR";

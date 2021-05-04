@@ -19,19 +19,44 @@
     =========================================================================
 */
 
-#ifndef FTY_COMMON_H_H_INCLUDED
-#define FTY_COMMON_H_H_INCLUDED
+#pragma once
 
 // Afwul hack, but I need exceptions to be valid for whole content
 #ifdef __cplusplus
-#include <exception>
+#include <cxxtools/allocator.h>
+#include <fty_log.h>
+#include <stdexcept>
 /// general IPM exception
-class IPMException : public std::exception { };
+class IPMException : public std::exception
+{
+};
 #endif // __cplusplus
 
-//  Include the project library file
-#include "fty_common_library.h"
+//  Opaque class structures to allow forward references
+//  These classes are stable or legacy and built in all releases
+typedef struct _fty_common_base_t fty_common_base_t;
+#define FTY_COMMON_BASE_T_DEFINED
+typedef struct _fty_common_asset_types_t fty_common_asset_types_t;
+#define FTY_COMMON_ASSET_TYPES_T_DEFINED
+typedef struct _fty_common_str_defs_t fty_common_str_defs_t;
+#define FTY_COMMON_STR_DEFS_T_DEFINED
+typedef struct _fty_common_filesystem_t fty_common_filesystem_t;
+#define FTY_COMMON_FILESYSTEM_T_DEFINED
+typedef struct _fty_common_json_t fty_common_json_t;
+#define FTY_COMMON_JSON_T_DEFINED
+typedef struct _fty_common_utf8_t fty_common_utf8_t;
+#define FTY_COMMON_UTF8_T_DEFINED
+typedef struct _fty_common_unit_tests_t fty_common_unit_tests_t;
+#define FTY_COMMON_UNIT_TESTS_T_DEFINED
 
-//  Add your own public definitions here, if you need them
-
-#endif
+#include "fty_common_agents.h"
+#include "fty_common_asset_types.h"
+#include "fty_common_base.h"
+#include "fty_common_client.h"
+#include "fty_common_filesystem.h"
+#include "fty_common_json.h"
+#include "fty_common_macros.h"
+#include "fty_common_nut_types.h"
+#include "fty_common_str_defs.h"
+#include "fty_common_sync_server.h"
+#include "fty_common_utf8.h"

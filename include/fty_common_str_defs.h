@@ -23,8 +23,7 @@
  * \author Karol Hrdina <KarolHrdina@Eaton.com>
  * \brief Not yet documented file
  */
-#ifndef FTY_COMMON_COMMON_STR_DEFS_H__
-#define FTY_COMMON_COMMON_STR_DEFS_H__
+#pragma once
 
 #ifdef __cplusplus
 
@@ -44,10 +43,8 @@ extern const char* BIOS_WEB_AVERAGE_REPLY_JSON_DATA_ITEM_TMPL;
 
 // evironment variables
 extern const char* EV_BIOS_LOG_LEVEL;
-extern const char* EV_LICENSE_DIR; // directory holding license file
-extern const char* EV_DATA_DIR; // directory holding data (?)
+extern const char* EV_LICENSE_DIR;        // directory holding license file
+extern const char* EV_DATA_DIR;           // directory holding data (?)
 extern const char* EV_DB_INITIALIZED_DIR; // directory holding database ready file
 
 #endif // __cplusplus
-
-#endif // FTY_COMMON_COMMON_STR_DEFS_H__
