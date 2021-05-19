@@ -23,7 +23,6 @@
 
 // Afwul hack, but I need exceptions to be valid for whole content
 #ifdef __cplusplus
-#include <cxxtools/allocator.h>
 #include <fty_log.h>
 #include <stdexcept>
 /// general IPM exception

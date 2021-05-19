@@ -27,6 +27,8 @@
 */
 
 #include "fty_common_json.h"
+#include <cxxtools/jsondeserializer.h>
+#include <cxxtools/jsonserializer.h>
 
 namespace JSON {
 
