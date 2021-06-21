@@ -41,6 +41,7 @@ etn_target(shared ${PROJECT_NAME}
         czmq
         cxxtools
         fty_common_logging
+        pthread
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})

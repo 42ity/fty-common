@@ -28,6 +28,8 @@
 
 #include "fty_common_json.h"
 #include <catch2/catch.hpp>
+#include <cxxtools/jsondeserializer.h>
+#include <cxxtools/jsonserializer.h>
 
 TEST_CASE("Json")
 {

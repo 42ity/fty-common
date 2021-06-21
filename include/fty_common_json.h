@@ -29,11 +29,13 @@
 
 #ifdef __cplusplus
 #include "fty_common.h"
-#include <cxxtools/jsondeserializer.h>
-#include <cxxtools/jsonserializer.h>
 #include <fstream>
 #include <iostream>
 #endif
+
+namespace cxxtools {
+class SerializationInfo;
+}
 
 typedef enum
 {
