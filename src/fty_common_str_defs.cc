@@ -29,7 +29,7 @@
 /* Implement variables declared in str_defs.h */
 const char* AVG_STEPS[AVG_STEPS_SIZE] = {"15m", "30m", "1h", "8h", "24h", "7d", "30d"};
 
-const char* AVG_TYPES[AVG_TYPES_SIZE] = {"arithmetic_mean", "min", "max"};
+const char* AVG_TYPES[AVG_TYPES_SIZE] = {"arithmetic_mean", "min", "max", "consumption"};
 
 const char* DATETIME_FORMAT = "%4d%2d%2d%2d%2d%2d%c";
 
