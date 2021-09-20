@@ -167,6 +167,8 @@ namespace persist {
         DELL_VXRAIL_EXSI,
         MICROSOFT_STANDALONE_HYPERV_SERVER,
 
+        ACTUATOR,
+
         NB_ASSET_SUBTYPES
     };
 }
@@ -243,6 +245,7 @@ namespace fty {
     static constexpr const char* SUB_MICROSOFT_SCVMM                    = "microsoft.scvmm";
     static constexpr const char* SUB_DELL_VXRAIL_EXSI                   = "dell.vxrail.exsi";
     static constexpr const char* SUB_MICROSOFT_STANDALONE_HYPERV_SERVER = "microsoft.standalone.hyperv.server";
+    static constexpr const char* SUB_ACTUATOR                           = "actuator";
 } //namespace fty
 
 namespace persist {
