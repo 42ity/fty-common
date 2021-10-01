@@ -118,7 +118,7 @@ TEST_CASE("Base")
             "nutanix.cluster", "nutanix.prism.connector", "vmware.vcenter.connector",
             "vmware.standalone.esxi.connector", "netapp.ontap", "vmware.srm", "vmware.srm.plan", "pcu",
             "dell.vxrail.connector", "dell.vxrail.manager", "dell.vxrail.cluster", "microsoft.hyperv.service",
-            "vmware.cluster.fault.domain", "microsoft.scvmm.connector", "microsoft.scvmm"});
+            "vmware.cluster.fault.domain", "microsoft.scvmm.connector", "microsoft.scvmm", "actuator"});
 
         bool success = true;
         for (auto type : types) {
