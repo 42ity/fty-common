@@ -25,7 +25,7 @@
 
 #define STR(X) #X
 
-#ifndef srteq
+#ifndef streq
 #define streq(s1, s2) (!strcmp((s1), (s2)))
 #endif
 

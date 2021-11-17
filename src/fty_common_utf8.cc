@@ -145,18 +145,19 @@ int utf8_to_codepoint(const char* uchar, char** codepoint)
     int j = 0;
     for (size_t i = 0; i < len; i++) {
         const char* pos = utf8_index(str_utf8, i);
-        if (codepoint_size(pos) == 0) {
+        int codepointSize = codepoint_size(pos);
+        if (codepointSize == 0) {
             log_debug("Comparing '%c' with '%c'\n", *pos, str_codepoint[j]);
             if (*pos != str_codepoint[j])
                 return 0;
             j++;
         } else {
-            char* codepoint = static_cast<char*>(malloc(size_t(codepoint_size(pos)) * sizeof(char)));
+            char* codepoint = static_cast<char*>(malloc(size_t(codepointSize) * sizeof(char)));
             int   rv        = utf8_to_codepoint(pos, &codepoint);
             if (rv == -1)
                 log_error("Error while converting alert name '%s' for comparison with alert name '%s'\n", str_utf8,
                     str_codepoint);
-            for (int k = 0; k < codepoint_size(pos); k++) {
+            for (int k = 0; k < codepointSize; k++) {
                 log_debug("codepoint : Comparing '%c' with '%c'\n", codepoint[k], str_codepoint[j]);
                 if (tolower(codepoint[k]) != tolower(str_codepoint[j]))
                     return 0;
