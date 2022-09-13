@@ -34,9 +34,6 @@
 
 #include <stdarg.h>
 
-//  Self test of this class
-void fty_common_utf8_test(bool verbose);
-
 #ifdef __cplusplus
 extern "C" {
 #endif
