@@ -34,7 +34,7 @@
 
 namespace UTF8 {
 
-static int codepoint_size(const char* uchar)
+[[maybe_unused]] static int codepoint_size(const char* uchar)
 {
     // ASCII
     if (((static_cast<unsigned char>(uchar[0])) & 0x80) == 0)
@@ -47,7 +47,7 @@ static int codepoint_size(const char* uchar)
     return -1;
 }
 
-static size_t utf8_len(const char* s)
+[[maybe_unused]] static size_t utf8_len(const char* s)
 {
     size_t len = 0;
     for (; *s; ++s)
@@ -58,7 +58,7 @@ static size_t utf8_len(const char* s)
 
 // returns a pointer to the beginning of the pos'th utf8 codepoint
 
-static const char* utf8_index(const char* s, size_t pos)
+[[maybe_unused]] static const char* utf8_index(const char* s, size_t pos)
 {
     ++pos;
     for (; *s; ++s) {
@@ -134,39 +134,6 @@ int utf8_to_codepoint(const char* uchar, char** codepoint)
         return 0;
     // in any other case, this is not a unicode character
     return -1;
-}
-
-[[maybe_unused]] static int compare_utf8_codepoint(const char* str_utf8, const char* str_codepoint)
-{
-    assert(str_utf8);
-    assert(str_codepoint);
-    size_t len = utf8_len(str_utf8);
-
-    int j = 0;
-    for (size_t i = 0; i < len; i++) {
-        const char* pos = utf8_index(str_utf8, i);
-        int codepointSize = codepoint_size(pos);
-        if (codepointSize == 0) {
-            log_debug("Comparing '%c' with '%c'\n", *pos, str_codepoint[j]);
-            if (*pos != str_codepoint[j])
-                return 0;
-            j++;
-        } else {
-            char* codepoint = static_cast<char*>(malloc(size_t(codepointSize) * sizeof(char)));
-            int   rv        = utf8_to_codepoint(pos, &codepoint);
-            if (rv == -1)
-                log_error("Error while converting alert name '%s' for comparison with alert name '%s'\n", str_utf8,
-                    str_codepoint);
-            for (int k = 0; k < codepointSize; k++) {
-                log_debug("codepoint : Comparing '%c' with '%c'\n", codepoint[k], str_codepoint[j]);
-                if (tolower(codepoint[k]) != tolower(str_codepoint[j]))
-                    return 0;
-                j++;
-            }
-            free(codepoint);
-        }
-    }
-    return 1;
 }
 
 // How many 8-bit bytes of the input comprise the next UTF-8 logical character?
