@@ -447,6 +447,7 @@ static std::string s_jsonify_translation_string(const char* key, va_list args)
     char* json_attempt = static_cast<char*>(zmalloc(json_format.length()));
     if (json_attempt == nullptr) {
         log_error("JSON buffer allocate has failed (%zu bytes)", json_format.length());
+        return "";
     }
     size_t missing = size_t(vsnprintf(json_attempt, json_format.length(), json_format.c_str(), args2));
     va_end(args2);
@@ -454,6 +455,8 @@ static std::string s_jsonify_translation_string(const char* key, va_list args)
         char* json = static_cast<char*>(realloc(json_attempt, missing + 1));
         if (json == nullptr) {
             log_error("JSON buffer reallocate has failed (%zu bytes)", (missing + 1));
+            free(json_attempt);
+            return "";
         }
         if (json != nullptr && json != json_attempt) {
             json_attempt = json;
