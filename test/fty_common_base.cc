@@ -38,6 +38,9 @@ TEST_CASE("Base")
         CHECK(persist::asset_subtype::N_A == 11);
         CHECK(persist::asset_subtype::VMWARE_VCENTER_CONNECTOR == 60);
         CHECK(persist::asset_subtype::VMWARE_SRM == 65);
+        CHECK(persist::asset_subtype::MICROSOFT_HYPERV_SERVICE == 72);
+        CHECK(persist::asset_subtype::ACTUATOR == 78);
+        CHECK(persist::asset_subtype::KUBERNETES_CONNECTOR == 79);
     }
 
     printf("test: type/typeid unknown\n");
@@ -104,7 +107,8 @@ TEST_CASE("Base")
 
     printf("test: subtype/subtypeid\n");
     {
-        std::vector<std::string> types({"", // "N_A"
+        std::vector<std::string> types({
+            "", // "N_A"
             "unknown", "UnkNOwN",
 
             "ups", "UPS", "genset", "Genset", "unknown", "epdu", "pdu", "server", "feed", "sts", "switch", "storage",
@@ -118,7 +122,9 @@ TEST_CASE("Base")
             "nutanix.cluster", "nutanix.prism.connector", "vmware.vcenter.connector",
             "vmware.standalone.esxi.connector", "netapp.ontap", "vmware.srm", "vmware.srm.plan", "pcu",
             "dell.vxrail.connector", "dell.vxrail.manager", "dell.vxrail.cluster", "microsoft.hyperv.service",
-            "vmware.cluster.fault.domain", "microsoft.scvmm.connector", "microsoft.scvmm", "actuator"});
+            "vmware.cluster.fault.domain", "microsoft.scvmm.connector", "microsoft.scvmm", "actuator",
+            "kubernetes.connector", "kubernetes.manager", "kubernetes.cluster","kubernetes.node"
+        });
 
         bool success = true;
         for (auto type : types) {

@@ -149,7 +149,13 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::MICROSOFT_SCVMM,                       ::fty::SUB_MICROSOFT_SCVMM },
     { asset_subtype::DELL_VXRAIL_EXSI,                      ::fty::SUB_DELL_VXRAIL_EXSI },
     { asset_subtype::MICROSOFT_STANDALONE_HYPERV_SERVER,    ::fty::SUB_MICROSOFT_STANDALONE_HYPERV_SERVER },
-    { asset_subtype::ACTUATOR,                              ::fty::SUB_ACTUATOR }
+    { asset_subtype::ACTUATOR,                              ::fty::SUB_ACTUATOR },
+
+    { asset_subtype::KUBERNETES_CONNECTOR,  ::fty::SUB_KUBERNETES_CONNECTOR },
+    { asset_subtype::KUBERNETES_MANAGER,    ::fty::SUB_KUBERNETES_MANAGER },
+    { asset_subtype::KUBERNETES_CLUSTER,    ::fty::SUB_KUBERNETES_CLUSTER },
+    { asset_subtype::KUBERNETES_NODE,       ::fty::SUB_KUBERNETES_NODE },
+
 };
 
 // Except "" for N_A, the names on the left are the ones from database
