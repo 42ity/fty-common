@@ -167,7 +167,12 @@ namespace persist {
         DELL_VXRAIL_EXSI,
         MICROSOFT_STANDALONE_HYPERV_SERVER,
 
-        ACTUATOR,
+        ACTUATOR, // 78
+
+        KUBERNETES_CONNECTOR, // 79
+        KUBERNETES_MANAGER,
+        KUBERNETES_CLUSTER,
+        KUBERNETES_NODE,
 
         NB_ASSET_SUBTYPES
     };
@@ -246,6 +251,11 @@ namespace fty {
     static constexpr const char* SUB_DELL_VXRAIL_EXSI                   = "dell.vxrail.exsi";
     static constexpr const char* SUB_MICROSOFT_STANDALONE_HYPERV_SERVER = "microsoft.standalone.hyperv.server";
     static constexpr const char* SUB_ACTUATOR                           = "actuator";
+    static constexpr const char* SUB_KUBERNETES_CONNECTOR               = "kubernetes.connector";
+    static constexpr const char* SUB_KUBERNETES_MANAGER                 = "kubernetes.manager";
+    static constexpr const char* SUB_KUBERNETES_CLUSTER                 = "kubernetes.cluster";
+    static constexpr const char* SUB_KUBERNETES_NODE                    = "kubernetes.node";
+
 } //namespace fty
 
 namespace persist {
