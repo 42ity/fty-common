@@ -77,6 +77,12 @@ std::string vajsonify_translation_string(const char* key, va_list args);
 // escape string for use as a bash command parameter
 std::string bash_escape(std::string& param);
 
+// encode double quote character(not supported as value on zconfig)
+std::string quoteEncode(const std::string& param);
+
+// decode double quote character from zconfig
+std::string quoteDecode(const std::string& param);
+
 } // namespace UTF8
 
 #endif

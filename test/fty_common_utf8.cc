@@ -288,3 +288,54 @@ TEST_CASE("utf8")
         printf("OK\n");
     }
 }
+
+TEST_CASE("string_quote_codec", "[quote]")
+{
+
+
+   struct {
+        const std::string in; //input
+    } testVector[] = {
+        { "" },
+        { "\"" },
+        { "\"\"\"\"" },
+        { "\"hello\"" },
+        { "hello" },
+        { "привет" }, //Russian
+        { "你好" }, //Chinese simplified
+        { "صباح الخير" }, //Arab
+    };
+
+
+
+   int cnt = 0;
+    for (auto& it : testVector) {
+        std::string input = it.in;
+        std::string enc = UTF8::quoteEncode(input);
+        std::string dec = UTF8::quoteDecode(enc);
+
+
+
+       std::cout << cnt << ": " << "input('" << input << "'), enc('" << enc << "'), dec('" << dec << "')" << std::endl;
+        cnt++;
+
+
+
+       bool hasQuote = (input.find('"') != std::string::npos);
+
+
+
+       if (hasQuote) { CHECK(input != enc); }
+        else { CHECK(input == enc); }
+
+
+
+       CHECK(enc.find('"') == std::string::npos);
+        CHECK(input == dec);
+
+
+
+       std::string enc2 = UTF8::quoteEncode(enc);
+        CHECK(enc == enc2);
+    }
+}
