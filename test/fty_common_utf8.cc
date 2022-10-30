@@ -311,8 +311,8 @@ TEST_CASE("string_quote_codec", "[quote]")
    int cnt = 0;
     for (auto& it : testVector) {
         std::string input = it.in;
-        std::string enc = UTF8::quoteEncode(input);
-        std::string dec = UTF8::quoteDecode(enc);
+        std::string enc = quoteEncode(input);
+        std::string dec = quoteDecode(enc);
 
 
 
@@ -335,7 +335,7 @@ TEST_CASE("string_quote_codec", "[quote]")
 
 
 
-       std::string enc2 = UTF8::quoteEncode(enc);
+       std::string enc2 = quoteEncode(enc);
         CHECK(enc == enc2);
     }
 }
