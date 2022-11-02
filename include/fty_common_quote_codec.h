@@ -1,7 +1,7 @@
 /*  =========================================================================
-    fty_common_utf8 - Functions for handling UTF-8 encoded strings
+    fty_common_quote_codec - Functions for handling quote codec
 
-    Copyright (C) 2014 - 2020 Eaton
+    Copyright (C) 2014 - 2022 Eaton
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,8 +23,12 @@
 
 #include <string>
 
-// encode double quote character(not supported as value on zconfig)
+namespace quotecodec {
+
+// encode double quote character(not supported as char on zconfig)
 std::string quoteEncode(const std::string& param);
 
 // decode double quote character from zconfig
 std::string quoteDecode(const std::string& param);
+
+} // namespace quotecodec
