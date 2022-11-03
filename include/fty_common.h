@@ -56,6 +56,7 @@ typedef struct _fty_common_unit_tests_t fty_common_unit_tests_t;
 #include "fty_common_json.h"
 #include "fty_common_macros.h"
 #include "fty_common_nut_types.h"
+#include "fty_common_quote_codec.h"
 #include "fty_common_str_defs.h"
 #include "fty_common_sync_server.h"
 #include "fty_common_utf8.h"

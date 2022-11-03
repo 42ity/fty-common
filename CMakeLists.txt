@@ -28,6 +28,7 @@ etn_target(shared ${PROJECT_NAME}
         fty_common_sync_server.h
         fty_common_utf8.h
         fty_common_unit_tests.h
+        fty_common_quote_codec.h
     SOURCES
         src/fty_common_asset_types.cc
         src/fty_common_filesystem.cc
@@ -35,6 +36,7 @@ etn_target(shared ${PROJECT_NAME}
         src/fty_common_str_defs.cc
         src/fty_common_utf8.cc
         src/fty_common_unit_tests.cc
+        src/fty_common_quote_codec.cc
     FLAGS
         -Wno-format-nonliteral
     USES
@@ -58,6 +60,7 @@ etn_test_target(${PROJECT_NAME}
         test/fty_common_json.cc
         test/fty_common_unit_tests.cc
         test/fty_common_utf8.cc
+        test/fty_common_quote_codec.cc
     USES
         pthread
     SUBDIR
