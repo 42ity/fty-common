@@ -153,6 +153,36 @@ TEST_CASE("Base")
         CHECK(success);
     }
 
+    printf("test: is_virtual\n");
+    {
+        CHECK(!persist::is_virtual("hello world"));
+        CHECK(!persist::is_virtual("unknown"));
+        CHECK(!persist::is_virtual("feed"));
+        CHECK(!persist::is_virtual("device"));
+        CHECK(!persist::is_virtual("ups"));
+        CHECK(!persist::is_virtual("epdu"));
+        CHECK(!persist::is_virtual("sts"));
+
+        const std::vector<const char*>types = {
+            fty::TYPE_INFRA_SERVICE,
+            fty::TYPE_CLUSTER,
+            fty::TYPE_HYPERVISOR,
+            fty::TYPE_VIRTUAL_MACHINE,
+            fty::TYPE_STORAGE_SERVICE,
+            fty::TYPE_VAPP,
+            fty::TYPE_CONNECTOR,
+            fty::TYPE_SERVER,
+            fty::TYPE_PLANNER,
+            fty::TYPE_OPERATING_SYSTEM,
+            fty::TYPE_PLAN,
+            fty::TYPE_CONTAINER_CLUSTER,
+            fty::TYPE_CONTAINER_NODE,
+        };
+        for (auto& type : types) {
+            CHECK(persist::is_virtual(type));
+        }
+    }
+
     //  @end
     printf(" * fty_commons: OK\n");
 }

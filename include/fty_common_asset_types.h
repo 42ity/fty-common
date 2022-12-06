@@ -54,7 +54,7 @@ enum asset_type
     OPERATING_SYSTEM,
     HOST_GROUP,
     CONTAINER_CLUSTER,
-    CONTAINE_NODE,
+    CONTAINER_NODE,
 
     NB_ASSET_TYPES
 };
@@ -295,7 +295,9 @@ bool is_dc(int x);
 
 bool is_ups(int x);
 
-bool is_container(const std::string& asset_type);
+bool is_virtual(const std::string& type);
+
+bool is_container(const std::string& type);
 
 bool is_ok_element_type(uint16_t element_type_id);
 
