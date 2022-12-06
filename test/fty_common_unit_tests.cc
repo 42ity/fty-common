@@ -47,7 +47,7 @@ static void callback(const fty::Payload& payload)
 }
 
 
-TEST_CASE("Test")
+TEST_CASE("Unit-tests")
 {
     printf(" * fty_common_unit_tests: \n");
 

@@ -67,7 +67,8 @@ TEST_CASE("Base")
     {
         std::vector<std::string> types({"unknown", "UnkNOwN", "group", "Group", "datacenter", "DATACENTER", "room",
             "row", "rack", "device", "infra-service", "cluster", "hypervisor", "virtual-machine", "storage-service",
-            "vapp", "connector", "server", "planner", "plan", "cops"});
+            "vapp", "connector", "server", "planner", "plan", "cops",
+            "operating-system", "host-group", "container-cluster", "container-node"});
 
         bool success = true;
         for (auto type : types) {
