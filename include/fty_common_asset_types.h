@@ -52,7 +52,9 @@ enum asset_type
     PLAN,
     COPS, // Composite Power System
     OPERATING_SYSTEM,
-    HOST_GROUP, // Composite Power System
+    HOST_GROUP,
+    CONTAINER_CLUSTER,
+    CONTAINER_NODE,
 
     NB_ASSET_TYPES
 };
@@ -61,26 +63,28 @@ enum asset_type
 
 namespace fty {
 // WARNING keep consistent with DB table t_bios_asset_element_type
-static constexpr const char* TYPE_UNKNOWN          = "unknown";          // 0
-static constexpr const char* TYPE_GROUP            = "group";            // 1
-static constexpr const char* TYPE_DATACENTER       = "datacenter";       // 2
-static constexpr const char* TYPE_ROOM             = "room";             // 3
-static constexpr const char* TYPE_ROW              = "row";              // 4
-static constexpr const char* TYPE_RACK             = "rack";             // 5
-static constexpr const char* TYPE_DEVICE           = "device";           // 6
-static constexpr const char* TYPE_INFRA_SERVICE    = "infra-service";    // 7
-static constexpr const char* TYPE_CLUSTER          = "cluster";          // 8
-static constexpr const char* TYPE_HYPERVISOR       = "hypervisor";       // 9
-static constexpr const char* TYPE_VIRTUAL_MACHINE  = "virtual-machine";  // 10
-static constexpr const char* TYPE_STORAGE_SERVICE  = "storage-service";  // 11
-static constexpr const char* TYPE_VAPP             = "vapp";             // 12
-static constexpr const char* TYPE_CONNECTOR        = "connector";        // 13
-static constexpr const char* TYPE_SERVER           = "server";           // 15
-static constexpr const char* TYPE_PLANNER          = "planner";          // 16
-static constexpr const char* TYPE_PLAN             = "plan";             // 17
-static constexpr const char* TYPE_COPS             = "cops";             // 18
-static constexpr const char* TYPE_OPERATING_SYSTEM = "operating-system"; // 19
-static constexpr const char* TYPE_HOST_GROUP       = "host-group";       // 20
+static constexpr const char* TYPE_UNKNOWN           = "unknown";           // 0
+static constexpr const char* TYPE_GROUP             = "group";             // 1
+static constexpr const char* TYPE_DATACENTER        = "datacenter";        // 2
+static constexpr const char* TYPE_ROOM              = "room";              // 3
+static constexpr const char* TYPE_ROW               = "row";               // 4
+static constexpr const char* TYPE_RACK              = "rack";              // 5
+static constexpr const char* TYPE_DEVICE            = "device";            // 6
+static constexpr const char* TYPE_INFRA_SERVICE     = "infra-service";     // 7
+static constexpr const char* TYPE_CLUSTER           = "cluster";           // 8
+static constexpr const char* TYPE_HYPERVISOR        = "hypervisor";        // 9
+static constexpr const char* TYPE_VIRTUAL_MACHINE   = "virtual-machine";   // 10
+static constexpr const char* TYPE_STORAGE_SERVICE   = "storage-service";   // 11
+static constexpr const char* TYPE_VAPP              = "vapp";              // 12
+static constexpr const char* TYPE_CONNECTOR         = "connector";         // 13
+static constexpr const char* TYPE_SERVER            = "server";            // 15
+static constexpr const char* TYPE_PLANNER           = "planner";           // 16
+static constexpr const char* TYPE_PLAN              = "plan";              // 17
+static constexpr const char* TYPE_COPS              = "cops";              // 18
+static constexpr const char* TYPE_OPERATING_SYSTEM  = "operating-system";  // 19
+static constexpr const char* TYPE_HOST_GROUP        = "host-group";        // 20
+static constexpr const char* TYPE_CONTAINER_CLUSTER = "container-cluster"; // 21
+static constexpr const char* TYPE_CONTAINER_NODE    = "container-node";    // 22
 
 } // namespace fty
 
@@ -255,7 +259,6 @@ namespace fty {
     static constexpr const char* SUB_KUBERNETES_MANAGER                 = "kubernetes.manager";
     static constexpr const char* SUB_KUBERNETES_CLUSTER                 = "kubernetes.cluster";
     static constexpr const char* SUB_KUBERNETES_NODE                    = "kubernetes.node";
-
 } //namespace fty
 
 namespace persist {
@@ -292,7 +295,9 @@ bool is_dc(int x);
 
 bool is_ups(int x);
 
-bool is_container(const std::string& asset_type);
+bool is_virtual(const std::string& type);
+
+bool is_container(const std::string& type);
 
 bool is_ok_element_type(uint16_t element_type_id);
 

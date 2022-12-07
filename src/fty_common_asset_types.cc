@@ -30,6 +30,7 @@
 #include <array>
 #include <functional>
 #include <map>
+#include <vector>
 #include <string.h>
 
 // t_bios_asset_ext_attributes.keytag
@@ -46,26 +47,28 @@ namespace persist {
 
 // clang-format off
 const static std::map<uint16_t, std::string> type_names {
-    { asset_type::TUNKNOWN,         ::fty::TYPE_UNKNOWN }, // **must* be set
-    { asset_type::GROUP,            ::fty::TYPE_GROUP },
-    { asset_type::DATACENTER,       ::fty::TYPE_DATACENTER },
-    { asset_type::ROOM,             ::fty::TYPE_ROOM },
-    { asset_type::ROW,              ::fty::TYPE_ROW },
-    { asset_type::RACK,             ::fty::TYPE_RACK },
-    { asset_type::DEVICE,           ::fty::TYPE_DEVICE },
-    { asset_type::INFRA_SERVICE,    ::fty::TYPE_INFRA_SERVICE },
-    { asset_type::CLUSTER,          ::fty::TYPE_CLUSTER },
-    { asset_type::HYPERVISOR,       ::fty::TYPE_HYPERVISOR },
-    { asset_type::VIRTUAL_MACHINE,  ::fty::TYPE_VIRTUAL_MACHINE },
-    { asset_type::STORAGE_SERVICE,  ::fty::TYPE_STORAGE_SERVICE },
-    { asset_type::VAPP,             ::fty::TYPE_VAPP },
-    { asset_type::CONNECTOR,        ::fty::TYPE_CONNECTOR },
-    { asset_type::TSERVER,          ::fty::TYPE_SERVER },
-    { asset_type::PLANNER,          ::fty::TYPE_PLANNER },
-    { asset_type::PLAN,             ::fty::TYPE_PLAN },
-    { asset_type::COPS,             ::fty::TYPE_COPS }, // Composite Power System
-    { asset_type::OPERATING_SYSTEM, ::fty::TYPE_OPERATING_SYSTEM },
-    { asset_type::HOST_GROUP,       ::fty::TYPE_HOST_GROUP }
+    { asset_type::TUNKNOWN,          ::fty::TYPE_UNKNOWN }, // **must* be set
+    { asset_type::GROUP,             ::fty::TYPE_GROUP },
+    { asset_type::DATACENTER,        ::fty::TYPE_DATACENTER },
+    { asset_type::ROOM,              ::fty::TYPE_ROOM },
+    { asset_type::ROW,               ::fty::TYPE_ROW },
+    { asset_type::RACK,              ::fty::TYPE_RACK },
+    { asset_type::DEVICE,            ::fty::TYPE_DEVICE },
+    { asset_type::INFRA_SERVICE,     ::fty::TYPE_INFRA_SERVICE },
+    { asset_type::CLUSTER,           ::fty::TYPE_CLUSTER },
+    { asset_type::HYPERVISOR,        ::fty::TYPE_HYPERVISOR },
+    { asset_type::VIRTUAL_MACHINE,   ::fty::TYPE_VIRTUAL_MACHINE },
+    { asset_type::STORAGE_SERVICE,   ::fty::TYPE_STORAGE_SERVICE },
+    { asset_type::VAPP,              ::fty::TYPE_VAPP },
+    { asset_type::CONNECTOR,         ::fty::TYPE_CONNECTOR },
+    { asset_type::TSERVER,           ::fty::TYPE_SERVER },
+    { asset_type::PLANNER,           ::fty::TYPE_PLANNER },
+    { asset_type::PLAN,              ::fty::TYPE_PLAN },
+    { asset_type::COPS,              ::fty::TYPE_COPS }, // Composite Power System
+    { asset_type::OPERATING_SYSTEM,  ::fty::TYPE_OPERATING_SYSTEM },
+    { asset_type::HOST_GROUP,        ::fty::TYPE_HOST_GROUP },
+    { asset_type::CONTAINER_CLUSTER, ::fty::TYPE_CONTAINER_CLUSTER },
+    { asset_type::CONTAINER_NODE,    ::fty::TYPE_CONTAINER_NODE },
 };
 
 const static std::map<uint16_t, std::string> subtype_names {
@@ -155,7 +158,6 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::KUBERNETES_MANAGER,    ::fty::SUB_KUBERNETES_MANAGER },
     { asset_subtype::KUBERNETES_CLUSTER,    ::fty::SUB_KUBERNETES_CLUSTER },
     { asset_subtype::KUBERNETES_NODE,       ::fty::SUB_KUBERNETES_NODE },
-
 };
 
 // Except "" for N_A, the names on the left are the ones from database
@@ -278,9 +280,33 @@ bool is_ups(int x)
     return x == asset_subtype::UPS;
 }
 
-bool is_container(const std::string& asset_type)
+bool is_virtual(const std::string& type)
 {
-    if (asset_type == "datacenter" || asset_type == "room" || asset_type == "row" || asset_type == "rack") {
+    static const std::vector<const char*> types = {
+        fty::TYPE_INFRA_SERVICE,
+        fty::TYPE_CLUSTER,
+        fty::TYPE_HYPERVISOR,
+        fty::TYPE_VIRTUAL_MACHINE,
+        fty::TYPE_STORAGE_SERVICE,
+        fty::TYPE_VAPP,
+        fty::TYPE_CONNECTOR,
+        fty::TYPE_SERVER,
+        fty::TYPE_PLANNER,
+        fty::TYPE_OPERATING_SYSTEM,
+        fty::TYPE_PLAN,
+        fty::TYPE_CONTAINER_CLUSTER,
+        fty::TYPE_CONTAINER_NODE,
+    };
+
+    return std::find(types.cbegin(), types.cend(), type) != types.cend();
+}
+
+bool is_container(const std::string& type)
+{
+    if (   type == "datacenter"
+        || type == "room"
+        || type == "row"
+        || type == "rack") {
         return true;
     }
 
