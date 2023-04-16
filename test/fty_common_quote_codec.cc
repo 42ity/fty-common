@@ -23,8 +23,8 @@
 #include <iostream>
 #include "fty_common_quote_codec.h"
 
-
-TEST_CASE("string_quote_codec", "[quote]") {
+TEST_CASE("quotecodec")
+{
     struct {
         const std::string in; //input
     } testVector[] = {

@@ -21,32 +21,16 @@
 
 #pragma once
 
-// Afwul hack, but I need exceptions to be valid for whole content
 #ifdef __cplusplus
-#include <fty_log.h>
+
+// Afwul hack, but I need exceptions to be valid for whole content
 #include <stdexcept>
 /// general IPM exception
 class IPMException : public std::exception
 {
 };
-#endif // __cplusplus
 
-//  Opaque class structures to allow forward references
-//  These classes are stable or legacy and built in all releases
-typedef struct _fty_common_base_t fty_common_base_t;
-#define FTY_COMMON_BASE_T_DEFINED
-typedef struct _fty_common_asset_types_t fty_common_asset_types_t;
-#define FTY_COMMON_ASSET_TYPES_T_DEFINED
-typedef struct _fty_common_str_defs_t fty_common_str_defs_t;
-#define FTY_COMMON_STR_DEFS_T_DEFINED
-typedef struct _fty_common_filesystem_t fty_common_filesystem_t;
-#define FTY_COMMON_FILESYSTEM_T_DEFINED
-typedef struct _fty_common_json_t fty_common_json_t;
-#define FTY_COMMON_JSON_T_DEFINED
-typedef struct _fty_common_utf8_t fty_common_utf8_t;
-#define FTY_COMMON_UTF8_T_DEFINED
-typedef struct _fty_common_unit_tests_t fty_common_unit_tests_t;
-#define FTY_COMMON_UNIT_TESTS_T_DEFINED
+#endif // __cplusplus
 
 #include "fty_common_agents.h"
 #include "fty_common_asset_types.h"

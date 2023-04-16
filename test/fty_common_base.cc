@@ -1,5 +1,5 @@
 /*  =========================================================================
-    fty_commons - Singleton object and common functions
+    fty_common_base - Singleton object and common functions
 
     Copyright (C) 2014 - 2020 Eaton
 

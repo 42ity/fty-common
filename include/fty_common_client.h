@@ -26,6 +26,7 @@
 #include <vector>
 
 namespace fty {
+
 using Callback = std::function<void(const std::vector<std::string>&)>;
 using Payload  = std::vector<std::string>;
 
@@ -40,7 +41,7 @@ using Payload  = std::vector<std::string>;
 class SyncClient
 {
 public:
-    virtual ~SyncClient()                                        = default;
+    virtual ~SyncClient() = default;
     virtual Payload syncRequestWithReply(const Payload& payload) = 0;
 };
 
@@ -52,7 +53,7 @@ public:
 class StreamPublisher
 {
 public:
-    virtual ~StreamPublisher()                   = default;
+    virtual ~StreamPublisher() = default;
     virtual void publish(const Payload& payload) = 0;
 };
 
@@ -66,7 +67,7 @@ public:
 class StreamSubscriber
 {
 public:
-    virtual ~StreamSubscriber()                   = default;
+    virtual ~StreamSubscriber() = default;
     virtual uint32_t subscribe(Callback callback) = 0;
     virtual void     unsubscribe(uint32_t subId)  = 0;
 };

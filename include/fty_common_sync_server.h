@@ -25,15 +25,16 @@
 #include <vector>
 
 namespace fty {
+
 using Sender  = std::string;
 using Payload = std::vector<std::string>;
 
 /**
  * \brief Interface for basic synchronous server
- * The server receive a request from a Sender and with a payload(vector or string)
+ * The server receive a request from a Sender with a payload.
  * The server will reply with a payload.
  *
- * If return payload is empty, no answer will be returned to the client.
+ * If the returned payload is empty, no answer will be returned to the client.
  *
  * \see Interface for basic synchronous client
  */
@@ -41,7 +42,7 @@ using Payload = std::vector<std::string>;
 class SyncServer
 {
 public:
-    virtual ~SyncServer()                                                       = default;
+    virtual ~SyncServer() = default;
     virtual Payload handleRequest(const Sender& sender, const Payload& payload) = 0;
 };
 

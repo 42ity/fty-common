@@ -46,7 +46,6 @@ static void callback(const fty::Payload& payload)
     g_condvar.notify_all();
 }
 
-
 TEST_CASE("Unit-tests")
 {
     printf(" * fty_common_unit_tests: \n");
@@ -86,9 +85,10 @@ TEST_CASE("Unit-tests")
         fty::StreamClientTest client;
 
         fty::Payload expectedPayload = {"This", "is", "a", "test"};
-        g_payload                    = {};
 
         {
+            g_payload = {};
+
             uint32_t registrationId = client.subscribe(callback);
 
             std::unique_lock<std::mutex> lock(g_lock);

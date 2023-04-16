@@ -21,10 +21,6 @@
 
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define AGENT_FTY_ALERT_ENGINE        "fty-alert-engine-server" // FIXME: to be renamed
 #define AGENT_FTY_ALERT_FLEXIBLE      "fty-alert-flexible"
 #define AGENT_FTY_ALERT_LIST          "fty-alert-list"
@@ -51,7 +47,3 @@ extern "C" {
 
 #define AGENT_FTY_SECURITY_WALLET          "security-wallet"
 #define AGENT_FTY_CREDENTIAL_ASSET_MAPPING "credential-asset-mapping"
-
-#ifdef __cplusplus
-}
-#endif

@@ -27,6 +27,7 @@
 #include <thread>
 
 namespace fty {
+
 /**
  * \brief Helper class to test synchronous client and server
  * The server is replaying with the same payload as received
@@ -35,7 +36,7 @@ namespace fty {
 class EchoServer final : public SyncServer
 {
 public:
-    Payload       handleRequest(const Sender& sender, const Payload& payload) override;
+    Payload handleRequest(const Sender& sender, const Payload& payload) override;
     const Sender& getLastSender() const;
 
 private:
@@ -60,7 +61,7 @@ private:
 
 /**
  * \brief Helper class to test stream client with only one subscriber and one publisher
- * When publish, the call back will be called if exist.
+ * When publish, the callback is called if defined.
  *
  */
 class StreamClientTest final : public StreamPublisher, public StreamSubscriber
@@ -76,4 +77,5 @@ private:
     Payload     m_lastPayload;
     std::thread m_listernerThread;
 };
+
 } // namespace fty

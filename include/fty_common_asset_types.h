@@ -34,35 +34,39 @@ enum asset_type
     TUNKNOWN = 0,
 
     GROUP = 1,
-    DATACENTER,
-    ROOM,
-    ROW,
-    RACK,
-    DEVICE,
-    INFRA_SERVICE,
-    CLUSTER,
-    HYPERVISOR,
+    DATACENTER,         // 2
+    ROOM,               // 3
+    ROW,                // 4
+    RACK,               // 5
+    DEVICE,             // 6
+    INFRA_SERVICE,      // 7
+    CLUSTER,            // 8
+    HYPERVISOR,         // 9
+    VIRTUAL_MACHINE,    // 10
+    STORAGE_SERVICE,    // 11
+    VAPP,               // 12
+    CONNECTOR,          // 13
 
-    VIRTUAL_MACHINE,
-    STORAGE_SERVICE,
-    VAPP,
-    CONNECTOR,
     TSERVER = 15,
-    PLANNER,
-    PLAN,
-    COPS, // Composite Power System
-    OPERATING_SYSTEM,
-    HOST_GROUP,
-    CONTAINER_CLUSTER,
-    CONTAINER_NODE,
+    PLANNER,            // 16
+    PLAN,               // 17
+    COPS,               // 18 (Composite Power System)
+    OPERATING_SYSTEM,   // 19
+    HOST_GROUP,         // 20
+    CONTAINER_CLUSTER,  // 21
+    CONTAINER_NODE,     // 22
 
     NB_ASSET_TYPES
 };
 
 } // namespace persist
 
-namespace fty {
+//
+// asset type
 // WARNING keep consistent with DB table t_bios_asset_element_type
+//
+namespace fty {
+
 static constexpr const char* TYPE_UNKNOWN           = "unknown";           // 0
 static constexpr const char* TYPE_GROUP             = "group";             // 1
 static constexpr const char* TYPE_DATACENTER        = "datacenter";        // 2
@@ -89,10 +93,11 @@ static constexpr const char* TYPE_CONTAINER_NODE    = "container-node";    // 22
 } // namespace fty
 
 namespace persist {
-    enum asset_subtype {
-        SUNKNOWN                        = 0,
 
-        UPS                             = 1,
+    enum asset_subtype {
+        SUNKNOWN        = 0,
+
+        UPS             = 1,
         GENSET,
         EPDU,
         PDU,
@@ -104,7 +109,7 @@ namespace persist {
         VM,
         VIRTUAL = VM,
 
-        N_A             = 11, /* ATTENTION: don't change N_A id. It is used as default value in initdb.sql for types, that don't have N_A */
+        N_A             = 11, // CAUTION: don't change N_A id. It is used as default value in initdb.sql for types, that don't have N_A
         ROUTER,
         RACKCONTROLLER,
         SENSOR,
@@ -180,10 +185,14 @@ namespace persist {
 
         NB_ASSET_SUBTYPES
     };
-}
+} // namespace persist
 
+//
+// device type
+// WARNING keep consistent with DB table t_bios_asset_device_type
+//
 namespace fty {
- // WARNING keep consistent with DB table t_bios_asset_device_type
+
     static constexpr const char* SUB_UNKNOWN                            = "unknown";
     static constexpr const char* SUB_UPS                                = "ups";
     static constexpr const char* SUB_GENSET                             = "genset";
@@ -259,6 +268,7 @@ namespace fty {
     static constexpr const char* SUB_KUBERNETES_MANAGER                 = "kubernetes.manager";
     static constexpr const char* SUB_KUBERNETES_CLUSTER                 = "kubernetes.cluster";
     static constexpr const char* SUB_KUBERNETES_NODE                    = "kubernetes.node";
+
 } //namespace fty
 
 namespace persist {
@@ -308,4 +318,5 @@ bool is_ok_keytag(const char* keytag);
 bool is_ok_value(const char* value);
 
 bool is_ok_link_type(uint8_t link_type_id);
+
 } // namespace persist
