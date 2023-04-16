@@ -124,7 +124,7 @@ std::string writeToString(cxxtools::SerializationInfo& si, bool beautify)
 }
 
 // write SI to JSON file
-void writeToFile(const std::string& path_name, cxxtools::SerializationInfo& si, bool beautify)
+void writeToFile(const std::string path_name, cxxtools::SerializationInfo& si, bool beautify)
 {
     std::ofstream output;
     output.exceptions(std::ofstream::failbit | std::ofstream::badbit);
@@ -145,14 +145,14 @@ void readFromStream(std::istringstream& input, cxxtools::SerializationInfo& si)
 }
 
 // read/set SI from JSON string
-void readFromString(const std::string& string, cxxtools::SerializationInfo& si)
+void readFromString(const std::string string, cxxtools::SerializationInfo& si)
 {
     std::istringstream input(string);
     readFromStream(input, si);
 }
 
 // read/set SI from JSON file
-void readFromFile(const std::string& path_name, cxxtools::SerializationInfo& si)
+void readFromFile(const std::string path_name, cxxtools::SerializationInfo& si)
 {
     std::ifstream input;
     input.open(path_name);
