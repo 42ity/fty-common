@@ -40,7 +40,6 @@ etn_target(shared ${PROJECT_NAME}
     FLAGS
         -Wno-format-nonliteral
     USES
-        czmq
         cxxtools
         fty_common_logging
         pthread
