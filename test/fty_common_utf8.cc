@@ -32,10 +32,7 @@
 #include <czmq.h>
 #include <fty_log.h>
 
-#define SELFTEST_DIR_RO "src/selftest-ro"
-#define SELFTEST_DIR_RW "src/selftest-rw"
-
-TEST_CASE("utf8")
+TEST_CASE("Utf8")
 {
     printf(" * fty_common_utf8: ");
 

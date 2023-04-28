@@ -83,7 +83,7 @@ std::vector<std::string> files_in_directory(const char* path);
 bool is_file_in_directory(const std::string& path, std::vector<std::string>& files);
 
 /**
- * \brief create directory (if not exists
+ * \brief create directory (if not exists)
  * \param path to the newly created directory
  * \param mode (rights)
  * \param create_parent directories if needed

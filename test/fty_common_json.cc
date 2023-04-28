@@ -31,9 +31,9 @@
 #include <fty_log.h>
 #include <cxxtools/serializationinfo.h>
 
-TEST_CASE("Json")
+TEST_CASE("Json parser")
 {
-    printf("fty_common_json...\n");
+    printf("fty_common_json parser...\n");
 
     //                   0123456
     std::string input = "{{{{{{test}}}}}";
@@ -72,7 +72,7 @@ TEST_CASE("Json")
         CHECK(std::string("Specific exception expected") == std::string("Code should never get here"));
     }
 
-    printf("fty_common_json: OK\n");
+    printf("fty_common_json parser: OK\n");
 }
 
 TEST_CASE("Json cxxtools")

@@ -23,7 +23,7 @@
 #include <iostream>
 #include "fty_common_quote_codec.h"
 
-TEST_CASE("quotecodec")
+TEST_CASE("Quote codec")
 {
     struct {
         const std::string in; //input

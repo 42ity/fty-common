@@ -33,7 +33,6 @@
 #include <condition_variable>
 #include <thread>
 
-
 static fty::Payload g_payload;
 
 static std::mutex              g_lock;

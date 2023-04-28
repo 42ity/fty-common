@@ -54,9 +54,11 @@ etn_test_target(${PROJECT_NAME}
         test/data/example.json
         test/data/test-config.conf
     SOURCES
-        test/main.cpp
+        test/main.cc
         test/fty_common_base.cc
+        test/fty_common_asset_types.cc
         test/fty_common_json.cc
+        test/fty_common_filesystem.cc
         test/fty_common_unit_tests.cc
         test/fty_common_utf8.cc
         test/fty_common_quote_codec.cc
