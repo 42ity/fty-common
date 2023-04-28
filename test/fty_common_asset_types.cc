@@ -21,6 +21,7 @@
 
 #include "fty_common_asset_types.h"
 #include <catch2/catch.hpp>
+#include <cstring>
 
 TEST_CASE("Asset types")
 {
@@ -180,6 +181,103 @@ TEST_CASE("Asset types")
         for (auto& type : types) {
             CHECK(persist::is_virtual(type));
         }
+    }
+
+    {
+        using namespace persist;
+        int st;
+
+        st = asset_subtype::EPDU;
+        CHECK(is_epdu(st) == true);
+        CHECK(is_pdu(st) == false);
+        CHECK(is_rack(st) == false);
+        CHECK(is_dc(st) == false);
+        CHECK(is_ups(st) == false);
+
+        st = asset_subtype::PDU;
+        CHECK(is_epdu(st) == false);
+        CHECK(is_pdu(st) == true);
+        CHECK(is_rack(st) == false);
+        CHECK(is_dc(st) == false);
+        CHECK(is_ups(st) == false);
+
+        st = asset_type::RACK;
+        CHECK(is_epdu(st) == false);
+        CHECK(is_pdu(st) == false);
+        CHECK(is_rack(st) == true);
+        CHECK(is_dc(st) == false);
+        CHECK(is_ups(st) == false);
+
+        st = asset_type::DATACENTER;
+        CHECK(is_epdu(st) == false);
+        CHECK(is_pdu(st) == false);
+        CHECK(is_rack(st) == false);
+        CHECK(is_dc(st) == true);
+        CHECK(is_ups(st) == false);
+
+        st = asset_subtype::UPS;
+        CHECK(is_epdu(st) == false);
+        CHECK(is_pdu(st) == false);
+        CHECK(is_rack(st) == false);
+        CHECK(is_dc(st) == false);
+        CHECK(is_ups(st) == true);
+
+        st = asset_subtype::STS;
+        CHECK(is_epdu(st) == false);
+        CHECK(is_pdu(st) == false);
+        CHECK(is_rack(st) == false);
+        CHECK(is_dc(st) == false);
+        CHECK(is_ups(st) == false);
+
+        st = 0;
+        CHECK(is_epdu(st) == false);
+        CHECK(is_pdu(st) == false);
+        CHECK(is_rack(st) == false);
+        CHECK(is_dc(st) == false);
+        CHECK(is_ups(st) == false);
+    }
+
+    {
+        using namespace persist;
+
+        CHECK(is_container("") == false);
+        CHECK(is_container("ups") == false);
+        CHECK(is_container("datacenter") == true);
+        CHECK(is_container("room") == true);
+        CHECK(is_container("row") == true);
+        CHECK(is_container("rack") == true);
+
+        CHECK(is_ok_element_type(0) == false);
+        CHECK(is_ok_element_type(1) == true);
+        CHECK(is_ok_element_type(2) == true);
+        CHECK(is_ok_element_type(9999) == false);
+
+        CHECK(is_ok_name(nullptr) == false);
+        CHECK(is_ok_name("") == false);
+        CHECK(is_ok_name("a") == true);
+        CHECK(is_ok_name("a_") == false);
+        CHECK(is_ok_name("a%") == false);
+        CHECK(is_ok_name("a@") == false);
+        CHECK(is_ok_name("abc") == true);
+
+        CHECK(is_ok_keytag(nullptr) == false);
+        CHECK(is_ok_keytag("") == false);
+        CHECK(is_ok_keytag("a") == true);
+        CHECK(is_ok_keytag("0123456789012345678901234567890123456789") == true); // max len 40
+        CHECK(is_ok_keytag("01234567890123456789012345678901234567890") == false);
+
+        CHECK(is_ok_value(nullptr) == false);
+        CHECK(is_ok_value("") == false);
+        CHECK(is_ok_value("a") == true);
+        char p[300]; memset(p, 'a', sizeof(p));
+        p[256] = 0;
+        CHECK(is_ok_value(p) == false); // max len 255
+        p[255] = 0;
+        CHECK(is_ok_value(p) == true);
+
+        CHECK(is_ok_link_type(0) == false);
+        CHECK(is_ok_link_type(1) == true);
+        CHECK(is_ok_link_type(255) == true);
     }
 
     //  @end
