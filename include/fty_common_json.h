@@ -104,7 +104,7 @@ class CorruptedLineException : public ::IPMException
  * \param[out]  si - cxxtools::SerializationInfo object
  * \throw std::ifstream::failbit | std::ifstream::badbit | generic exceptions
  */
-void readFromFile(const std::string path_name, cxxtools::SerializationInfo& si);
+void readFromFile(const std::string& path_name, cxxtools::SerializationInfo& si);
 
 /**
  * \brief Read/set a SerializationInfo object from a JSON string.
@@ -112,7 +112,7 @@ void readFromFile(const std::string path_name, cxxtools::SerializationInfo& si);
  * \param[out]  si - cxxtools::SerializationInfo object
  * \throw generic exceptions
  */
-void readFromString(const std::string string, cxxtools::SerializationInfo& si);
+void readFromString(const std::string& string, cxxtools::SerializationInfo& si);
 
 /**
  * \brief Read/set a SerializationInfo object from a JSON istringstream.
@@ -129,7 +129,7 @@ void readFromStream(std::istringstream& input, cxxtools::SerializationInfo& si);
  * \param[in]  beautify - beautify'er
  * \throw std::ofstream::failbit | std::ofstream::badbit | generic exceptions
  */
-void writeToFile(const std::string path_name, const cxxtools::SerializationInfo& si, bool beautify = true);
+void writeToFile(const std::string& path_name, const cxxtools::SerializationInfo& si, bool beautify = true);
 
 /**
  * \brief Write a SerializationInfo object into a JSON string.
