@@ -106,7 +106,7 @@ std::string readString(const std::string& line, size_t& start_pos, size_t& end_p
 namespace JSON {
 
 // write SI to JSON ostringstream
-void writeToStream(std::ostringstream& output, cxxtools::SerializationInfo& si, bool beautify)
+void writeToStream(std::ostringstream& output, const cxxtools::SerializationInfo& si, bool beautify)
 {
     cxxtools::JsonSerializer serializer;
     serializer.beautify(beautify);
@@ -116,7 +116,7 @@ void writeToStream(std::ostringstream& output, cxxtools::SerializationInfo& si, 
 }
 
 // write SI to JSON string
-std::string writeToString(cxxtools::SerializationInfo& si, bool beautify)
+std::string writeToString(const cxxtools::SerializationInfo& si, bool beautify)
 {
     std::ostringstream output;
     writeToStream(output, si, beautify);
@@ -124,7 +124,7 @@ std::string writeToString(cxxtools::SerializationInfo& si, bool beautify)
 }
 
 // write SI to JSON file
-void writeToFile(const std::string path_name, cxxtools::SerializationInfo& si, bool beautify)
+void writeToFile(const std::string path_name, const cxxtools::SerializationInfo& si, bool beautify)
 {
     std::ofstream output;
     output.exceptions(std::ofstream::failbit | std::ofstream::badbit);
