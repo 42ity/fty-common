@@ -26,14 +26,14 @@
 @end
 */
 
-#include "fty_common_json.h"
 #include <catch2/catch.hpp>
-#include <cxxtools/jsondeserializer.h>
-#include <cxxtools/jsonserializer.h>
+#include "fty_common_json.h"
+#include <fty_log.h>
+#include <cxxtools/serializationinfo.h>
 
-TEST_CASE("Json")
+TEST_CASE("Json parser")
 {
-    printf("fty_common_json_test...\n");
+    printf("fty_common_json parser...\n");
 
     //                   0123456
     std::string input = "{{{{{{test}}}}}";
@@ -70,6 +70,37 @@ TEST_CASE("Json")
         // this is only valid case
     } catch (...) {
         CHECK(std::string("Specific exception expected") == std::string("Code should never get here"));
+    }
+
+    printf("fty_common_json parser: OK\n");
+}
+
+TEST_CASE("Json cxxtools")
+{
+    printf("fty_common_json cxxtools...\n");
+
+    // support NULL char* as std::string argument (throw)
+    {
+        cxxtools::SerializationInfo si;
+
+        CHECK_THROWS(JSON::readFromString(nullptr, si));
+        CHECK_THROWS(JSON::readFromFile(nullptr, si));
+        CHECK_THROWS(JSON::writeToFile(nullptr, si));
+    }
+
+    // support valid char* as std::string argument (no throw)
+    {
+        cxxtools::SerializationInfo si;
+
+        const char* json = R"({"hello": "world"})";
+        const char* path_name = "test/data/example.json";
+        const char* path_name2 = "/tmp/output.json";
+
+        CHECK_NOTHROW(JSON::readFromString(json, si));
+        CHECK_NOTHROW(JSON::readFromFile(path_name, si));
+        CHECK_NOTHROW(JSON::writeToFile(path_name2, si));
+
+        remove(path_name2);
     }
 
     // writeToStream
@@ -155,7 +186,7 @@ TEST_CASE("Json")
             failed = true;
         }
         log_info("readFromString \"%s\": %s", buffer.c_str(), (failed ? "FAILED" : "success"));
-        assert(!failed);
+        CHECK(!failed);
 
         // invalid JSON buffer
         failed = false;
@@ -167,7 +198,7 @@ TEST_CASE("Json")
             failed = true;
         }
         log_info("readFromString \"%s\": %s", buffer.c_str(), (failed ? "FAILED" : "success"));
-        assert(failed);
+        CHECK(failed);
     }
 
     // readFromFile
@@ -265,7 +296,7 @@ TEST_CASE("Json")
             failed = true;
         }
         log_info("readFromFile/writeToFile %s", (failed ? "FAILED" : "succeeded"));
-        assert(!failed);
+        CHECK(!failed);
     }
 
     // readFromFile, writeToString
@@ -292,5 +323,5 @@ TEST_CASE("Json")
         CHECK(buffer1 == buffer2);
     }
 
-    printf("fty_common_json_test: OK\n");
+    printf("fty_common_json cxxtools: OK\n");
 }

@@ -33,7 +33,6 @@
 #include <condition_variable>
 #include <thread>
 
-
 static fty::Payload g_payload;
 
 static std::mutex              g_lock;
@@ -45,7 +44,6 @@ static void callback(const fty::Payload& payload)
     g_payload = payload;
     g_condvar.notify_all();
 }
-
 
 TEST_CASE("Unit-tests")
 {
@@ -86,9 +84,10 @@ TEST_CASE("Unit-tests")
         fty::StreamClientTest client;
 
         fty::Payload expectedPayload = {"This", "is", "a", "test"};
-        g_payload                    = {};
 
         {
+            g_payload = {};
+
             uint32_t registrationId = client.subscribe(callback);
 
             std::unique_lock<std::mutex> lock(g_lock);

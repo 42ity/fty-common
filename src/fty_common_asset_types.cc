@@ -321,11 +321,13 @@ bool is_ok_element_type(uint16_t element_type_id)
 bool is_ok_name(const char* name)
 {
     size_t length = name ? strlen(name) : 0;
-    if (length == 0)
-        return false;
 
     // Bad characters _ % @
-    if (strchr(name, '_') != nullptr || strchr(name, '%') != nullptr || strchr(name, '@') != nullptr)
+    if ((length == 0)
+        || strchr(name, '_')
+        || strchr(name, '%')
+        || strchr(name, '@')
+    )
         return false;
 
     return true;
@@ -334,28 +336,19 @@ bool is_ok_name(const char* name)
 bool is_ok_keytag(const char* keytag)
 {
     size_t length = keytag ? strlen(keytag) : 0;
-    if ((length > 0) && (length <= MAX_KEYTAG_LENGTH))
-        return true;
-    else
-        return false;
+    return (length > 0) && (length <= MAX_KEYTAG_LENGTH);
 }
 
 bool is_ok_value(const char* value)
 {
     size_t length = value ? strlen(value) : 0;
-    if ((length > 0) && (length <= MAX_VALUE_LENGTH))
-        return true;
-    else
-        return false;
+    return (length > 0) && (length <= MAX_VALUE_LENGTH);
 }
 
 bool is_ok_link_type(uint8_t link_type_id)
 {
     // TODO: manage link types
-    if (link_type_id > 0)
-        return true;
-    else
-        return false;
+    return (link_type_id > 0);
 }
 
 } // namespace persist

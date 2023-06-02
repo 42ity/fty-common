@@ -28,14 +28,10 @@
 #endif
 
 #ifdef __cplusplus
-#include "fty_common.h"
+#include "fty_common.h" // IPMException
 #include <fstream>
 #include <iostream>
 #endif
-
-namespace cxxtools {
-class SerializationInfo;
-}
 
 typedef enum
 {
@@ -47,7 +43,9 @@ typedef enum
 } JSON_TYPE;
 
 #ifdef __cplusplus
+
 namespace JSON {
+
 /**
  * \brief Determine start and type of next object in json line
  * This function tries to determine next JSON type from start_pos based on it's content.
@@ -85,6 +83,7 @@ std::string readString(const std::string& line, size_t& start_pos, size_t& end_p
  * is not found \throw CorruptedLineException - in case that no ending curly bracket isn't found for the object
  */
 std::string readObject(const std::string& line, size_t& start_pos, size_t& end_pos);
+
 /// exception that should be used when something is not found
 class NotFoundException : public ::IPMException
 {
@@ -94,9 +93,17 @@ class CorruptedLineException : public ::IPMException
 {
 };
 
+} // namespace JSON
+
 //
 // cxxtools SerializationInfo simple interface
 //
+
+namespace cxxtools {
+class SerializationInfo;
+}
+
+namespace JSON {
 
 /**
  * \brief Read/set a SerializationInfo object from a JSON file.
@@ -150,4 +157,5 @@ std::string writeToString(const cxxtools::SerializationInfo& si, bool beautify =
 void writeToStream(std::ostringstream& output, const cxxtools::SerializationInfo& si, bool beautify = true);
 
 } // namespace JSON
-#endif
+
+#endif //__cplusplus

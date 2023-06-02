@@ -1,5 +1,5 @@
 /*  =========================================================================
-    fty_commons - Singleton object and common functions
+    fty_common_base - Singleton object and common functions
 
     Copyright (C) 2014 - 2020 Eaton
 
@@ -26,14 +26,5 @@
 #define STR(X) #X
 
 #ifndef streq
-#define streq(s1, s2) (!strcmp((s1), (s2)))
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
-#ifdef __cplusplus
-}
+#define streq(s1, s2) (strcmp((s1), (s2)) == 0)
 #endif

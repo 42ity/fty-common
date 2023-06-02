@@ -29,7 +29,6 @@
 #include "fty_common_utf8.h"
 #include "fty_common_json.h"
 #include <cassert>
-#include <czmq.h>
 #include <fty_log.h>
 
 namespace UTF8 {
@@ -321,7 +320,7 @@ std::string escape(const std::string& before)
     return escape(before.c_str());
 }
 
-std::string bash_escape(std::string& param)
+std::string bash_escape(const std::string& param)
 {
     std::string escape_chars(" \t!\"#$&'()*,;<=>?[\\]^`{|}~");
     std::string escaped;
@@ -356,6 +355,7 @@ std::string bash_escape(std::string& param)
 static std::string s_jsonify_translation_string(const char* key, va_list args)
 {
     // log_trace ("called");
+    if (!key) return "";
 
     // check if 'key' is already in JSON format
     // since we may start/end with {{vari}} and we don't want to go through the whole string,
@@ -433,6 +433,8 @@ static std::string s_jsonify_translation_string(const char* key, va_list args)
     }
 
     if (json_format.empty()) {
+        va_end(args2);
+        va_end(args3);
         // no formatting directives, finish up the JSON and return
         return "{ \"key\": \"" + key_replaced + "\" }";
     }
@@ -444,28 +446,30 @@ static std::string s_jsonify_translation_string(const char* key, va_list args)
     json_format.append(" } }");
 
     // replace formatting directives with real content
-    char* json_attempt = static_cast<char*>(zmalloc(json_format.length()));
+    char* json_attempt = static_cast<char*>(calloc(json_format.length(), sizeof(char)));
     if (json_attempt == nullptr) {
+        va_end(args2);
+        va_end(args3);
         log_error("JSON buffer allocate has failed (%zu bytes)", json_format.length());
         return "";
     }
     size_t missing = size_t(vsnprintf(json_attempt, json_format.length(), json_format.c_str(), args2));
     va_end(args2);
+
     if (missing >= json_format.length()) {
         char* json = static_cast<char*>(realloc(json_attempt, missing + 1));
         if (json == nullptr) {
             log_error("JSON buffer reallocate has failed (%zu bytes)", (missing + 1));
             free(json_attempt);
+            va_end(args3);
             return "";
         }
-        if (json != nullptr && json != json_attempt) {
-            json_attempt = json;
-        }
+        json_attempt = json;
         vsnprintf(json_attempt, missing + 1, json_format.c_str(), args3);
-        va_end(args3);
     } else {
         // log_trace ("JSON buffer was sufficient");
     }
+    va_end(args3);
 
     std::string json_str(json_attempt);
     free(json_attempt);
@@ -521,31 +525,23 @@ std::string vajsonify_translation_string(const char* key, va_list args)
 
 char* utf8_escape(const char* string)
 {
-    std::string escaped_str = UTF8::escape(string);
-    size_t      length      = escaped_str.length();
-    char*       escaped     = static_cast<char*>(zmalloc(length + 1));
-    strcpy(escaped, escaped_str.c_str());
-    return escaped;
+    std::string escaped_str = UTF8::escape(string ? string : "");
+    return strdup(escaped_str.c_str());
 }
 
 char* utf8_bash_escape(const char* string)
 {
-    std::string string_str(string);
-    std::string escaped_str = UTF8::bash_escape(string_str);
-    size_t      length      = escaped_str.length();
-    char*       escaped     = static_cast<char*>(zmalloc(length + 1));
-    strcpy(escaped, escaped_str.c_str());
-    return escaped;
+    std::string escaped_str = UTF8::bash_escape(string ? string : "");
+    return strdup(escaped_str.c_str());
 }
 
 char* utf8_jsonify_translation_string(const char* key, ...)
 {
+    if (!key) return strdup("");
+
     va_list args;
     va_start(args, key);
     std::string jsonified_str = UTF8::s_jsonify_translation_string(key, args);
     va_end(args);
-    size_t length    = jsonified_str.length();
-    char*  jsonified = static_cast<char*>(zmalloc(length + 1));
-    strcpy(jsonified, jsonified_str.c_str());
-    return jsonified;
+    return strdup(jsonified_str.c_str());
 }

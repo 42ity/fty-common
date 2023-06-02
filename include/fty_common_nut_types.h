@@ -1,5 +1,5 @@
 /*  =========================================================================
-    fty_common_nut_utils - class description
+    fty_common_nut_types - class description
 
     Copyright (C) 2014 - 2020 Eaton
 
@@ -43,4 +43,4 @@ using DeviceConfigurations = std::vector<DeviceConfiguration>;
 
 } // namespace fty::nut
 
-#endif
+#endif //__cplusplus

@@ -32,10 +32,7 @@
 #include <czmq.h>
 #include <fty_log.h>
 
-#define SELFTEST_DIR_RO "src/selftest-ro"
-#define SELFTEST_DIR_RW "src/selftest-rw"
-
-TEST_CASE("utf8")
+TEST_CASE("Utf8")
 {
     printf(" * fty_common_utf8: ");
 
@@ -131,7 +128,7 @@ TEST_CASE("utf8")
         char* escaped;
         for (auto const& item : tests) {
             escaped = utf8_escape(item.first.c_str());
-            assert(streq(escaped, item.second.c_str()));
+            CHECK(streq(escaped, item.second.c_str()));
             free(escaped);
         }
         printf("OK\n");
@@ -260,14 +257,14 @@ TEST_CASE("utf8")
         free(json);
 
         json = utf8_jsonify_translation_string(translation_string6, "foo", "bar");
-        assert(streq(json, output6.c_str()));
+        CHECK(streq(json, output6.c_str()));
         free(json);
 
         const char* param1 =
             "{ \"key\": \"Error: client-> recv (timeout = '{{var1}} returned NULL\", \"variables\": { \"var1\": "
             "\"60')\" } }";
         json = utf8_jsonify_translation_string(translation_string7, param1);
-        assert(streq(json, output7.c_str()));
+        CHECK(streq(json, output7.c_str()));
         free(json);
 
         const char* param2 = "{ \"key\": \"Unexpected param\" }";

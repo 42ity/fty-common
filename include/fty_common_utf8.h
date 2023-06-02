@@ -41,7 +41,7 @@ extern "C" {
 // C wrapper for UTF8::escape
 char* utf8_escape(const char* string);
 
-// C wrapper for UTF8::escape
+// C wrapper for UTF8::bash_escape
 char* utf8_bash_escape(const char* string);
 
 // C wrapper for UTF8::jsonify_translation_string
@@ -75,7 +75,7 @@ std::string jsonify_translation_string(const char* key, ...);
 std::string vajsonify_translation_string(const char* key, va_list args);
 
 // escape string for use as a bash command parameter
-std::string bash_escape(std::string& param);
+std::string bash_escape(const std::string& param);
 
 } // namespace UTF8
 

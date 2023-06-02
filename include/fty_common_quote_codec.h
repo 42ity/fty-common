@@ -19,16 +19,19 @@
     =========================================================================
 */
 
+/// simple encoder/decoder to support zconfig format
+/// using double quotes (") as delimiter
+
 #pragma once
 
 #include <string>
 
 namespace quotecodec {
 
-// encode double quote character(not supported as char on zconfig)
-std::string quoteEncode(const std::string& param);
+// encode double quotes character from STRING
+std::string quoteEncode(const std::string& string);
 
-// decode double quote character from zconfig
-std::string quoteDecode(const std::string& param);
+// decode double quotes character from STRING
+std::string quoteDecode(const std::string& string);
 
 } // namespace quotecodec

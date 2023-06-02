@@ -52,7 +52,7 @@ std::vector<std::string> items_in_directory(const char* path)
 {
     std::vector<std::string> result;
 
-    DIR* dir = opendir(path);
+    DIR* dir = path ? opendir(path) : nullptr;
     if (dir) {
         struct dirent* entry;
         while ((entry = readdir(dir)) != nullptr) {
@@ -71,7 +71,7 @@ bool is_item_in_directory(const std::string& path, std::vector<std::string>& ite
         return false;
     }
 
-    struct dirent* entry;
+    struct dirent* entry = nullptr;
     while ((entry = readdir(dir)) != nullptr) {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
             continue;
@@ -84,11 +84,12 @@ bool is_item_in_directory(const std::string& path, std::vector<std::string>& ite
 
 std::vector<std::string> files_in_directory(const char* path)
 {
-    std::vector<std::string> result;
-    std::string              spath = path;
+    std::string spath = path ? path : "";
     spath += path_separator();
 
-    for (auto it : items_in_directory(path)) {
+    std::vector<std::string> result;
+
+    for (const auto& it : items_in_directory(path)) {
         if (is_file((spath + it).c_str()))
             result.push_back(it);
     }
@@ -97,6 +98,8 @@ std::vector<std::string> files_in_directory(const char* path)
 
 bool is_file_in_directory(const std::string& path, std::vector<std::string>& files)
 {
+    if (path.empty()) return false;
+
     std::string spath = path;
     spath += path_separator();
 

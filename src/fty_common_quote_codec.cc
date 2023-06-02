@@ -23,20 +23,20 @@
 
 namespace quotecodec {
 
-std::string quoteEncode(const std::string& param)
+std::string quoteEncode(const std::string& string)
 {
     std::string ret;
 
-    for (const auto& c : param) {
+    for (const auto& c : string) {
         ret += (c == '"') ? "\\u0022" : std::string{c};
     }
 
     return ret;
 }
 
-std::string quoteDecode(const std::string& param)
+std::string quoteDecode(const std::string& string)
 {
-    std::string ret{param};
+    std::string ret{string};
 
     while(1) {
         size_t pos = ret.find("\\u0022");

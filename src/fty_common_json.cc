@@ -97,9 +97,13 @@ std::string readString(const std::string& line, size_t& start_pos, size_t& end_p
     return line.substr(start_pos + 1, end_pos - start_pos - 1);
 }
 
+} // namespace JSON
+
 //
 // cxxtools SerializationInfo simple interface
 //
+
+namespace JSON {
 
 // write SI to JSON ostringstream
 void writeToStream(std::ostringstream& output, const cxxtools::SerializationInfo& si, bool beautify)
