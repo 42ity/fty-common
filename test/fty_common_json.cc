@@ -31,6 +31,9 @@
 #include <fty_log.h>
 #include <cxxtools/serializationinfo.h>
 
+#include <functional>
+#include <sstream>
+
 TEST_CASE("Json parser")
 {
     printf("fty_common_json parser...\n");
@@ -321,6 +324,38 @@ TEST_CASE("Json cxxtools")
             buffer1.c_str(), buffer2.c_str());
         CHECK(!failed);
         CHECK(buffer1 == buffer2);
+    }
+
+    // UTF8 readFromString, writeToFile, readFromFile
+    {
+        static std::string json = R"({
+            "name0" : "مرحبا بالعالم",
+            "name1" : "你好世界",
+            "name2" : "Привет, мир",
+            "name3" : "Hello world"
+        })";
+
+        std::function<std::string(const cxxtools::String&)> toStdString = [](const cxxtools::String& value)
+        {
+            std::ostringstream oss;
+            oss << value;
+            return oss.str();
+        };
+
+        cxxtools::SerializationInfo si;
+        REQUIRE_NOTHROW(JSON::readFromString(json, si));
+        REQUIRE_NOTHROW(JSON::writeToFile("/tmp/utf8.json", si));
+
+        cxxtools::SerializationInfo si2;
+        REQUIRE_NOTHROW(JSON::readFromFile("/tmp/utf8.json", si2));
+
+        cxxtools::String s;
+        cxxtools::SerializationInfo* p;
+
+        p = si2.findMember("name0"); REQUIRE(p); *p >>= s; CHECK(toStdString(s) == "مرحبا بالعالم");
+        p = si2.findMember("name1"); REQUIRE(p); *p >>= s; CHECK(toStdString(s) == "你好世界");
+        p = si2.findMember("name2"); REQUIRE(p); *p >>= s; CHECK(toStdString(s) == "Привет, мир");
+        p = si2.findMember("name3"); REQUIRE(p); *p >>= s; CHECK(toStdString(s) == "Hello world");
     }
 
     printf("fty_common_json cxxtools: OK\n");
