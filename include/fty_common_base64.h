@@ -1,7 +1,7 @@
 /*  =========================================================================
-    fty-common - Provides common tools for agents
+    fty_common_base64 - Functions for base64 codec
 
-    Copyright (C) 2014 - 2020 Eaton
+    Copyright (C) 2014 - 2024 Eaton
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,27 +21,24 @@
 
 #pragma once
 
-#ifdef __cplusplus
+#include <string>
 
-// Afwul hack, but I need exceptions to be valid for whole content
-#include <stdexcept>
-/// general IPM exception
-class IPMException : public std::exception
-{
-};
+namespace Base64 {
 
-#endif // __cplusplus
+/**
+ * \brief Base64 encode message.
+ * \param[in]   message (plaintext)
+ * \param[in]   len message length (bytes)
+ * \return      the encoded message
+ */
+std::string encode(const std::string& message);
+std::string encode(const char* message, size_t len);
 
-#include "fty_common_agents.h"
-#include "fty_common_asset_types.h"
-#include "fty_common_base.h"
-#include "fty_common_client.h"
-#include "fty_common_filesystem.h"
-#include "fty_common_json.h"
-#include "fty_common_macros.h"
-#include "fty_common_nut_types.h"
-#include "fty_common_quote_codec.h"
-#include "fty_common_str_defs.h"
-#include "fty_common_sync_server.h"
-#include "fty_common_utf8.h"
-#include "fty_common_base64.h"
+/**
+ * \brief Base64 decode message.
+ * \param[in]   message (encoded)
+ * \return      the decoded message
+ */
+std::string decode(const std::string& message);
+
+}
