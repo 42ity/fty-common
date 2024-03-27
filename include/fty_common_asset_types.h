@@ -183,6 +183,8 @@ namespace persist {
         KUBERNETES_CLUSTER,
         KUBERNETES_NODE,
 
+        DELL_VXRAIL_VM, // 83
+
         NB_ASSET_SUBTYPES
     };
 } // namespace persist
@@ -268,6 +270,7 @@ namespace fty {
     static constexpr const char* SUB_KUBERNETES_MANAGER                 = "kubernetes.manager";
     static constexpr const char* SUB_KUBERNETES_CLUSTER                 = "kubernetes.cluster";
     static constexpr const char* SUB_KUBERNETES_NODE                    = "kubernetes.node";
+    static constexpr const char* SUB_DELL_VXRAIL_VM                     = "dell.vxrail.vm";
 
 } //namespace fty
 

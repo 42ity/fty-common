@@ -143,6 +143,7 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::VMWARE_SRM_PLAN,   ::fty::SUB_VMWARE_SRM_PLAN },
 
     { asset_subtype::PCU,   ::fty::SUB_PCU }, // Parallel Control Unit
+
     { asset_subtype::DELL_VXRAIL_CONNECTOR,                 ::fty::SUB_DELL_VXRAIL_CONNECTOR },
     { asset_subtype::DELL_VXRAIL_MANAGER,                   ::fty::SUB_DELL_VXRAIL_MANAGER },
     { asset_subtype::DELL_VXRAIL_CLUSTER,                   ::fty::SUB_DELL_VXRAIL_CLUSTER },
@@ -158,6 +159,8 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::KUBERNETES_MANAGER,    ::fty::SUB_KUBERNETES_MANAGER },
     { asset_subtype::KUBERNETES_CLUSTER,    ::fty::SUB_KUBERNETES_CLUSTER },
     { asset_subtype::KUBERNETES_NODE,       ::fty::SUB_KUBERNETES_NODE },
+
+    { asset_subtype::DELL_VXRAIL_VM,        ::fty::SUB_DELL_VXRAIL_VM },
 };
 
 // Except "" for N_A, the names on the left are the ones from database

@@ -41,6 +41,7 @@ TEST_CASE("Asset types")
         CHECK(persist::asset_subtype::MICROSOFT_HYPERV_SERVICE == 72);
         CHECK(persist::asset_subtype::ACTUATOR == 78);
         CHECK(persist::asset_subtype::KUBERNETES_CONNECTOR == 79);
+        CHECK(persist::asset_subtype::DELL_VXRAIL_VM == 83);
     }
 
     printf("test: type/typeid unknown\n");
@@ -124,7 +125,8 @@ TEST_CASE("Asset types")
             "vmware.standalone.esxi.connector", "netapp.ontap", "vmware.srm", "vmware.srm.plan", "pcu",
             "dell.vxrail.connector", "dell.vxrail.manager", "dell.vxrail.cluster", "microsoft.hyperv.service",
             "vmware.cluster.fault.domain", "microsoft.scvmm.connector", "microsoft.scvmm", "actuator",
-            "kubernetes.connector", "kubernetes.manager", "kubernetes.cluster","kubernetes.node"
+            "kubernetes.connector", "kubernetes.manager", "kubernetes.cluster", "kubernetes.node",
+            "dell.vxrail.vm"
         });
 
         bool success = true;
