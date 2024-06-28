@@ -25,45 +25,10 @@
 #include <inttypes.h>
 #include <string>
 
-namespace persist {
-
-// CAUTION: THESE ENUMS REFLECT (PARTS OF) THE DATABASE
-
-enum asset_type
-{
-    TUNKNOWN = 0,
-
-    GROUP = 1,
-    DATACENTER,         // 2
-    ROOM,               // 3
-    ROW,                // 4
-    RACK,               // 5
-    DEVICE,             // 6
-    INFRA_SERVICE,      // 7
-    CLUSTER,            // 8
-    HYPERVISOR,         // 9
-    VIRTUAL_MACHINE,    // 10
-    STORAGE_SERVICE,    // 11
-    VAPP,               // 12
-    CONNECTOR,          // 13
-
-    TSERVER = 15,
-    PLANNER,            // 16
-    PLAN,               // 17
-    COPS,               // 18 (Composite Power System)
-    OPERATING_SYSTEM,   // 19
-    HOST_GROUP,         // 20
-    CONTAINER_CLUSTER,  // 21
-    CONTAINER_NODE,     // 22
-
-    NB_ASSET_TYPES
-};
-
-} // namespace persist
-
 //
-// asset type
+// asset type (literal)
 // WARNING keep consistent with DB table t_bios_asset_element_type
+// select * from t_bios_asset_element_type order by id_asset_element_type asc;
 //
 namespace fty {
 
@@ -94,104 +59,45 @@ static constexpr const char* TYPE_CONTAINER_NODE    = "container-node";    // 22
 
 namespace persist {
 
-    enum asset_subtype {
-        SUNKNOWN        = 0,
+// CAUTION: THESE ENUMS REFLECT (PARTS OF) THE DATABASE
+// keep consistent with DB table t_bios_asset_element_type @id_asset_element_type
 
-        UPS             = 1,
-        GENSET,
-        EPDU,
-        PDU,
-        SERVER,
-        FEED,
-        STS,
-        SWITCH,
-        STORAGE,
-        VM,
-        VIRTUAL = VM,
+enum asset_type // IDs
+{
+    TUNKNOWN = 0,
 
-        N_A             = 11, // CAUTION: don't change N_A id. It is used as default value in initdb.sql for types, that don't have N_A
-        ROUTER,
-        RACKCONTROLLER,
-        SENSOR,
-        APPLIANCE,
-        CHASSIS,
-        PATCHPANEL,
-        OTHER,
-        SENSORGPIO,
+    GROUP = 1,
+    DATACENTER,         // 2
+    ROOM,               // 3
+    ROW,                // 4
+    RACK,               // 5
+    DEVICE,             // 6
+    INFRA_SERVICE,      // 7
+    CLUSTER,            // 8
+    HYPERVISOR,         // 9
+    VIRTUAL_MACHINE,    // 10
+    STORAGE_SERVICE,    // 11
+    VAPP,               // 12
+    CONNECTOR,          // 13
 
-        GPO,
-        NETAPP_ONTAP_NODE,
-        IPMINFRA_SERVER,
-        IPMINFRA_SERVICE,
-        VMWARE_VCENTER,
-        CITRIX_POOL,
-        VMWARE_CLUSTER,
-        VMWARE_ESXI,
-        MICROSOFT_HYPERV_SERVER,
-        VMWARE_VM,
+    TSERVER = 15,
+    PLANNER,            // 16
+    PLAN,               // 17
+    COPS,               // 18 (Composite Power System)
+    OPERATING_SYSTEM,   // 19
+    HOST_GROUP,         // 20
+    CONTAINER_CLUSTER,  // 21
+    CONTAINER_NODE,     // 22
 
-        CITRIX_VM = 31,
-        NETAPP_NODE,
-        VMWARE_STANDALONE_ESXI,
-        VMWARE_TASK,
-        VMWARE_VAPP,
-        CITRIX_XENSERVER,
-        CITRIX_VAPP,
-        CITRIX_TASK,
-        MICROSOFT_VM,
-        MICROSOFT_TASK,
-        MICROSOFT_SERVER_CONNECTOR,
-        MICROSOFT_SERVER,
-        MICROSOFT_CLUSTER,
+    MAX_ASSET_TYPE_ID
+};
 
-        HP_ONEVIEW_CONNECTOR,
-        HP_ONEVIEW,
-        HP_IT_SERVER,
-        HP_IT_RACK,
-        NETAPP_SERVER,
-        NETAPP_ONTAP_CONNECTOR,
-        NETAPP_ONTAP_CLUSTER,
-
-        NUTANIX_VM,
-        NUTANIX_PRISM_GATEWAY,
-        NUTANIX_NODE,
-        NUTANIX_CLUSTER,
-        NUTANIX_PRISM_CONNECTOR,
-
-        VMWARE_VCENTER_CONNECTOR            = 60,
-        VMWARE_STANDALONE_ESXI_CONNECTOR,
-        NETAPP_ONTAP,
-        VMWARE_SRM                          = 65,
-        VMWARE_SRM_PLAN,
-        PCU,      // Parallel Control Unit
-
-        DELL_VXRAIL_CONNECTOR,
-        DELL_VXRAIL_MANAGER,
-        DELL_VXRAIL_CLUSTER,
-
-        MICROSOFT_HYPERV_SERVICE            = 72,
-        VMWARE_CLUSTER_FAULT_DOMAIN,
-        MICROSOFT_SCVMM_CONNECTOR,
-        MICROSOFT_SCVMM,
-        DELL_VXRAIL_EXSI,
-        MICROSOFT_STANDALONE_HYPERV_SERVER,
-
-        ACTUATOR, // 78
-
-        KUBERNETES_CONNECTOR, // 79
-        KUBERNETES_MANAGER,
-        KUBERNETES_CLUSTER,
-        KUBERNETES_NODE,
-
-        DELL_VXRAIL_VM, // 83
-
-        NB_ASSET_SUBTYPES
-    };
 } // namespace persist
 
 //
-// device type
+// device type (literal)
 // WARNING keep consistent with DB table t_bios_asset_device_type
+// select * from t_bios_asset_device_type order by id_asset_device_type asc;
 //
 namespace fty {
 
@@ -273,6 +179,99 @@ namespace fty {
     static constexpr const char* SUB_DELL_VXRAIL_VM                     = "dell.vxrail.vm";
 
 } //namespace fty
+
+namespace persist {
+// CAUTION: THESE ENUMS REFLECT (PARTS OF) THE DATABASE
+// keep consistent with DB table t_bios_asset_device_type @id_asset_device_type
+
+    enum asset_subtype { // IDs
+        SUNKNOWN = 0,
+
+        UPS = 1,
+        GENSET,     // 2
+        EPDU,       // 3
+        PDU,        // 4
+        SERVER,     // 5
+        FEED,       // 6
+        STS,        // 7
+        SWITCH,     // 8
+        STORAGE,    // 9
+        VM,         // 10
+        VIRTUAL = VM,
+
+        N_A = 11, // CAUTION: don't change N_A id. It is used as default value in initdb.sql for types, that don't have N_A
+        ROUTER,                 // 12
+        RACKCONTROLLER,         // 13
+        SENSOR,                 // 14
+        APPLIANCE,              // 15
+        CHASSIS,                // 16
+        PATCHPANEL,             // 17
+        OTHER,                  // 18
+        SENSORGPIO,             // 19
+        GPO,                    // 20
+        NETAPP_ONTAP_NODE,      // 21
+        IPMINFRA_SERVER,        // 22
+        IPMINFRA_SERVICE,       // 23
+        VMWARE_VCENTER,         // 24
+        CITRIX_POOL,            // 25
+        VMWARE_CLUSTER,         // 26
+        VMWARE_ESXI,            // 27
+        MICROSOFT_HYPERV_SERVER,// 28
+        VMWARE_VM,              // 29
+
+        CITRIX_VM = 31,
+        NETAPP_NODE,            // 32
+        VMWARE_STANDALONE_ESXI, // 33
+        VMWARE_TASK,            // 34
+        VMWARE_VAPP,            // 35
+        CITRIX_XENSERVER,       // 36
+        CITRIX_VAPP,            // 37
+        CITRIX_TASK,            // 38
+        MICROSOFT_VM,           // 39
+        MICROSOFT_TASK,         // 40
+        MICROSOFT_SERVER_CONNECTOR, // 41
+        MICROSOFT_SERVER,       // 42
+        MICROSOFT_CLUSTER,      // 43
+        HP_ONEVIEW_CONNECTOR,   // 44
+        HP_ONEVIEW,             // 45
+        HP_IT_SERVER,           // 46
+        HP_IT_RACK,             // 47
+        NETAPP_SERVER,          // 48
+        NETAPP_ONTAP_CONNECTOR, // 49
+        NETAPP_ONTAP_CLUSTER,   // 50
+        NUTANIX_VM,             // 51
+        NUTANIX_PRISM_GATEWAY,  // 52
+        NUTANIX_NODE,           // 53
+        NUTANIX_CLUSTER,        // 54
+        NUTANIX_PRISM_CONNECTOR,// 55
+
+        VMWARE_VCENTER_CONNECTOR  = 60,
+        VMWARE_STANDALONE_ESXI_CONNECTOR,   // 61
+        NETAPP_ONTAP,                       // 62
+
+        VMWARE_SRM = 65,
+        VMWARE_SRM_PLAN,        // 66
+        PCU,                    // 67 (Parallel Control Unit)
+        DELL_VXRAIL_CONNECTOR,  // 68
+        DELL_VXRAIL_MANAGER,    // 69
+        DELL_VXRAIL_CLUSTER,    // 70
+
+        MICROSOFT_HYPERV_SERVICE = 72,
+        VMWARE_CLUSTER_FAULT_DOMAIN,        // 73
+        MICROSOFT_SCVMM_CONNECTOR,          // 74
+        MICROSOFT_SCVMM,                    // 75
+        DELL_VXRAIL_EXSI,                   // 76
+        MICROSOFT_STANDALONE_HYPERV_SERVER, // 77
+        ACTUATOR,                           // 78
+        KUBERNETES_CONNECTOR,               // 79
+        KUBERNETES_MANAGER,                 // 80
+        KUBERNETES_CLUSTER,                 // 81
+        KUBERNETES_NODE,                    // 82
+        DELL_VXRAIL_VM,                     // 83
+
+        MAX_ASSET_SUBTYPE_ID
+    };
+} // namespace persist
 
 namespace persist {
 

@@ -52,7 +52,7 @@ TEST_CASE("Asset types")
         const std::string sUnknown  = persist::typeid_to_type(idUnknown);
 
         bool success = true;
-        for (auto type : types) {
+        for (const auto& type : types) {
             uint16_t    id = persist::type_to_typeid(type);
             std::string s  = persist::typeid_to_type(id);
 
@@ -72,7 +72,7 @@ TEST_CASE("Asset types")
             "operating-system", "host-group", "container-cluster", "container-node"});
 
         bool success = true;
-        for (auto type : types) {
+        for (const auto& type : types) {
             uint16_t    id = persist::type_to_typeid(type);
             std::string s  = persist::typeid_to_type(id);
 
@@ -95,7 +95,7 @@ TEST_CASE("Asset types")
         std::vector<std::string> types({"hello", "world", sUnknown});
 
         bool success = true;
-        for (auto type : types) {
+        for (const auto& type : types) {
             uint16_t    id = persist::subtype_to_subtypeid(type);
             std::string s  = persist::subtypeid_to_subtype(id);
 
@@ -130,7 +130,7 @@ TEST_CASE("Asset types")
         });
 
         bool success = true;
-        for (auto type : types) {
+        for (const auto& type : types) {
             uint16_t    id = persist::subtype_to_subtypeid(type);
             std::string s  = persist::subtypeid_to_subtype(id);
 
@@ -153,6 +153,30 @@ TEST_CASE("Asset types")
             success &= ok;
         }
         CHECK(success);
+    }
+
+    printf("test: operation\n");
+    {
+        using namespace persist;
+
+        CHECK(operation2str(asset_operation::INSERT) == "create");
+        CHECK(operation2str(asset_operation::DELETE) == "delete");
+        CHECK(operation2str(asset_operation::UPDATE) == "update");
+        CHECK(operation2str(asset_operation::GET) == "get");
+        CHECK(operation2str(asset_operation::RETIRE) == "retire");
+        CHECK(operation2str(asset_operation::INVENTORY) == "inventory");
+
+        CHECK(str2operation("create") == asset_operation::INSERT);
+        CHECK(str2operation("delete") == asset_operation::DELETE);
+        CHECK(str2operation("update") == asset_operation::UPDATE);
+        CHECK(str2operation("get") == asset_operation::GET);
+        CHECK(str2operation("retire") == asset_operation::RETIRE);
+        CHECK(str2operation("inventory") == asset_operation::INVENTORY);
+
+        CHECK(str2operation("hello world") == asset_operation::INVENTORY); // default
+
+        CHECK(str2operation("CREATE") == asset_operation::INSERT);
+        CHECK(str2operation("CREate") == asset_operation::INSERT);
     }
 
     printf("test: is_virtual\n");
@@ -180,11 +204,12 @@ TEST_CASE("Asset types")
             fty::TYPE_CONTAINER_CLUSTER,
             fty::TYPE_CONTAINER_NODE,
         };
-        for (auto& type : types) {
+        for (const auto& type : types) {
             CHECK(persist::is_virtual(type));
         }
     }
 
+    printf("test: is_epdu, ...\n");
     {
         using namespace persist;
         int st;
@@ -239,6 +264,7 @@ TEST_CASE("Asset types")
         CHECK(is_ups(st) == false);
     }
 
+    printf("test: is_container\n");
     {
         using namespace persist;
 
@@ -248,7 +274,11 @@ TEST_CASE("Asset types")
         CHECK(is_container("room") == true);
         CHECK(is_container("row") == true);
         CHECK(is_container("rack") == true);
+    }
 
+    printf("test: is_ok_///\n");
+    {
+        using namespace persist;
         CHECK(is_ok_element_type(0) == false);
         CHECK(is_ok_element_type(1) == true);
         CHECK(is_ok_element_type(2) == true);
@@ -271,6 +301,7 @@ TEST_CASE("Asset types")
         CHECK(is_ok_value(nullptr) == false);
         CHECK(is_ok_value("") == false);
         CHECK(is_ok_value("a") == true);
+
         char p[300]; memset(p, 'a', sizeof(p));
         p[256] = 0;
         CHECK(is_ok_value(p) == false); // max len 255
@@ -282,6 +313,5 @@ TEST_CASE("Asset types")
         CHECK(is_ok_link_type(255) == true);
     }
 
-    //  @end
     printf(" * fty_common_asset_types: OK\n");
 }
