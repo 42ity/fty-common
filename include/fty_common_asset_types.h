@@ -122,7 +122,6 @@ namespace fty {
     static constexpr const char* SUB_OTHER                              = "other";
     static constexpr const char* SUB_SENSORGPIO                         = "sensorgpio";
     static constexpr const char* SUB_GPO                                = "gpo";
-    static constexpr const char* SUB_NETAPP_ONTAP_NODE                  = "netapp.ontap.node";
     static constexpr const char* SUB_IPMINFRA_SERVER                    = "ipminfra.server";
     static constexpr const char* SUB_IPMINFRA_SERVICE                   = "ipminfra.service";
     static constexpr const char* SUB_VMWARE_VCENTER                     = "vmware.vcenter";
@@ -132,7 +131,6 @@ namespace fty {
     static constexpr const char* SUB_MICROSOFT_HYPERV_SERVER            = "microsoft.hyperv.server";
     static constexpr const char* SUB_VMWARE_VM                          = "vmware.vm";
     static constexpr const char* SUB_CITRIX_VM                          = "citrix.vm";
-    static constexpr const char* SUB_NETAPP_NODE                        = "netapp.node";
     static constexpr const char* SUB_VMWARE_STANDALONE_ESXI             = "vmware.standalone.esxi";
     static constexpr const char* SUB_VMWARE_TASK                        = "vmware.task";
     static constexpr const char* SUB_VMWARE_VAPP                        = "vmware.vapp";
@@ -144,13 +142,6 @@ namespace fty {
     static constexpr const char* SUB_MICROSOFT_SERVER_CONNECTOR         = "microsoft.server.connector";
     static constexpr const char* SUB_MICROSOFT_SERVER                   = "microsoft.server";
     static constexpr const char* SUB_MICROSOFT_CLUSTER                  = "microsoft.cluster";
-    static constexpr const char* SUB_HP_ONEVIEW_CONNECTOR               = "hp.oneview.connector";
-    static constexpr const char* SUB_HP_ONEVIEW                         = "hp.oneview";
-    static constexpr const char* SUB_HP_IT_SERVER                       = "hp.it.server";
-    static constexpr const char* SUB_HP_IT_RACK                         = "hp.it.rack";
-    static constexpr const char* SUB_NETAPP_SERVER                      = "netapp.server";
-    static constexpr const char* SUB_NETAPP_ONTAP_CONNECTOR             = "netapp.ontap.connector";
-    static constexpr const char* SUB_NETAPP_ONTAP_CLUSTER               = "netapp.ontap.cluster";
     static constexpr const char* SUB_NUTANIX_VM                         = "nutanix.vm";
     static constexpr const char* SUB_NUTANIX_PRISM_GATEWAY              = "nutanix.prism.gateway";
     static constexpr const char* SUB_NUTANIX_NODE                       = "nutanix.node";
@@ -158,7 +149,6 @@ namespace fty {
     static constexpr const char* SUB_NUTANIX_PRISM_CONNECTOR            = "nutanix.prism.connector";
     static constexpr const char* SUB_VMWARE_VCENTER_CONNECTOR           = "vmware.vcenter.connector";
     static constexpr const char* SUB_VMWARE_STANDALONE_ESXI_CONNECTOR   = "vmware.standalone.esxi.connector";
-    static constexpr const char* SUB_NETAPP_ONTAP                       = "netapp.ontap";
     static constexpr const char* SUB_VMWARE_SRM                         = "vmware.srm";
     static constexpr const char* SUB_VMWARE_SRM_PLAN                    = "vmware.srm.plan";
     static constexpr const char* SUB_PCU                                = "pcu";
@@ -209,8 +199,8 @@ namespace persist {
         OTHER,                  // 18
         SENSORGPIO,             // 19
         GPO,                    // 20
-        NETAPP_ONTAP_NODE,      // 21
-        IPMINFRA_SERVER,        // 22
+
+        IPMINFRA_SERVER = 22,
         IPMINFRA_SERVICE,       // 23
         VMWARE_VCENTER,         // 24
         CITRIX_POOL,            // 25
@@ -220,8 +210,8 @@ namespace persist {
         VMWARE_VM,              // 29
 
         CITRIX_VM = 31,
-        NETAPP_NODE,            // 32
-        VMWARE_STANDALONE_ESXI, // 33
+
+        VMWARE_STANDALONE_ESXI = 33,
         VMWARE_TASK,            // 34
         VMWARE_VAPP,            // 35
         CITRIX_XENSERVER,       // 36
@@ -232,14 +222,8 @@ namespace persist {
         MICROSOFT_SERVER_CONNECTOR, // 41
         MICROSOFT_SERVER,       // 42
         MICROSOFT_CLUSTER,      // 43
-        HP_ONEVIEW_CONNECTOR,   // 44
-        HP_ONEVIEW,             // 45
-        HP_IT_SERVER,           // 46
-        HP_IT_RACK,             // 47
-        NETAPP_SERVER,          // 48
-        NETAPP_ONTAP_CONNECTOR, // 49
-        NETAPP_ONTAP_CLUSTER,   // 50
-        NUTANIX_VM,             // 51
+
+        NUTANIX_VM = 51,
         NUTANIX_PRISM_GATEWAY,  // 52
         NUTANIX_NODE,           // 53
         NUTANIX_CLUSTER,        // 54
@@ -247,7 +231,6 @@ namespace persist {
 
         VMWARE_VCENTER_CONNECTOR  = 60,
         VMWARE_STANDALONE_ESXI_CONNECTOR,   // 61
-        NETAPP_ONTAP,                       // 62
 
         VMWARE_SRM = 65,
         VMWARE_SRM_PLAN,        // 66

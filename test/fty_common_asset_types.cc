@@ -115,14 +115,13 @@ TEST_CASE("Asset types")
 
             "ups", "UPS", "genset", "Genset", "unknown", "epdu", "pdu", "server", "feed", "sts", "switch", "storage",
             "vm", "N_A", "router", "rack controller", "sensor", "appliance", "chassis", "patch panel", "other",
-            "sensorgpio", "gpo", "netapp.ontap.node", "ipminfra.server", "ipminfra.service", "vmware.vcenter",
+            "sensorgpio", "gpo", "ipminfra.server", "ipminfra.service", "vmware.vcenter",
             "citrix.pool", "vmware.cluster", "vmware.esxi", "microsoft.hyperv.server", "vmware.vm", "citrix.vm",
-            "netapp.node", "vmware.standalone.esxi", "vmware.task", "vmware.vapp", "citrix.xenserver", "citrix.vapp",
+            "vmware.standalone.esxi", "vmware.task", "vmware.vapp", "citrix.xenserver", "citrix.vapp",
             "citrix.task", "microsoft.vm", "microsoft.task", "microsoft.server.connector", "microsoft.server",
-            "microsoft.cluster", "hp.oneview.connector", "hp.oneview", "hp.it.server", "hp.it.rack", "netapp.server",
-            "netapp.ontap.connector", "netapp.ontap.cluster", "nutanix.vm", "nutanix.prism.gateway", "nutanix.node",
+            "microsoft.cluster", "nutanix.vm", "nutanix.prism.gateway", "nutanix.node",
             "nutanix.cluster", "nutanix.prism.connector", "vmware.vcenter.connector",
-            "vmware.standalone.esxi.connector", "netapp.ontap", "vmware.srm", "vmware.srm.plan", "pcu",
+            "vmware.standalone.esxi.connector", "vmware.srm", "vmware.srm.plan", "pcu",
             "dell.vxrail.connector", "dell.vxrail.manager", "dell.vxrail.cluster", "microsoft.hyperv.service",
             "vmware.cluster.fault.domain", "microsoft.scvmm.connector", "microsoft.scvmm", "actuator",
             "kubernetes.connector", "kubernetes.manager", "kubernetes.cluster", "kubernetes.node",
@@ -147,9 +146,9 @@ TEST_CASE("Asset types")
                 attempt = fty::SUB_PATCH_PANEL;
 
             bool ok = (attempt == s);
-            if (!ok)
-                printf(
-                    "ERROR: subtype: %s, id: %d, s: %s, attempt: %s\n", type.c_str(), id, s.c_str(), attempt.c_str());
+            if (!ok) {
+                printf("ERROR: subtype: %s, id: %d, s: %s, attempt: %s\n", type.c_str(), id, s.c_str(), attempt.c_str());
+            }
             success &= ok;
         }
         CHECK(success);
@@ -276,7 +275,7 @@ TEST_CASE("Asset types")
         CHECK(is_container("rack") == true);
     }
 
-    printf("test: is_ok_///\n");
+    printf("test: is_ok\n");
     {
         using namespace persist;
         CHECK(is_ok_element_type(0) == false);

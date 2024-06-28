@@ -97,7 +97,6 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::SENSORGPIO,     ::fty::SUB_SENSORGPIO },
 
     { asset_subtype::GPO,                     ::fty::SUB_GPO },
-    { asset_subtype::NETAPP_ONTAP_NODE,       ::fty::SUB_NETAPP_ONTAP_NODE },
     { asset_subtype::IPMINFRA_SERVER,         ::fty::SUB_IPMINFRA_SERVER },
     { asset_subtype::IPMINFRA_SERVICE,        ::fty::SUB_IPMINFRA_SERVICE },
     { asset_subtype::VMWARE_VCENTER,          ::fty::SUB_VMWARE_VCENTER },
@@ -108,7 +107,6 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::VMWARE_VM,               ::fty::SUB_VMWARE_VM },
 
     { asset_subtype::CITRIX_VM,                         ::fty::SUB_CITRIX_VM },
-    { asset_subtype::NETAPP_NODE,                       ::fty::SUB_NETAPP_NODE },
     { asset_subtype::VMWARE_STANDALONE_ESXI,            ::fty::SUB_VMWARE_STANDALONE_ESXI },
     { asset_subtype::VMWARE_TASK,                       ::fty::SUB_VMWARE_TASK },
     { asset_subtype::VMWARE_VAPP,                       ::fty::SUB_VMWARE_VAPP },
@@ -121,14 +119,7 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::MICROSOFT_SERVER_CONNECTOR,   ::fty::SUB_MICROSOFT_SERVER_CONNECTOR },
     { asset_subtype::MICROSOFT_SERVER,             ::fty::SUB_MICROSOFT_SERVER },
     { asset_subtype::MICROSOFT_CLUSTER,            ::fty::SUB_MICROSOFT_CLUSTER },
-    { asset_subtype::HP_ONEVIEW_CONNECTOR,         ::fty::SUB_HP_ONEVIEW_CONNECTOR },
-    { asset_subtype::HP_ONEVIEW,                   ::fty::SUB_HP_ONEVIEW },
-    { asset_subtype::HP_IT_SERVER,                 ::fty::SUB_HP_IT_SERVER },
-    { asset_subtype::HP_IT_RACK,                   ::fty::SUB_HP_IT_RACK },
-    { asset_subtype::NETAPP_SERVER,                ::fty::SUB_NETAPP_SERVER },
-    { asset_subtype::NETAPP_ONTAP_CONNECTOR,       ::fty::SUB_NETAPP_ONTAP_CONNECTOR },
 
-    { asset_subtype::NETAPP_ONTAP_CLUSTER,     ::fty::SUB_NETAPP_ONTAP_CLUSTER },
     { asset_subtype::NUTANIX_VM,               ::fty::SUB_NUTANIX_VM },
     { asset_subtype::NUTANIX_PRISM_GATEWAY,    ::fty::SUB_NUTANIX_PRISM_GATEWAY },
     { asset_subtype::NUTANIX_NODE,             ::fty::SUB_NUTANIX_NODE },
@@ -137,7 +128,6 @@ const static std::map<uint16_t, std::string> subtype_names {
 
     { asset_subtype::VMWARE_VCENTER_CONNECTOR,         ::fty::SUB_VMWARE_VCENTER_CONNECTOR },
     { asset_subtype::VMWARE_STANDALONE_ESXI_CONNECTOR, ::fty::SUB_VMWARE_STANDALONE_ESXI_CONNECTOR },
-    { asset_subtype::NETAPP_ONTAP,                     ::fty::SUB_NETAPP_ONTAP },
 
     { asset_subtype::VMWARE_SRM,        ::fty::SUB_VMWARE_SRM },
     { asset_subtype::VMWARE_SRM_PLAN,   ::fty::SUB_VMWARE_SRM_PLAN },
