@@ -188,8 +188,7 @@ uint16_t type_to_typeid(const std::string& type_)
 std::string subtypeid_to_subtype(uint16_t subtype_id)
 {
     try {
-        std::string subtype = subtype_names.at(subtype_id);
-        return subtype;
+        return subtype_names.at(subtype_id);
     } catch (...) {
     }
     return ::fty::SUB_UNKNOWN; // subtype_names.at(asset_subtype::SUNKNOWN);
