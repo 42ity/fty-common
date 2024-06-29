@@ -199,6 +199,7 @@ TEST_CASE("Asset types")
             fty::TYPE_SERVER,
             fty::TYPE_PLANNER,
             fty::TYPE_OPERATING_SYSTEM,
+            fty::TYPE_HOST_GROUP,
             fty::TYPE_PLAN,
             fty::TYPE_CONTAINER_CLUSTER,
             fty::TYPE_CONTAINER_NODE,
