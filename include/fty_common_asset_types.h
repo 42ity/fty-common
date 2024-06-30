@@ -269,8 +269,6 @@ enum asset_operation
     INSERT [[deprecated]] = CREATE
 };
 
-//#pragma deprecated(asset_operation::INSERT)
-
 std::string operation2str(asset_operation operation);
 
 asset_operation str2operation(const std::string& operation);
