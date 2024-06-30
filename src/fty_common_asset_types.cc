@@ -215,7 +215,7 @@ uint16_t subtype_to_subtypeid(const std::string& subtype_)
 }
 
 const static std::map<uint16_t, std::string> operation_names {
-    { asset_operation::INSERT, "create" },
+    { asset_operation::CREATE, "create" },
     { asset_operation::DELETE, "delete" },
     { asset_operation::UPDATE, "update" },
     { asset_operation::GET, "get" },

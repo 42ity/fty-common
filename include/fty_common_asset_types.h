@@ -260,13 +260,16 @@ namespace persist {
 
 enum asset_operation
 {
-    INSERT = 1,
+    CREATE = 1,
     DELETE,
     UPDATE,
     GET,
     RETIRE,
-    INVENTORY
+    INVENTORY,
+    INSERT [[deprecated]] = CREATE
 };
+
+//#pragma deprecated(asset_operation::INSERT)
 
 std::string operation2str(asset_operation operation);
 

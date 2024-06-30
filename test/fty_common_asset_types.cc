@@ -158,14 +158,14 @@ TEST_CASE("Asset types")
     {
         using namespace persist;
 
-        CHECK(operation2str(asset_operation::INSERT) == "create");
+        CHECK(operation2str(asset_operation::CREATE) == "create");
         CHECK(operation2str(asset_operation::DELETE) == "delete");
         CHECK(operation2str(asset_operation::UPDATE) == "update");
         CHECK(operation2str(asset_operation::GET) == "get");
         CHECK(operation2str(asset_operation::RETIRE) == "retire");
         CHECK(operation2str(asset_operation::INVENTORY) == "inventory");
 
-        CHECK(str2operation("create") == asset_operation::INSERT);
+        CHECK(str2operation("create") == asset_operation::CREATE);
         CHECK(str2operation("delete") == asset_operation::DELETE);
         CHECK(str2operation("update") == asset_operation::UPDATE);
         CHECK(str2operation("get") == asset_operation::GET);
@@ -174,8 +174,8 @@ TEST_CASE("Asset types")
 
         CHECK(str2operation("hello world") == asset_operation::INVENTORY); // default
 
-        CHECK(str2operation("CREATE") == asset_operation::INSERT);
-        CHECK(str2operation("CREate") == asset_operation::INSERT);
+        CHECK(str2operation("CREATE") == asset_operation::CREATE);
+        CHECK(str2operation("CREate") == asset_operation::CREATE);
     }
 
     printf("test: is_virtual\n");
