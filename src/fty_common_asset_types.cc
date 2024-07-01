@@ -97,7 +97,6 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::SENSORGPIO,     ::fty::SUB_SENSORGPIO },
 
     { asset_subtype::GPO,                     ::fty::SUB_GPO },
-    { asset_subtype::NETAPP_ONTAP_NODE,       ::fty::SUB_NETAPP_ONTAP_NODE },
     { asset_subtype::IPMINFRA_SERVER,         ::fty::SUB_IPMINFRA_SERVER },
     { asset_subtype::IPMINFRA_SERVICE,        ::fty::SUB_IPMINFRA_SERVICE },
     { asset_subtype::VMWARE_VCENTER,          ::fty::SUB_VMWARE_VCENTER },
@@ -108,7 +107,6 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::VMWARE_VM,               ::fty::SUB_VMWARE_VM },
 
     { asset_subtype::CITRIX_VM,                         ::fty::SUB_CITRIX_VM },
-    { asset_subtype::NETAPP_NODE,                       ::fty::SUB_NETAPP_NODE },
     { asset_subtype::VMWARE_STANDALONE_ESXI,            ::fty::SUB_VMWARE_STANDALONE_ESXI },
     { asset_subtype::VMWARE_TASK,                       ::fty::SUB_VMWARE_TASK },
     { asset_subtype::VMWARE_VAPP,                       ::fty::SUB_VMWARE_VAPP },
@@ -121,14 +119,7 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::MICROSOFT_SERVER_CONNECTOR,   ::fty::SUB_MICROSOFT_SERVER_CONNECTOR },
     { asset_subtype::MICROSOFT_SERVER,             ::fty::SUB_MICROSOFT_SERVER },
     { asset_subtype::MICROSOFT_CLUSTER,            ::fty::SUB_MICROSOFT_CLUSTER },
-    { asset_subtype::HP_ONEVIEW_CONNECTOR,         ::fty::SUB_HP_ONEVIEW_CONNECTOR },
-    { asset_subtype::HP_ONEVIEW,                   ::fty::SUB_HP_ONEVIEW },
-    { asset_subtype::HP_IT_SERVER,                 ::fty::SUB_HP_IT_SERVER },
-    { asset_subtype::HP_IT_RACK,                   ::fty::SUB_HP_IT_RACK },
-    { asset_subtype::NETAPP_SERVER,                ::fty::SUB_NETAPP_SERVER },
-    { asset_subtype::NETAPP_ONTAP_CONNECTOR,       ::fty::SUB_NETAPP_ONTAP_CONNECTOR },
 
-    { asset_subtype::NETAPP_ONTAP_CLUSTER,     ::fty::SUB_NETAPP_ONTAP_CLUSTER },
     { asset_subtype::NUTANIX_VM,               ::fty::SUB_NUTANIX_VM },
     { asset_subtype::NUTANIX_PRISM_GATEWAY,    ::fty::SUB_NUTANIX_PRISM_GATEWAY },
     { asset_subtype::NUTANIX_NODE,             ::fty::SUB_NUTANIX_NODE },
@@ -137,7 +128,6 @@ const static std::map<uint16_t, std::string> subtype_names {
 
     { asset_subtype::VMWARE_VCENTER_CONNECTOR,         ::fty::SUB_VMWARE_VCENTER_CONNECTOR },
     { asset_subtype::VMWARE_STANDALONE_ESXI_CONNECTOR, ::fty::SUB_VMWARE_STANDALONE_ESXI_CONNECTOR },
-    { asset_subtype::NETAPP_ONTAP,                     ::fty::SUB_NETAPP_ONTAP },
 
     { asset_subtype::VMWARE_SRM,        ::fty::SUB_VMWARE_SRM },
     { asset_subtype::VMWARE_SRM_PLAN,   ::fty::SUB_VMWARE_SRM_PLAN },
@@ -187,17 +177,18 @@ uint16_t type_to_typeid(const std::string& type_)
     std::string type(type_);
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
-    for (auto& it : type_names)
-        if (it.second == type)
+    for (const auto& it : type_names) {
+        if (it.second == type) {
             return it.first;
+        }
+    }
     return asset_type::TUNKNOWN;
 }
 
 std::string subtypeid_to_subtype(uint16_t subtype_id)
 {
     try {
-        std::string subtype = subtype_names.at(subtype_id);
-        return subtype;
+        return subtype_names.at(subtype_id);
     } catch (...) {
     }
     return ::fty::SUB_UNKNOWN; // subtype_names.at(asset_subtype::SUNKNOWN);
@@ -206,56 +197,52 @@ std::string subtypeid_to_subtype(uint16_t subtype_id)
 uint16_t subtype_to_subtypeid(const std::string& subtype_)
 {
     std::string subtype(subtype_);
-    if (subtype != "N_A")
+    if (subtype != "N_A") {
         std::transform(subtype.begin(), subtype.end(), subtype.begin(), ::tolower);
+    }
 
     auto ite = subtype_equivs.find(subtype);
-    if (ite != subtype_equivs.end())
+    if (ite != subtype_equivs.end()) {
         subtype = ite->second;
+    }
 
-    for (auto& it : subtype_names)
-        if (it.second == subtype)
+    for (const auto& it : subtype_names) {
+        if (it.second == subtype) {
             return it.first;
+        }
+    }
     return asset_subtype::SUNKNOWN;
 }
 
+const static std::map<uint16_t, std::string> operation_names {
+    { asset_operation::CREATE, "create" },
+    { asset_operation::DELETE, "delete" },
+    { asset_operation::UPDATE, "update" },
+    { asset_operation::GET, "get" },
+    { asset_operation::RETIRE, "retire" },
+    { asset_operation::INVENTORY, "inventory" },
+};
+
 std::string operation2str(asset_operation operation)
 {
-    switch (operation) {
-        case asset_operation::INSERT:
-            return "create";
-        case asset_operation::DELETE:
-            return "delete";
-        case asset_operation::UPDATE:
-            return "update";
-        case asset_operation::GET:
-            return "get";
-        case asset_operation::RETIRE:
-            return "retire";
-        case asset_operation::INVENTORY:
-            return "inventory";
+    try {
+        return operation_names.at(operation);
+    } catch (...) {
     }
     return "unknown";
 }
 
-asset_operation str2operation(const std::string& operation)
+asset_operation str2operation(const std::string& operation_)
 {
-    std::string t(operation);
-    std::transform(t.begin(), t.end(), t.begin(), ::tolower);
-    if (t == "create") {
-        return asset_operation::INSERT;
-    } else if (t == "delete") {
-        return asset_operation::DELETE;
-    } else if (t == "retire") {
-        return asset_operation::RETIRE;
-    } else if (t == "inventory") {
-        return asset_operation::INVENTORY;
-    } else if (t == "update") {
-        return asset_operation::UPDATE;
-    } else if (t == "get") {
-        return asset_operation::GET;
+    std::string operation(operation_);
+    std::transform(operation.begin(), operation.end(), operation.begin(), ::tolower);
+
+    for (const auto& it : operation_names) {
+        if (it.second == operation) {
+            return static_cast<asset_operation>(it.first);
+        }
     }
-    return asset_operation::INVENTORY;
+    return asset_operation::INVENTORY; // default
 }
 
 bool is_epdu(int x)
@@ -296,6 +283,7 @@ bool is_virtual(const std::string& type)
         fty::TYPE_SERVER,
         fty::TYPE_PLANNER,
         fty::TYPE_OPERATING_SYSTEM,
+        fty::TYPE_HOST_GROUP,
         fty::TYPE_PLAN,
         fty::TYPE_CONTAINER_CLUSTER,
         fty::TYPE_CONTAINER_NODE,
@@ -306,14 +294,14 @@ bool is_virtual(const std::string& type)
 
 bool is_container(const std::string& type)
 {
-    if (   type == "datacenter"
-        || type == "room"
-        || type == "row"
-        || type == "rack") {
-        return true;
-    }
+    static const std::vector<std::string> containers = {
+        fty::TYPE_DATACENTER,
+        fty::TYPE_ROOM,
+        fty::TYPE_ROW,
+        fty::TYPE_RACK,
+    };
 
-    return false;
+    return std::find(containers.cbegin(), containers.cend(), type) != containers.cend();
 }
 
 bool is_ok_element_type(uint16_t element_type_id)
@@ -330,8 +318,9 @@ bool is_ok_name(const char* name)
         || strchr(name, '_')
         || strchr(name, '%')
         || strchr(name, '@')
-    )
+    ) {
         return false;
+    }
 
     return true;
 }
