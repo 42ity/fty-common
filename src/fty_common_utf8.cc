@@ -27,9 +27,185 @@
 */
 
 #include "fty_common_utf8.h"
-#include "fty_common_json.h"
-#include <cassert>
 #include <fty_log.h>
+#include <cassert>
+#include <climits>
+#include <stdexcept>
+#include <inttypes.h>
+
+namespace JSON {
+
+///
+/// Private JSON home-made interface
+/// Coming from a previous public JSON home-made interface.
+/// This is not used elsewhere, not maintainable and deprecated.
+///
+
+typedef enum
+{
+    JT_Invalid = INT_MIN,
+    JT_None,
+    JT_String = 0,
+    JT_Object,
+    JT_Object_End
+} JSON_TYPE;
+
+/// exception that should be used when something is not found
+class NotFoundException {};
+/// exception that should be used when input line is corrupted somehow
+class CorruptedLineException {};
+
+/**
+ * \brief Determine start and type of next object in json line
+ * This function tries to determine next JSON type from start_pos based on it's content.
+ * Usage: i=50; getNextObject (line,i); returns next object type after 49th character, and points i to it's start
+ * position. \param[in]       line - JSON fully loaded into string \param[in,out]   start_pos - location where to start
+ * search, on return contains object start position (invalid for non-object results) \return  JSON_TYPE enum
+ */
+JSON_TYPE getNextObject(const std::string& line, size_t& start_pos)
+{
+    start_pos = line.find_first_not_of("\t :,", start_pos);
+    if (start_pos == std::string::npos) {
+        return JT_None;
+    }
+    switch (line.at(start_pos)) {
+        case '{':
+            return JT_Object;
+        case '}':
+            return JT_Object_End;
+        case '"':
+            return JT_String;
+        default:
+            return JT_Invalid;
+    }
+}
+
+/**
+ * \brief Returns object from JSON without validating it
+ * This function reads first object from JSON without validating it, and sets it's start and end position.
+ * Usage: i=50; j; readObject (line,i,j); returns next object from JSON after 49th character, and points i to it's start
+ * position, and j to it's end. To get next object, you should do i=j+1; readObject (line,i,j); Beware, first
+ * object-like type is returned by this function, so if next type is string and then next is object, such string will be
+ * skipped, and the object after it will be returned, effectively skipping the string. You should use getNextObject
+ * first to ensure you read proper type. Also be aware that there is no validation, so possibly an object in string
+ * might be returned if such object matches requirements. \param[in]       line - JSON fully loaded into string
+ * \param[in,out]   start_pos - location where to start search, on return contains object start position (invalid for
+ * non-object results) \param[out]      end_pos - on return contains object end position (invalid for non-object
+ * results) \return  JSON_TYPE enum \throw NotFoundException - in case that no opening curly bracket encapsulated object
+ * is not found \throw CorruptedLineException - in case that no ending curly bracket isn't found for the object
+ */
+std::string readObject(const std::string& line, size_t& start_pos, size_t& end_pos)
+{
+    size_t temp = 0;
+    end_pos     = 0;
+    start_pos   = line.find_first_of('{', start_pos);
+    if (std::string::npos == start_pos) {
+        throw NotFoundException();
+    }
+    int count = 1;
+    temp      = start_pos; // searching at temp+1, so no need to add 1 here
+    while (end_pos == 0) {
+        temp = line.find_first_of("{}", temp + 1); // always searching at pos > 0
+        if (std::string::npos == temp) {
+            throw CorruptedLineException();
+        } else if (line.at(temp) == '{') {
+            ++count;
+        } else {
+            --count; // closing curly bracket
+        }
+        if (count == 0) {
+            end_pos = temp;
+        }
+    }
+    return line.substr(start_pos, end_pos - start_pos + 1);
+}
+
+/**
+ * \brief Returns string from JSON without validating it
+ * This function reads first string from JSON without validating it, and sets it's start and end position.
+ * Usage: i=50; j; readString (line,i,j); returns next string from JSON after 49th character, and points i to it's start
+ * position, and j to it's end. To get next string, you should do i=j+1; readString (line,i,j); Beware, first
+ * string-like type is returned by this function, so if next type is object that contains string, such string will
+ * actually be returned, so this function traverses JSON tree. You should use getNextObject first to ensure you read
+ * proper type. \param[in]       line - JSON fully loaded into string \param[in,out]   start_pos - location where to
+ * start search, on return contains string start position (invalid for non-object results) \param[out]      end_pos - on
+ * return contains string end position (invalid for non-object results) \return  JSON_TYPE enum \throw NotFoundException
+ * - in case that no double-quotes encapsulated object is not found \throw CorruptedLineException - in case that no
+ * ending double-quotes are found for the object
+ */
+std::string readString(const std::string& line, size_t& start_pos, size_t& end_pos)
+{
+    size_t temp = 0;
+    end_pos     = 0;
+    start_pos   = line.find_first_of('"', start_pos);
+    if (std::string::npos == start_pos) {
+        throw NotFoundException();
+    }
+    temp = start_pos + 1;
+    while (end_pos == 0) {
+        temp = line.find_first_of('"', temp + 1); // always searching at pos > 0
+        if (std::string::npos == temp) {
+            throw CorruptedLineException();
+        }
+        if (line[temp - 1] != '\\') {
+            end_pos = temp;
+        }
+    }
+    return line.substr(start_pos + 1, end_pos - start_pos - 1);
+}
+
+/***
+//catch2 unit test
+TEST_CASE("Json parser")
+{
+    printf("fty_common_json parser...\n");
+
+    //                   0123456
+    std::string input = "{{{{{{test}}}}}";
+    std::string exp1  = "{{{{{test}}}}}";
+    std::string exp2  = "{{{{test}}}}";
+    std::string exp3  = "{test}";
+    // at 0 invalid object is located
+    size_t i = 1, j;
+    CHECK(JSON::readObject(input, i, j) == exp1);
+    CHECK(i == 1);
+    CHECK(j == exp1.length() - 1 + 1);
+    i = 2;
+    CHECK(JSON::readObject(input, i, j) == exp2);
+    CHECK(i == 2);
+    CHECK(j == exp2.length() - 1 + 2);
+    i = 5;
+    CHECK(JSON::readObject(input, i, j) == exp3);
+    CHECK(i == 5);
+    CHECK(j == exp3.length() - 1 + 5);
+    i = 6;
+    try {
+        JSON::readObject(input, i, j);
+        CHECK(std::string("Exception should have been raised first") == std::string("Code should never get here"));
+    } catch (JSON::NotFoundException&) {
+        // this is only valid case
+    } catch (...) {
+        CHECK(std::string("Specific exception expected") == std::string("Code should never get here"));
+    }
+    i = 0;
+    try {
+        JSON::readObject(input, i, j);
+        CHECK(std::string("Exception should have been raised first") == std::string("Code should never get here"));
+    } catch (JSON::CorruptedLineException&) {
+        // this is only valid case
+    } catch (...) {
+        CHECK(std::string("Specific exception expected") == std::string("Code should never get here"));
+    }
+
+    printf("fty_common_json parser: OK\n");
+}
+***/
+
+///
+/// End of JSON home-made interface
+///
+
+} // namespace JSON
 
 namespace UTF8 {
 

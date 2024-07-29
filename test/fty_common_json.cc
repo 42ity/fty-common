@@ -34,50 +34,6 @@
 #include <functional>
 #include <sstream>
 
-TEST_CASE("Json parser")
-{
-    printf("fty_common_json parser...\n");
-
-    //                   0123456
-    std::string input = "{{{{{{test}}}}}";
-    std::string exp1  = "{{{{{test}}}}}";
-    std::string exp2  = "{{{{test}}}}";
-    std::string exp3  = "{test}";
-    // at 0 invalid object is located
-    size_t i = 1, j;
-    CHECK(JSON::readObject(input, i, j) == exp1);
-    CHECK(i == 1);
-    CHECK(j == exp1.length() - 1 + 1);
-    i = 2;
-    CHECK(JSON::readObject(input, i, j) == exp2);
-    CHECK(i == 2);
-    CHECK(j == exp2.length() - 1 + 2);
-    i = 5;
-    CHECK(JSON::readObject(input, i, j) == exp3);
-    CHECK(i == 5);
-    CHECK(j == exp3.length() - 1 + 5);
-    i = 6;
-    try {
-        JSON::readObject(input, i, j);
-        CHECK(std::string("Exception should have been raised first") == std::string("Code should never get here"));
-    } catch (JSON::NotFoundException&) {
-        // this is only valid case
-    } catch (...) {
-        CHECK(std::string("Specific exception expected") == std::string("Code should never get here"));
-    }
-    i = 0;
-    try {
-        JSON::readObject(input, i, j);
-        CHECK(std::string("Exception should have been raised first") == std::string("Code should never get here"));
-    } catch (JSON::CorruptedLineException&) {
-        // this is only valid case
-    } catch (...) {
-        CHECK(std::string("Specific exception expected") == std::string("Code should never get here"));
-    }
-
-    printf("fty_common_json parser: OK\n");
-}
-
 TEST_CASE("Json cxxtools")
 {
     printf("fty_common_json cxxtools...\n");
