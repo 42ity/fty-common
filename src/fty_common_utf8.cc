@@ -27,9 +27,70 @@
 */
 
 #include "fty_common_utf8.h"
-#include "fty_common_json.h"
-#include <cassert>
 #include <fty_log.h>
+#include <cassert>
+#include <climits>
+#include <stdexcept>
+#include <inttypes.h>
+
+namespace JSON {
+
+///
+/// Private JSON home-made interface
+/// Coming from a previous public JSON home-made interface.
+/// This is not used elsewhere, not maintainable and deprecated.
+///
+
+/// exception that should be used when something is not found
+class NotFoundException {};
+/// exception that should be used when input line is corrupted somehow
+class CorruptedLineException {};
+
+/**
+ * \brief Returns object from JSON without validating it
+ * This function reads first object from JSON without validating it, and sets it's start and end position.
+ * Usage: i=50; j; readObject (line,i,j); returns next object from JSON after 49th character, and points i to it's start
+ * position, and j to it's end. To get next object, you should do i=j+1; readObject (line,i,j); Beware, first
+ * object-like type is returned by this function, so if next type is string and then next is object, such string will be
+ * skipped, and the object after it will be returned, effectively skipping the string. You should use getNextObject
+ * first to ensure you read proper type. Also be aware that there is no validation, so possibly an object in string
+ * might be returned if such object matches requirements. \param[in]       line - JSON fully loaded into string
+ * \param[in,out]   start_pos - location where to start search, on return contains object start position (invalid for
+ * non-object results) \param[out]      end_pos - on return contains object end position (invalid for non-object
+ * results) \return  JSON_TYPE enum \throw NotFoundException - in case that no opening curly bracket encapsulated object
+ * is not found \throw CorruptedLineException - in case that no ending curly bracket isn't found for the object
+ */
+std::string readObject(const std::string& line, size_t& start_pos, size_t& end_pos)
+{
+    size_t temp = 0;
+    end_pos     = 0;
+    start_pos   = line.find_first_of('{', start_pos);
+    if (std::string::npos == start_pos) {
+        throw NotFoundException();
+    }
+    int count = 1;
+    temp      = start_pos; // searching at temp+1, so no need to add 1 here
+    while (end_pos == 0) {
+        temp = line.find_first_of("{}", temp + 1); // always searching at pos > 0
+        if (std::string::npos == temp) {
+            throw CorruptedLineException();
+        } else if (line.at(temp) == '{') {
+            ++count;
+        } else {
+            --count; // closing curly bracket
+        }
+        if (count == 0) {
+            end_pos = temp;
+        }
+    }
+    return line.substr(start_pos, end_pos - start_pos + 1);
+}
+
+///
+/// End of JSON home-made interface
+///
+
+} // namespace JSON
 
 namespace UTF8 {
 

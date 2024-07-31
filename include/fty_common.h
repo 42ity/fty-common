@@ -21,17 +21,6 @@
 
 #pragma once
 
-#ifdef __cplusplus
-
-// Afwul hack, but I need exceptions to be valid for whole content
-#include <stdexcept>
-/// general IPM exception
-class IPMException : public std::exception
-{
-};
-
-#endif // __cplusplus
-
 #include "fty_common_agents.h"
 #include "fty_common_asset_types.h"
 #include "fty_common_base.h"
