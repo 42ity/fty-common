@@ -31,4 +31,6 @@ TEST_CASE("Base")
     CHECK(streq("a", "a") == 1);
     CHECK(streq("a", "b") == 0);
     CHECK(streq("b", "a") == 0);
+
+    CHECK(streq("a", "A") == 0);
 }
