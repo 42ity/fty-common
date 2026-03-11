@@ -151,6 +151,11 @@ const static std::map<uint16_t, std::string> subtype_names {
     { asset_subtype::KUBERNETES_NODE,       ::fty::SUB_KUBERNETES_NODE },
 
     { asset_subtype::DELL_VXRAIL_VM,        ::fty::SUB_DELL_VXRAIL_VM },
+
+    { asset_subtype::PROXMOX_VE_CONNECTOR,  ::fty::SUB_PROXMOX_VE_CONNECTOR },
+    { asset_subtype::PROXMOX_VE_CLUSTER,    ::fty::SUB_PROXMOX_VE_CLUSTER },
+    { asset_subtype::PROXMOX_VE_NODE,       ::fty::SUB_PROXMOX_VE_NODE },
+    { asset_subtype::PROXMOX_VE_VM,         ::fty::SUB_PROXMOX_VE_VM },
 };
 
 // Except "" for N_A, the names on the left are the ones from database

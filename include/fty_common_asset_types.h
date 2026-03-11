@@ -167,6 +167,10 @@ namespace fty {
     static constexpr const char* SUB_KUBERNETES_CLUSTER                 = "kubernetes.cluster";
     static constexpr const char* SUB_KUBERNETES_NODE                    = "kubernetes.node";
     static constexpr const char* SUB_DELL_VXRAIL_VM                     = "dell.vxrail.vm";
+    static constexpr const char* SUB_PROXMOX_VE_CONNECTOR               = "proxmox.ve.connector";
+    static constexpr const char* SUB_PROXMOX_VE_CLUSTER                 = "proxmox.ve.cluster";
+    static constexpr const char* SUB_PROXMOX_VE_NODE                    = "proxmox.ve.node";
+    static constexpr const char* SUB_PROXMOX_VE_VM                      = "proxmox.ve.vm";
 
 } //namespace fty
 
@@ -251,6 +255,11 @@ namespace persist {
         KUBERNETES_CLUSTER,                 // 81
         KUBERNETES_NODE,                    // 82
         DELL_VXRAIL_VM,                     // 83
+
+        PROXMOX_VE_CONNECTOR, // 84
+        PROXMOX_VE_CLUSTER,   // 85
+        PROXMOX_VE_NODE,      // 86
+        PROXMOX_VE_VM,        // 87
 
         MAX_ASSET_SUBTYPE_ID
     };

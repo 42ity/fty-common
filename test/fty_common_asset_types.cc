@@ -42,6 +42,8 @@ TEST_CASE("Asset types")
         CHECK(persist::asset_subtype::ACTUATOR == 78);
         CHECK(persist::asset_subtype::KUBERNETES_CONNECTOR == 79);
         CHECK(persist::asset_subtype::DELL_VXRAIL_VM == 83);
+        CHECK(persist::asset_subtype::PROXMOX_VE_CONNECTOR == 84);
+        CHECK(persist::asset_subtype::PROXMOX_VE_VM == 87);
     }
 
     printf("test: type/typeid unknown\n");
@@ -125,7 +127,8 @@ TEST_CASE("Asset types")
             "dell.vxrail.connector", "dell.vxrail.manager", "dell.vxrail.cluster", "microsoft.hyperv.service",
             "vmware.cluster.fault.domain", "microsoft.scvmm.connector", "microsoft.scvmm", "actuator",
             "kubernetes.connector", "kubernetes.manager", "kubernetes.cluster", "kubernetes.node",
-            "dell.vxrail.vm"
+            "dell.vxrail.vm",
+            "proxmox.ve.connector", "proxmox.ve.cluster", "proxmox.ve.node", "proxmox.ve.vm",
         });
 
         bool success = true;
