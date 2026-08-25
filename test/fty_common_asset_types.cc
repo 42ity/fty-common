@@ -44,6 +44,9 @@ TEST_CASE("Asset types")
         CHECK(persist::asset_subtype::DELL_VXRAIL_VM == 83);
         CHECK(persist::asset_subtype::PROXMOX_VE_CONNECTOR == 84);
         CHECK(persist::asset_subtype::PROXMOX_VE_VM == 87);
+        CHECK(persist::asset_subtype::DELL_VXRAIL_FAULT_DOMAIN == 88);
+        CHECK(persist::asset_subtype::MICROSOFT_FAILOVER_CONNECTOR == 89);
+        CHECK(persist::asset_subtype::MICROSOFT_FAILOVER_VM == 92);
     }
 
     printf("test: type/typeid unknown\n");
@@ -111,7 +114,7 @@ TEST_CASE("Asset types")
 
     printf("test: subtype/subtypeid\n");
     {
-        std::vector<std::string> types({
+        std::vector<std::string> subtypes({
             "", // "N_A"
             "unknown", "UnkNOwN",
 
@@ -129,28 +132,30 @@ TEST_CASE("Asset types")
             "kubernetes.connector", "kubernetes.manager", "kubernetes.cluster", "kubernetes.node",
             "dell.vxrail.vm",
             "proxmox.ve.connector", "proxmox.ve.cluster", "proxmox.ve.node", "proxmox.ve.vm",
+            "dell.vxrail.fault.domain",
+            "microsoft.failover.connector", "microsoft.failover.cluster", "microsoft.failover.server", "microsoft.failover.vm"
         });
 
         bool success = true;
-        for (const auto& type : types) {
-            uint16_t    id = persist::subtype_to_subtypeid(type);
+        for (const auto& subtype : subtypes) {
+            uint16_t    id = persist::subtype_to_subtypeid(subtype);
             std::string s  = persist::subtypeid_to_subtype(id);
 
-            std::string attempt(type);
+            std::string attempt(subtype);
             if (attempt != "N_A")
                 std::transform(attempt.begin(), attempt.end(), attempt.begin(), ::tolower);
 
             // handle exceptions
-            if (type == "")
+            if (subtype == "")
                 attempt = fty::SUB_N_A;
-            else if (type == "rack controller")
+            else if (subtype == "rack controller")
                 attempt = fty::SUB_RACK_CONTROLLER;
-            else if (type == "patch panel")
+            else if (subtype == "patch panel")
                 attempt = fty::SUB_PATCH_PANEL;
 
             bool ok = (attempt == s);
             if (!ok) {
-                printf("ERROR: subtype: %s, id: %d, s: %s, attempt: %s\n", type.c_str(), id, s.c_str(), attempt.c_str());
+                printf("ERROR: subtype: %s, id: %d, s: %s, attempt: %s\n", subtype.c_str(), id, s.c_str(), attempt.c_str());
             }
             success &= ok;
         }
