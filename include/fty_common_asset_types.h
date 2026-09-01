@@ -171,7 +171,11 @@ namespace fty {
     static constexpr const char* SUB_PROXMOX_VE_CLUSTER                 = "proxmox.ve.cluster";
     static constexpr const char* SUB_PROXMOX_VE_NODE                    = "proxmox.ve.node";
     static constexpr const char* SUB_PROXMOX_VE_VM                      = "proxmox.ve.vm";
-
+    static constexpr const char* SUB_DELL_VXRAIL_FAULT_DOMAIN           = "dell.vxrail.fault.domain";
+    static constexpr const char* SUB_MICROSOFT_FAILOVER_CONNECTOR       = "microsoft.failover.connector";
+    static constexpr const char* SUB_MICROSOFT_FAILOVER_CLUSTER         = "microsoft.failover.cluster";
+    static constexpr const char* SUB_MICROSOFT_FAILOVER_SERVER          = "microsoft.failover.server";
+    static constexpr const char* SUB_MICROSOFT_FAILOVER_VM              = "microsoft.failover.vm";
 } //namespace fty
 
 namespace persist {
@@ -260,6 +264,13 @@ namespace persist {
         PROXMOX_VE_CLUSTER,   // 85
         PROXMOX_VE_NODE,      // 86
         PROXMOX_VE_VM,        // 87
+
+        DELL_VXRAIL_FAULT_DOMAIN, // 88
+
+        MICROSOFT_FAILOVER_CONNECTOR, // 89
+        MICROSOFT_FAILOVER_CLUSTER, // 90
+        MICROSOFT_FAILOVER_SERVER, // 91
+        MICROSOFT_FAILOVER_VM, // 92
 
         MAX_ASSET_SUBTYPE_ID
     };
